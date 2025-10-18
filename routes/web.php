@@ -50,3 +50,6 @@ Route::get('/mahasiswa', function () {
 Route::get('/dosen', function () {
     return view('dosen');
 });
+Route::get('/surat_tugas', function () {
+    return view('surat_tugas');
+});
