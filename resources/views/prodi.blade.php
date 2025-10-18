@@ -1,50 +1,9 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Prodi</title>
+@extends('apps.index')
+@section('title', 'Prodi')
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+@section('content')
 
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f5f7ff;
-        }
-        .card {
-            border: none;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        .card-header {
-            background: linear-gradient(135deg, #4f46e5, #3b82f6);
-            color: white;
-            font-weight: 600;
-        }
-        .btn-primary {
-            background-color: #4f46e5;
-            border: none;
-        }
-        .btn-primary:hover {
-            background-color: #4338ca;
-        }
-        .badge-active {
-            background-color: #10b981;
-        }
-        .badge-inactive {
-            background-color: #ef4444;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container py-5">
+<div class="col-lg-10 col-md-9 content">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0"><i class="bi bi-journal-text me-2"></i>Data Prodi</h5>
@@ -92,9 +51,5 @@
         </div>
     </div>
 </div>
+@endsection
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-</html>

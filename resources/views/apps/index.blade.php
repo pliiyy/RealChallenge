@@ -22,6 +22,38 @@
         .btn-primary { background-color: #4f46e5; border: none; }
         .btn-primary:hover { background-color: #4338ca; }
         .table thead { background-color: #eef2ff; color: #4f46e5; }
+        .profile-card {
+            background: #fff;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, #4f46e5, #3b82f6);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .profile-header img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid white;
+            margin-bottom: 15px;
+        }
+
+        .profile-header h4 {
+            font-weight: 600;
+        }
+
+        .info-label {
+            font-weight: 500;
+            color: #4f46e5;
+        }
     </style>
 </head>
 <body>
