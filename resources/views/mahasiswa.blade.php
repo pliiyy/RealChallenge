@@ -122,12 +122,12 @@
 </div>
 
 <!-- Modal Tambah Mahasiswa -->
-<div class="modal fade" id="addMahasiswaModal" tabindex="-1" aria-labelledby="addMahasiswaModalLabel" aria-hidden="true">
+<div class="modal fade" id="addMahasiswaModal" tabindex="-1" aria-labelledby="addMahasiswaModalLabel" aria-hidden="true" >
     <div class="modal-dialog">
         <form class="modal-content">
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="addMahasiswaModalLabel">Tambah Mahasiswa Baru</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title" id="addMahasiswaModalLabel" >Tambah Mahasiswa Baru</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" onclick="Add()"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
@@ -184,5 +184,10 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function Add() {
+        fetch("/api/provinces").then(res => res.json()).then(res => console.log({res}))
+    }
+</script>
 </body>
 </html>

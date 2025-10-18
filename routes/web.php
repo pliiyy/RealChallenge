@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\RoleController;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -54,4 +55,10 @@ Route::get('/dosen', function () {
 });
 Route::get('/surat_tugas', function () {
     return view('surat_tugas');
+});
+
+
+Route::get('/api/provinces', function () {
+    $response = Http::get('https://wilayah.id/api/provinces.json');
+    return response()->json($response->json());
 });
