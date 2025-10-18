@@ -56,9 +56,22 @@ Route::get('/dosen', function () {
 Route::get('/surat_tugas', function () {
     return view('surat_tugas');
 });
+Route::get('/dekan', function () {
+    return view('dekan');
+});
 
 
 Route::get('/api/provinces', function () {
     $response = Http::get('https://wilayah.id/api/provinces.json');
+    return response()->json($response->json());
+});
+Route::get('/api/regencies/{provinceId}', function ($provinceId) {
+    $response = Http::get("https://wilayah.id/api/regencies/{$provinceId}.json");
+    return response()->json($response->json());
+});
+
+// Ambil daftar kecamatan berdasarkan ID kabupaten
+Route::get('/api/districts/{regencyId}', function ($regencyId) {
+    $response = Http::get("https://wilayah.id/api/districts/{$regencyId}.json");
     return response()->json($response->json());
 });

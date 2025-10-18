@@ -64,7 +64,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span>🎓 Data Mahasiswa</span>
-                    <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal" data-bs-target="#addMahasiswaModal">
+                    <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal" data-bs-target="#addMahasiswaModal" onclick="Add()">
                         <i class="bi bi-plus-circle me-1"></i> Tambah Mahasiswa
                     </button>
                 </div>
@@ -127,7 +127,7 @@
         <form class="modal-content">
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title" id="addMahasiswaModalLabel" >Tambah Mahasiswa Baru</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" onclick="Add()"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" ></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
@@ -164,15 +164,26 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Provinsi</label>
-                    <input type="text" class="form-control" placeholder="">
+                    <select class="form-select" id="provinsi" onchange="RubahProvinsi(this.value)">
+                    </select>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Kabupaten</label>
-                    <input type="text" class="form-control" placeholder="">
+                    <label class="form-label">Kota/Kabupaten</label>
+                    <select class="form-select" id="kota" onchange="RubahKota(this.value)">
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">kecamatan</label>
+                    <select class="form-select" id="kecamatan" >
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Desa</label>
                     <input type="text" class="form-control" placeholder="">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Alamat</label>
+                    <textarea  class="form-control" placeholder=""></textarea>
                 </div>
             </div>
             <div class="modal-footer">
@@ -186,7 +197,34 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     function Add() {
-        fetch("/api/provinces").then(res => res.json()).then(res => console.log({res}))
+        fetch("/api/provinces").then(res => res.json()).then(res => {
+            const data = res.data;
+            const temp = data.map((d) => `
+                        <option  value="${d.code}" >${d.name}</option>
+            `);
+            console.log({temp})
+            document.getElementById("provinsi").innerHTML = temp.join("");
+        })
+    }
+    function RubahProvinsi(id) {
+        fetch(`/api/regencies/${id}`).then(res => res.json()).then(res => {
+            const data = res.data;
+            const temp = data.map((d) => `
+                        <option value="${d.code}" >${d.name}</option>
+            `);
+            console.log({data,temp,hasil: temp.join("")});
+            document.getElementById("kota").innerHTML = temp.join("");
+        })
+    }
+    function RubahKota(id) {
+        fetch(`/api/districts/${id}`).then(res => res.json()).then(res => {
+            const data = res.data;
+            const temp = data.map((d) => `
+                        <option value="${d.code}" >${d.name}</option>
+            `);
+            console.log({data,temp,hasil: temp.join("")});
+            document.getElementById("kecamatan").innerHTML = temp.join("");
+        })
     }
 </script>
 </body>
