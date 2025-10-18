@@ -71,39 +71,86 @@
             </div>
         </div>
     </div>
-
     <!-- Modal Tambah Role -->
     <div class="modal fade" id="addRoleModal" tabindex="-1" aria-labelledby="addRoleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form class="modal-content">
+            <form class="modal-content" action="/roles" method="POST">
+                @csrf
+                @method("post")
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="addRoleModalLabel">Tambah Role Baru</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
+                <div class="mb-3 none">
+                        <label class="form-label">Status</label>
+                        <input type="text" class="form-control" placeholder="Contoh: Admin, Staff, Mahasiswa" name="status" value="AKTIF">
+                    </div>
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nama Role</label>
-                        <input type="text" class="form-control" placeholder="Contoh: Admin, Staff, Mahasiswa">
+                        <input type="text" class="form-control" placeholder="Contoh: Admin, Staff, Mahasiswa" name="nama">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Keterangan</label>
-                        <textarea class="form-control" rows="3" placeholder="Deskripsi singkat role ini"></textarea>
+                        <textarea class="form-control" rows="3" placeholder="Deskripsi singkat role ini" name="keterangan"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Izin Akses</label>
-                        <select class="form-select">
-                            <option>Full Access</option>
-                            <option>CRUD Data</option>
-                            <option>Read Only</option>
-                        </select>
+            <label class="form-label">Izin Akses</label>
+            
+            <div class="border p-3 rounded">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong class="me-3">Dashboard</strong>
+                    <div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="dashboardRead">
+                            <label class="form-check-label" for="dashboardRead">Baca</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="dashboardCreate">
+                            <label class="form-check-label" for="dashboardCreate">Buat</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="dashboardUpdate">
+                            <label class="form-check-label" for="dashboardUpdate">Ubah</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="dashboardDelete">
+                            <label class="form-check-label" for="dashboardDelete">Hapus</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="dashboardDelete">
+                            <label class="form-check-label" for="dashboardDelete">Proses</label>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <select class="form-select">
-                            <option>Aktif</option>
-                            <option>Nonaktif</option>
-                        </select>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <strong class="me-3">Data Pengguna</strong>
+                    <div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="userDataRead" name="userDataRead">
+                            <label class="form-check-label" for="userDataRead">Baca</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="userDataCreate" name="userDataCreate">
+                            <label class="form-check-label" for="userDataCreate">Buat</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="userDataUpdate">
+                            <label class="form-check-label" for="userDataUpdate">Ubah</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="userDataDelete">
+                            <label class="form-check-label" for="userDataDelete">Hapus</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="dashboardDelete">
+                            <label class="form-check-label" for="dashboardDelete">Proses</label>
+                        </div>
                     </div>
+                </div>
+                
+                </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>

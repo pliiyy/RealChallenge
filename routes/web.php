@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +21,7 @@ Route::get('/settings', function () {
 Route::get('/roles', function () {
     return view('roles');
 });
+Route::post('/roles', [RoleController::class,"create"]);
 Route::get('/fakultas', function () {
     return view('fakultas');
 });
