@@ -86,7 +86,9 @@
                 <a href="#" class="nav-link"><i class="bi bi-door-closed me-2"></i> Data Ruangan</a>
                 <a href="#" class="nav-link"><i class="bi bi-people me-2"></i> Data Kelas</a>
                 <a href="#" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Data Mahasiswa</a>
+                <a href="#" class="nav-link"><i class="bi bi-gear me-2"></i> Surat Tugas Mengajar</a>
                 <a href="#" class="nav-link"><i class="bi bi-gear me-2"></i> Pengaturan</a>
+
             </nav>
         </div> --}}
         <div class="col-lg-2 col-md-3 p-3 sidebar  border-end vh-100">
@@ -119,7 +121,9 @@
             <a href="#" class="nav-link"><i class="bi bi-people me-2"></i> Kelas</a>
             <a href="#" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Mahasiswa</a>
         </div>
-
+        <a href="#" class="nav-link">
+            <i class="bi bi-gear me-2"></i> Surat Tugas Mengajar
+        </a>
         <!-- Pengaturan -->
         <a href="#" class="nav-link">
             <i class="bi bi-gear me-2"></i> Pengaturan

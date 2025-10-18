@@ -147,15 +147,32 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Angkatan</label>
+                    <label class="form-label">Semester</label>
                     <input type="number" class="form-control" placeholder="Contoh: 2023">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Status</label>
-                    <select class="form-select">
-                        <option>Aktif</option>
-                        <option>Tidak Aktif</option>
-                    </select>
+                    <label class="form-label">Angkatan</label>
+                    <input type="text" class="form-control" placeholder="">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Agama</label>
+                    <input type="text" class="form-control" placeholder="">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Gender</label>
+                    <input type="text" class="form-control" placeholder="">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Provinsi</label>
+                    <input type="text" class="form-control" placeholder="">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Kabupaten</label>
+                    <input type="text" class="form-control" placeholder="">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">kecamatan</label>
+                    <input type="text" class="form-control" placeholder="">
                 </div>
             </div>
             <div class="modal-footer">
