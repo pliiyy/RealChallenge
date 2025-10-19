@@ -1,3 +1,7 @@
+@extends('apps.index')
+@section('title', 'Data')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="id">
 

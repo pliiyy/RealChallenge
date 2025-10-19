@@ -7,7 +7,7 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span>🏫 Data Kelas</span>
                 <form action="/kelas" method="GET" class="mb-3 d-flex gap-2">
-                    <input type="text" name="search" class="form-control" placeholder="Cari nama fakultas"
+                    <input type="text" name="search" class="form-control" placeholder="Cari nama kelas"
                         value="{{ request('search') }}">
 
                     <select name="status" class="form-select">
@@ -103,7 +103,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Tahun ajaran</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 40" name="tahun_ajaran">
+                        <input type="number" class="form-control" placeholder="Contoh: 2025" name="tahun_ajaran">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Kapasitas</label>

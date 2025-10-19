@@ -1,5 +1,5 @@
 @extends('apps.index')
-@section('title', 'Prodi')
+@section('title', 'Profil')
 
 @section('content')
   <div class="col-lg-10 col-md-9 p-4">

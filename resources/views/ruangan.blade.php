@@ -5,8 +5,8 @@
 <div class="col-lg-10 col-md-9 content">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <span>🏫 Data Ruangan</span>
-                         <form action="/ruangan" method="GET" class="mb-3 d-flex gap-2">
+                        <span>🚪 Data Ruangan</span>
+                        <form action="/ruangan" method="GET" class="mb-3 d-flex gap-2">
                     <input type="text" name="search" class="form-control" placeholder="Cari nama ruangan"
                         value="{{ request('search') }}">
 
@@ -30,7 +30,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Nama Ruangan</th>
-                                        <th>Angkatan</th>
+                                        <th>Kapasitas</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -38,8 +38,8 @@
                                 <tbody>
                                     <tr>
                                         <td>1</td>
-                                        <td>Lab Komputer 1</td>
-                                        <td>2021</td>
+                                        <td>Ruang Kuliah A101</td>
+                                        <td>40</td>
                                         <td><span class="badge bg-success">Aktif</span></td>
                                         <td>
                                             <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i></button>
@@ -48,8 +48,8 @@
                                     </tr>
                                     <tr>
                                         <td>2</td>
-                                        <td>Ruang B-203</td>
-                                        <td>2022</td>
+                                        <td>Ruang Lab Komputer 1</td>
+                                        <td>25</td>
                                         <td><span class="badge bg-secondary">Tidak Aktif</span></td>
                                         <td>
                                             <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i></button>
@@ -64,7 +64,7 @@
 
                 <div class="mt-4 alert alert-info bg-opacity-25 border-0 text-primary">
                     <i class="bi bi-info-circle me-2"></i>
-                    Kelola data ruangan untuk kegiatan perkuliahan di sini.
+                    Data ruangan digunakan untuk mengelola ruang perkuliahan atau laboratorium.
                 </div>
             </div>
         </div>
@@ -81,17 +81,17 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nama Ruangan</label>
-                        <input type="text" class="form-control" placeholder="Contoh: Lab Komputer 1">
+                        <input type="text" class="form-control" placeholder="Contoh: Ruang Kuliah A101">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Angkatan</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 2021">
+                        <label class="form-label">Kapasitas</label>
+                        <input type="number" class="form-control" placeholder="Contoh: 40">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Status</label>
                         <select class="form-select">
-                            <option>Aktif</option>
-                            <option>Tidak Aktif</option>
+                            <option value="Aktif">Aktif</option>
+                            <option value="Tidak Aktif">Tidak Aktif</option>
                         </select>
                     </div>
                 </div>
@@ -108,17 +108,21 @@
                 @csrf
                 @method('post')
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="addKelasModalLabel">Tambah Fakultas</h5>
+                    <h5 class="modal-title" id="addKelasModalLabel">Tambah Ruangan</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Nama Fakultas</label>
+                        <label class="form-label">Nama Ruangan</label>
                         <input type="text" class="form-control" placeholder="Contoh: Kelas A, Kelas B" name="nama">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Kode</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 40" name="kode">
+                        <label class="form-label">Kapasitas</label>
+                        <input type="number" class="form-control" placeholder="Contoh: 40" name="kapasitas">
+                    </div>
+                     <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <input type="number" class="form-control" placeholder="Contoh: 40" name="Status">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -144,13 +148,18 @@
                     <input type="hidden" name="id" id="edit-id"> {{-- ID role yang akan diupdate --}}
 
                     <div class="mb-3">
-                        <label for="edit-nama" class="form-label">Nama Fakultas</label>
+                        <label for="edit-nama" class="form-label">Nama Ruangan</label>
                         <input type="text" class="form-control" id="edit-nama" name="nama" required />
                     </div>
                     <div class="mb-3">
-                        <label for="edit-kode" class="form-label">Kode</label>
-                        <input class="form-control" id="edit-kode" name="kode"></textarea>
+                        <label for="edit-kapasitas" class="form-label">Kapasitas</label>
+                        <input class="form-control" id="edit-kapasitas" name="kapasitas"></textarea>
                     </div>
+                    <div class="mb-3">
+                        <label for="edit-status" class="form-label">Status</label>
+                        <input class="form-control" id="edit-status" name="status"></textarea>
+                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -174,12 +183,12 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Apakah Anda yakin ingin menghapus Fakultas ini? **<span id="delete-role-name"></span>**?</p>
+                    <p>Apakah Anda yakin ingin menghapus Ruangan ini? **<span id="delete-role-name"></span>**?</p>
                     <input type="hidden" name="id" id="delete-id">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-danger">Ya, Hapus Fakultas Ini</button>
+                    <button type="submit" class="btn btn-danger">Ya, Hapus Ruangan Ini</button>
                 </div>
             </form>
         </div>
@@ -192,13 +201,15 @@
                 // 1. Ambil data dari data-attributes
                 var id = $(this).data('id');
                 var nama = $(this).data('nama');
-                var kode = $(this).data('kode');
+                var kapasitas = $(this).data('kapasitas');
+                var status = $(this).data('status');
                 // var izinAksesJson = $(this).data('izin_akses');
 
                 // 2. Isi data Role ke dalam form modal
                 $('#edit-id').val(id);
                 $('#edit-nama').val(nama);
-                $('#edit-kode').val(kode);
+                $('#edit-status').val(kapasitas);
+                $('#edit-status').val(status);
                 $('#edit-role-name').text(nama); // Tampilkan nama role di header modal
 
                 // 3. Atur action form
@@ -255,4 +266,5 @@
             });
         });
     </script>
+
 @endsection
