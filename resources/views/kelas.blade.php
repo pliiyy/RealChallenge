@@ -7,7 +7,7 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span>🏫 Data Kelas</span>
                 <form action="/kelas" method="GET" class="mb-3 d-flex gap-2">
-                    <input type="text" name="search" class="form-control" placeholder="Cari nama role"
+                    <input type="text" name="search" class="form-control" placeholder="Cari nama fakultas"
                         value="{{ request('search') }}">
 
                     <select name="status" class="form-select">
@@ -125,7 +125,7 @@
                 @csrf
                 @method('PUT') {{-- Gunakan method PUT untuk update --}}
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="editRoleModalLabel">Edit Role: <span id="edit-role-name"></span></h5>
+                    <h5 class="modal-title" id="editRoleModalLabel">Edit Kelas: <span id="edit-role-name"></span></h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -133,7 +133,7 @@
                     <input type="hidden" name="id" id="edit-id"> {{-- ID role yang akan diupdate --}}
 
                     <div class="mb-3">
-                        <label for="edit-nama" class="form-label">Nama Role</label>
+                        <label for="edit-nama" class="form-label">Nama Kelas</label>
                         <input type="text" class="form-control" id="edit-nama" name="nama" required />
                     </div>
                     <div class="mb-3">
@@ -167,7 +167,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Apakah Anda yakin ingin menghapus role **<span id="delete-role-name"></span>**?</p>
+                    <p>Apakah Anda yakin ingin menghapus kelas **<span id="delete-role-name"></span>**?</p>
                     <input type="hidden" name="id" id="delete-id">
                 </div>
                 <div class="modal-footer">
@@ -196,56 +196,18 @@
                 $('#edit-kapasitas').val(kapasitas);
                 $('#edit-role-name').text(nama); // Tampilkan nama role di header modal
 
-                // 3. Atur action form
-                // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
                 $('#editRoleForm').attr('action', '/kelas/' + id);
 
-                // 4. Proses dan centang checkbox Izin Akses
 
-                // Pertama, hapus centang dari semua checkbox
-                // $('#editRoleModal input[type="checkbox"]').prop('checked', false);
-
-                // if (izinAksesJson) {
-                //     try {
-                //         // Decode JSON string terluar menjadi array string JSON
-                //         var stringArray = JSON.parse(izinAksesJson);
-
-                //         stringArray.forEach(function(permString) {
-                //             // Decode setiap string JSON di dalamnya menjadi objek/array
-                //             var perm = JSON.parse(permString);
-
-
-                //             // Pisahkan string akses (misal: "read,create")
-                //             var aksesArray = perm.akses.split(',');
-
-                //             // Tentukan modulKey dari nama (sesuaikan dengan nama di form)
-                //             var moduleKey = perm.nama === 'Dashboard' ? 'dashboard' :
-                //                 perm.nama === 'Mahasiswa' ? 'mahasiswa' : null;
-
-                //             if (moduleKey) {
-                //                 aksesArray.forEach(function(akses) {
-                //                     // Bentuk ID checkbox yang sesuai dan centang
-                //                     var checkboxId = '#edit-' + moduleKey + '_' + akses
-                //                         .trim();
-                //                     $(checkboxId).prop('checked', true);
-                //                 });
-                //             }
-                //         });
-                //     } catch (e) {
-                //         console.error("Gagal memproses izin akses JSON:", e);
-                //     }
-                // }
             });
             $('.btn-delete').on('click', function() {
                 var id = $(this).data('id');
                 var nama = $(this).data('nama');
 
-                // Isi data ke dalam form modal
                 $('#delete-id').val(id);
                 $('#delete-role-name').text(nama);
 
                 // Atur action form
-                // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
                 $('#deleteRoleForm').attr('action', '/kelas/' + id);
             });
         });

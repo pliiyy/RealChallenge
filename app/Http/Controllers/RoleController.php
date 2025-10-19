@@ -162,7 +162,8 @@ class RoleController extends Controller
     {
         $role = Role::findOrFail($id);
         $roleName = $role->nama;
-        $role->delete();
+        $role->update(["STATUS" => "NONAKTIF"]);
+        // $role->delete();
 
         return redirect('/role')->with('success', 'Role ' . $roleName . ' berhasil dihapus!');
     }
