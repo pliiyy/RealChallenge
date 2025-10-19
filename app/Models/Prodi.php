@@ -13,4 +13,8 @@ class Prodi extends Model
     {
         return $this->belongsTo(Fakultas::class);
     }
+    public function MataKuliah()
+    {
+        return $this->hasMany(Fakultas::class);
+    }
 }

@@ -2,11 +2,11 @@
 @section('title', 'Matakuliah')
 
 @section('content')
- <div class="col-lg-10 col-md-9 content">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span>📘 Data Mata Kuliah</span>
-                        <form action="/matakuliah" method="GET" class="mb-3 d-flex gap-2">
+    <div class="col-lg-10 col-md-9 content">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>📘 Data Mata Kuliah</span>
+                <form action="/matakuliah" method="GET" class="mb-3 d-flex gap-2">
                     <input type="text" name="search" class="form-control" placeholder="Cari nama matakuliah"
                         value="{{ request('search') }}">
 
@@ -18,65 +18,66 @@
 
                     <button type="submit" class="btn btn-primary">Filter</button>
                 </form>
-                        <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal" data-bs-target="#addMatkulModal">
-                            <i class="bi bi-plus-circle me-1"></i> Tambah Mata Kuliah
-                        </button>
-                    </div>
+                <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
+                    data-bs-target="#addMatkulModal">
+                    <i class="bi bi-plus-circle me-1"></i> Tambah Mata Kuliah
+                </button>
+            </div>
 
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table align-middle">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Nama Mata Kuliah</th>
-                                        <th>Kode</th>
-                                        <th>SKS</th>
-                                        <th>Semester</th>
-                                        <th>Program Studi</th>
-                                        <th>Status</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Pemrograman Web</td>
-                                        <td>PW101</td>
-                                        <td>3</td>
-                                        <td>Semester 5</td>
-                                        <td>Teknik Informatika</td>
-                                        <td><span class="badge bg-success">Aktif</span></td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i></button>
-                                            <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Struktur Data</td>
-                                        <td>SD202</td>
-                                        <td>4</td>
-                                        <td>Semester 3</td>
-                                        <td>Sistem Informasi</td>
-                                        <td><span class="badge bg-secondary">Tidak Aktif</span></td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i></button>
-                                            <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-4 alert alert-info bg-opacity-25 border-0 text-primary">
-                    <i class="bi bi-info-circle me-2"></i>
-                    Kelola data mata kuliah di sini. Pastikan SKS dan status aktif sesuai dengan kurikulum.
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nama Mata Kuliah</th>
+                                <th>Kode</th>
+                                <th>SKS</th>
+                                <th>Semester</th>
+                                <th>Program Studi</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Pemrograman Web</td>
+                                <td>PW101</td>
+                                <td>3</td>
+                                <td>Semester 5</td>
+                                <td>Teknik Informatika</td>
+                                <td><span class="badge bg-success">Aktif</span></td>
+                                <td>
+                                    <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Struktur Data</td>
+                                <td>SD202</td>
+                                <td>4</td>
+                                <td>Semester 3</td>
+                                <td>Sistem Informasi</td>
+                                <td><span class="badge bg-secondary">Tidak Aktif</span></td>
+                                <td>
+                                    <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+
+        <div class="mt-4 alert alert-info bg-opacity-25 border-0 text-primary">
+            <i class="bi bi-info-circle me-2"></i>
+            Kelola data mata kuliah di sini. Pastikan SKS dan status aktif sesuai dengan kurikulum.
+        </div>
+    </div>
+    </div>
     </div>
 
     <!-- Modal Tambah Mata Kuliah -->
@@ -263,7 +264,7 @@
                 $('#edit-sks').text(sks); // Tampilkan nama role di header modal
                 $('#edit-semester').text(semester); // Tampilkan nama role di header modal
                 $('#edit-programstudi').text(programstudi); // Tampilkan nama role di header modal
-              
+
 
                 // 3. Atur action form
                 // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya

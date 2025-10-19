@@ -9,5 +9,8 @@ class Semester extends Model
     protected $table = 'semester';
     protected $guarded = ['id'];
     
-
+    public function MataKuliah()
+    {
+        return $this->hasMany(MataKuliah::class);
+    }
 }
