@@ -24,7 +24,7 @@ class FakultasController extends Controller
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
-
+$query->where("status","AKTIF");
         // Pagination, misal 10 data per halaman
         $fakultas = $query->orderBy('id', 'desc')->paginate(10);
 

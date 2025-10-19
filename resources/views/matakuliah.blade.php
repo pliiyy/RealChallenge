@@ -270,41 +270,6 @@
                 // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
                 $('#editRoleForm').attr('action', '/matakuliah/' + id);
 
-                // 4. Proses dan centang checkbox Izin Akses
-
-                // Pertama, hapus centang dari semua checkbox
-                // $('#editRoleModal input[type="checkbox"]').prop('checked', false);
-
-                // if (izinAksesJson) {
-                //     try {
-                //         // Decode JSON string terluar menjadi array string JSON
-                //         var stringArray = JSON.parse(izinAksesJson);
-
-                //         stringArray.forEach(function(permString) {
-                //             // Decode setiap string JSON di dalamnya menjadi objek/array
-                //             var perm = JSON.parse(permString);
-
-
-                //             // Pisahkan string akses (misal: "read,create")
-                //             var aksesArray = perm.akses.split(',');
-
-                //             // Tentukan modulKey dari nama (sesuaikan dengan nama di form)
-                //             var moduleKey = perm.nama === 'Dashboard' ? 'dashboard' :
-                //                 perm.nama === 'Mahasiswa' ? 'mahasiswa' : null;
-
-                //             if (moduleKey) {
-                //                 aksesArray.forEach(function(akses) {
-                //                     // Bentuk ID checkbox yang sesuai dan centang
-                //                     var checkboxId = '#edit-' + moduleKey + '_' + akses
-                //                         .trim();
-                //                     $(checkboxId).prop('checked', true);
-                //                 });
-                //             }
-                //         });
-                //     } catch (e) {
-                //         console.error("Gagal memproses izin akses JSON:", e);
-                //     }
-                // }
             });
             $('.btn-delete').on('click', function() {
                 var id = $(this).data('id');

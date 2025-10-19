@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Matakuliah;
 use App\Models\Prodi;
+use App\Models\Semester;
 use Illuminate\Http\Request;
 
 class MatakuliahController extends Controller
@@ -26,6 +27,7 @@ class MatakuliahController extends Controller
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
+        $query->where("status","AKTIF");
         // Pagination, misal 10 data per halaman
         $matakuliah = $query->orderBy('id', 'desc')->paginate(10);
 
@@ -33,7 +35,7 @@ class MatakuliahController extends Controller
         $matakuliah->appends($request->all());
 
         $prodi = Prodi::all();
-        $semester = Prodi::all();
+        $semester = Semester::all();
 
         return view('matakuliah', compact('matakuliah','prodi','semester'));
     }
@@ -89,11 +91,13 @@ class MatakuliahController extends Controller
         'nama' => 'required|string|max:255|unique:matakuliah,nama',
         'kode' => 'nullable|string',
         'sks' => 'nullable|string',
-        'prodi_id' => 'required|string',
-        'semester_id' => 'required|string',
+        'prodi_id' => 'nullable|string',
+        'semester_id' => 'nullable|string',
         ]);
-        $validated["status"] = "AKTIF";
 
+        $validated["prodi_id"] = $validated["prodi_id"]|| $matakuliah->prodi_id;
+        $validated["semester_id"] = $validated["semester_id"]|| $matakuliah->semester_id;
+        $validated["status"] = "AKTIF";
         
         // Simpan sebagai string JSON double-encoded
        $validated['status'] = "AKTIF";

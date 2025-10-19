@@ -25,6 +25,7 @@ class ProdiController extends Controller
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
+        $query->where("status","AKTIF");
 
         // Pagination, misal 10 data per halaman
         $prodi = $query->orderBy('id', 'desc')->paginate(10);
@@ -103,7 +104,6 @@ class ProdiController extends Controller
      */
     public function destroy($id)
     {
-        dd($id);
         $prodi = Prodi::findOrFail($id);
         $prodiName = $prodi->nama;
         $prodi->status = "NONAKTIF";

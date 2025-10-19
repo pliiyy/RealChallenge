@@ -75,7 +75,7 @@
     </div>
     <div class="modal fade" id="addKelasModal" tabindex="-1" aria-labelledby="addKelasModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form class="modal-content" action="/prodi" method="POST">
+            <form class="modal-content" action="" method="POST">
                 @csrf
                 @method('post')
                 <div class="modal-header bg-primary text-white">
@@ -93,7 +93,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Fakultas</label>
-                        <select class="form-select" name="fakultas_id">
+                        <select class="form-select" name="fakultas_id" id="edit-fakultas_id">
                             <option value="">-- Fakultas --</option>
                             @foreach ($fakultas as $index => $kls)
                                 <option value="{{ $kls->id }}">{{ $kls->nama }}</option>
@@ -112,7 +112,7 @@
     <div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             {{-- Form action akan diisi oleh JavaScript --}}
-            <form class="modal-content" id="editRoleForm" action="/prodi" method="PUT">
+            <form class="modal-content" id="editRoleForm" action="" method="POST">
                 @csrf
                 @method('PUT') {{-- Gunakan method PUT untuk update --}}
                 <div class="modal-header bg-primary text-white">
@@ -133,7 +133,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="edit-fakultas" class="form-label">Fakultas</label>
-                        <select class="form-select" name="fakultas_id">
+                        <select class="form-select" name="fakultas_id" id="edit-fakultas_id">
                             <option value="">-- Fakultas --</option>
                             @foreach ($fakultas as $index => $kls)
                                 <option value="{{ $kls->id }}">{{ $kls->nama }}</option>
@@ -154,7 +154,7 @@
         aria-hidden="true">
         <div class="modal-dialog modal-sm">
             {{-- Form action akan diisi oleh JavaScript --}}
-            <form class="modal-content" id="deleteRoleForm" action="/prodi" method="DELETE">
+            <form class="modal-content" id="deleteRoleForm" action="" method="POST">
                 @csrf
                 @method('DELETE') {{-- Gunakan method DELETE untuk hapus --}}
                 <div class="modal-header bg-danger text-white">
@@ -196,41 +196,6 @@
                 // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
                 $('#editRoleForm').attr('action', '/prodi/' + id);
 
-                // 4. Proses dan centang checkbox Izin Akses
-
-                // Pertama, hapus centang dari semua checkbox
-                // $('#editRoleModal input[type="checkbox"]').prop('checked', false);
-
-                // if (izinAksesJson) {
-                //     try {
-                //         // Decode JSON string terluar menjadi array string JSON
-                //         var stringArray = JSON.parse(izinAksesJson);
-
-                //         stringArray.forEach(function(permString) {
-                //             // Decode setiap string JSON di dalamnya menjadi objek/array
-                //             var perm = JSON.parse(permString);
-
-
-                //             // Pisahkan string akses (misal: "read,create")
-                //             var aksesArray = perm.akses.split(',');
-
-                //             // Tentukan modulKey dari nama (sesuaikan dengan nama di form)
-                //             var moduleKey = perm.nama === 'Dashboard' ? 'dashboard' :
-                //                 perm.nama === 'Mahasiswa' ? 'mahasiswa' : null;
-
-                //             if (moduleKey) {
-                //                 aksesArray.forEach(function(akses) {
-                //                     // Bentuk ID checkbox yang sesuai dan centang
-                //                     var checkboxId = '#edit-' + moduleKey + '_' + akses
-                //                         .trim();
-                //                     $(checkboxId).prop('checked', true);
-                //                 });
-                //             }
-                //         });
-                //     } catch (e) {
-                //         console.error("Gagal memproses izin akses JSON:", e);
-                //     }
-                // }
             });
             $('.btn-delete').on('click', function() {
                 var id = $(this).data('id');
