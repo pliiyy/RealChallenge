@@ -127,6 +127,7 @@ class RoleController extends Controller
             'keterangan' => 'nullable|string',
             // izin_akses dan izin_info akan diproses di bawah
         ]);
+        $validated['status'] = "AKTIF";
 
         // ============ Logic Pemrosesan Izin Akses (Sama seperti metode store) ============
         $izinAksesTerkelompok = $request->input('izin_akses', []);

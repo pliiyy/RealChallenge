@@ -89,7 +89,7 @@ class ProdiController extends Controller
 
         
         // Simpan sebagai string JSON double-encoded
-        $validated['status'] = $prodi->status;
+        $validated['status'] = "AKTIF";
         // ===============================================================================
 
         $prodi->update($validated);

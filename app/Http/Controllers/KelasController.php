@@ -89,7 +89,7 @@ class KelasController extends Controller
 
         
         // Simpan sebagai string JSON double-encoded
-        $validated['status'] = $kelas->status;
+        $validated['status'] = "AKTIF";
         // ===============================================================================
 
         $kelas->update($validated);
@@ -104,7 +104,8 @@ class KelasController extends Controller
     {
         $kelas = Kelas::findOrFail($id);
         $kelasName = $kelas->nama;
-        $kelas->update(["STATUS" => "NONAKTIF"]);
+        $kelas->status = "NONAKTIF";
+        $kelas->update();
         // $kelas->delete();
 
         return redirect('/kelas')->with('success', 'Kelas ' . $kelasName . ' berhasil dihapus!');

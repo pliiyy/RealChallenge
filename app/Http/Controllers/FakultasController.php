@@ -88,7 +88,7 @@ class FakultasController extends Controller
 
         
         // Simpan sebagai string JSON double-encoded
-        $validated['status'] = $fakultas->status;
+       $validated['status'] = "AKTIF";
         // ===============================================================================
 
         $fakultas->update($validated);

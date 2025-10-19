@@ -91,7 +91,7 @@ class SemesterController extends Controller
 
         
         // Simpan sebagai string JSON double-encoded
-        $validated['status'] = $semester->status;
+        $validated['status'] = "AKTIF";
         // ===============================================================================
 
         $semester->update($validated);
