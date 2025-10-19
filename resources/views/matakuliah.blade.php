@@ -39,32 +39,42 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Pemrograman Web</td>
-                                        <td>PW101</td>
-                                        <td>3</td>
-                                        <td>Semester 5</td>
-                                        <td>Teknik Informatika</td>
-                                        <td><span class="badge bg-success">Aktif</span></td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i></button>
-                                            <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Struktur Data</td>
-                                        <td>SD202</td>
-                                        <td>4</td>
-                                        <td>Semester 3</td>
-                                        <td>Sistem Informasi</td>
-                                        <td><span class="badge bg-secondary">Tidak Aktif</span></td>
-                                        <td>
-                                            <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i></button>
-                                            <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
-                                        </td>
-                                    </tr>
+                                    @foreach ($matakuliah as $index => $kls)
+                                <tr>
+                                    <td>{{ $matakuliah->firstItem() + $index }}</td>
+                                    <td><span>{{ $kls->nama }}</span></td>
+                                    <td>{{ $kls->kode }}</td>
+                                    <td>{{ $kls->sks }}</td>
+                                    <td>{{ $kls->semester->nama }}</td>
+                                    <td>{{ $kls->prodi->nama }}</td>
+                                    <td>
+                                        @if ($kls->status == 'AKTIF')
+                                            <span class="badge bg-success">{{ ucfirst(strtolower($kls->status)) }}</span>
+                                        @else
+                                            <span class="badge bg-secondary">{{ ucfirst(strtolower($kls->status)) }}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
+                                        <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
+                                            data-bs-toggle="modal" data-bs-target="#editRoleModal"
+                                            data-id="{{ $kls->id }}"
+                                            data-nama="{{ $kls->nama }}"data-kode="{{ $kls->kode }}"
+                                            data-kode="{{ $kls->kode }}"data-keterangan="{{ $kls->keterangan }}"
+                                            data-tahun_akademik="{{ $kls->tahun_akademik }}"
+                                            data-tipe="{{ $kls->tipe }}"> <i class="bi bi-pencil"></i>
+                                        </button>
+
+                                        {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
+                                            data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
+                                            data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                    {{-- ... akhir loop ... --}}
+                                </tr>
+                            @endforeach
                                 </tbody>
                             </table>
                         </div>
