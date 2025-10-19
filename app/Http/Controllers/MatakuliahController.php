@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Matakuliah;
 use App\Models\Prodi;
+use App\Models\Semester;
 use Illuminate\Http\Request;
 
 class MatakuliahController extends Controller
@@ -33,7 +34,7 @@ class MatakuliahController extends Controller
         $matakuliah->appends($request->all());
 
         $prodi = Prodi::all();
-        $semester = Prodi::all();
+        $semester = Semester::all();
 
         return view('matakuliah', compact('matakuliah','prodi','semester'));
     }

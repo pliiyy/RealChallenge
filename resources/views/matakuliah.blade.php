@@ -93,7 +93,9 @@
     <!-- Modal Tambah Mata Kuliah -->
     <div class="modal fade" id="addMatkulModal" tabindex="-1" aria-labelledby="addMatkulModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form class="modal-content">
+            <form class="modal-content" action="/matakuliah" method="POST">
+                @csrf
+                @method('post')
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="addMatkulModalLabel">Tambah Mata Kuliah Baru</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
@@ -101,81 +103,31 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nama Mata Kuliah</label>
-                        <input type="text" class="form-control" placeholder="Contoh: Pemrograman Web">
+                        <input type="text" class="form-control" placeholder="Contoh: Pemrograman Web"name="nama">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Kode</label>
-                        <input type="text" class="form-control" placeholder="Contoh: PW101">
+                        <input type="text" class="form-control" placeholder="Contoh: PW101"name="kode">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">SKS</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 3">
+                        <input type="number" class="form-control" placeholder="Contoh: 3"name="sks">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Semester</label>
-                        <select class="form-select">
-                            <option>Semester 1</option>
-                            <option>Semester 2</option>
-                            <option>Semester 3</option>
-                            <option>Semester 4</option>
-                            <option>Semester 5</option>
-                            <option>Semester 6</option>
-                            <option>Semester 7</option>
-                            <option>Semester 8</option>
+                        <select class="form-select"name="semester_id">
+                             @foreach ($semester as $index => $kls)
+                                <option value="{{ $kls->id }}">{{ $kls->nama }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Program Studi</label>
-                        <select class="form-select">
-                            <option>Teknik Informatika</option>
-                            <option>Sistem Informasi</option>
-                            <option>Manajemen</option>
+                        <select class="form-select"name="prodi_id">
+                             @foreach ($prodi as $index => $kls)
+                                <option value="{{ $kls->id }}">{{ $kls->nama }}</option>
+                            @endforeach
                         </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <select class="form-select">
-                            <option>Aktif</option>
-                            <option>Tidak Aktif</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="modal fade" id="addKelasModal" tabindex="-1" aria-labelledby="addKelasModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form class="modal-content" action="/matakuliah" method="POST">
-                @csrf
-                @method('post')
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="addKelasModalLabel">Tambah Mata Kuliah</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Nama Matakuliah</label>
-                        <input type="text" class="form-control" placeholder="Contoh: Kelas A, Kelas B" name="nama">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Kode</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 40" name="kode">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">SKS</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 40" name="sks">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Semester</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 40" name="semester">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Program Studi</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 40" name="programstudi">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -213,12 +165,20 @@
                         <input class="form-control" id="edit-sks" name="sks"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="edit-semester" class="form-label">semester</label>
-                        <input class="form-control" id="edit-semester" name="semester"></textarea>
+                        <label class="form-label">Semester</label>
+                        <select class="form-select"name="semester_id">
+                             @foreach ($semester as $index => $kls)
+                                <option value="{{ $kls->id }}">{{ $kls->nama }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <label for="edit-programstudi" class="form-label">Program Studi</label>
-                        <input class="form-control" id="edit-programstudi" name="programstudi"></textarea>
+                        <label class="form-label">Program Studi</label>
+                        <select class="form-select"name="prodi_id">
+                             @foreach ($prodi as $index => $kls)
+                                <option value="{{ $kls->id }}">{{ $kls->nama }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
