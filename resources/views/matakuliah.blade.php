@@ -24,23 +24,23 @@
                 </button>
             </div>
 
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table align-middle">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Nama Mata Kuliah</th>
-                                        <th>Kode</th>
-                                        <th>SKS</th>
-                                        <th>Semester</th>
-                                        <th>Program Studi</th>
-                                        <th>Status</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($matakuliah as $index => $kls)
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nama Mata Kuliah</th>
+                                <th>Kode</th>
+                                <th>SKS</th>
+                                <th>Semester</th>
+                                <th>Program Studi</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($matakuliah as $index => $kls)
                                 <tr>
                                     <td>{{ $matakuliah->firstItem() + $index }}</td>
                                     <td><span>{{ $kls->nama }}</span></td>
@@ -61,9 +61,9 @@
                                             data-bs-toggle="modal" data-bs-target="#editRoleModal"
                                             data-id="{{ $kls->id }}"
                                             data-nama="{{ $kls->nama }}"data-kode="{{ $kls->kode }}"
-                                            data-kode="{{ $kls->kode }}"data-keterangan="{{ $kls->keterangan }}"
-                                            data-tahun_akademik="{{ $kls->tahun_akademik }}"
-                                            data-tipe="{{ $kls->tipe }}"> <i class="bi bi-pencil"></i>
+                                            data-kode="{{ $kls->kode }}"data-sks="{{ $kls->sks }}"
+                                            data-semester_id="{{ $kls->semester->id }}"
+                                            data-prodi_id="{{ $kls->prodi->id }}"> <i class="bi bi-pencil"></i>
                                         </button>
 
                                         {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
@@ -76,11 +76,11 @@
                                     {{-- ... akhir loop ... --}}
                                 </tr>
                             @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
+            </div>
+        </div>
 
         <div class="mt-4 alert alert-info bg-opacity-25 border-0 text-primary">
             <i class="bi bi-info-circle me-2"></i>
@@ -116,7 +116,7 @@
                     <div class="mb-3">
                         <label class="form-label">Semester</label>
                         <select class="form-select"name="semester_id">
-                             @foreach ($semester as $index => $kls)
+                            @foreach ($semester as $index => $kls)
                                 <option value="{{ $kls->id }}">{{ $kls->nama }}</option>
                             @endforeach
                         </select>
@@ -124,7 +124,7 @@
                     <div class="mb-3">
                         <label class="form-label">Program Studi</label>
                         <select class="form-select"name="prodi_id">
-                             @foreach ($prodi as $index => $kls)
+                            @foreach ($prodi as $index => $kls)
                                 <option value="{{ $kls->id }}">{{ $kls->nama }}</option>
                             @endforeach
                         </select>
@@ -167,7 +167,7 @@
                     <div class="mb-3">
                         <label class="form-label">Semester</label>
                         <select class="form-select"name="semester_id">
-                             @foreach ($semester as $index => $kls)
+                            @foreach ($semester as $index => $kls)
                                 <option value="{{ $kls->id }}">{{ $kls->nama }}</option>
                             @endforeach
                         </select>
@@ -175,7 +175,7 @@
                     <div class="mb-3">
                         <label class="form-label">Program Studi</label>
                         <select class="form-select"name="prodi_id">
-                             @foreach ($prodi as $index => $kls)
+                            @foreach ($prodi as $index => $kls)
                                 <option value="{{ $kls->id }}">{{ $kls->nama }}</option>
                             @endforeach
                         </select>
@@ -223,8 +223,8 @@
                 var nama = $(this).data('nama');
                 var kode = $(this).data('kode');
                 var sks = $(this).data('sks');
-                var semester = $(this).data('semester');
-                var programstudi = $(this).data('programstudi');
+                var semester_id = $(this).data('semester_id');
+                var prodi_id = $(this).data('prodi_id');
                 // var izinAksesJson = $(this).data('izin_akses');
 
                 // 2. Isi data Role ke dalam form modal
@@ -232,8 +232,8 @@
                 $('#edit-nama').val(nama);
                 $('#edit-kode').val(kode);
                 $('#edit-sks').text(sks); // Tampilkan nama role di header modal
-                $('#edit-semester').text(semester); // Tampilkan nama role di header modal
-                $('#edit-programstudi').text(programstudi); // Tampilkan nama role di header modal
+                $('#edit-semester_id').text(semester_id); // Tampilkan nama role di header modal
+                $('#edit-prodi_id').text(prodi_id); // Tampilkan nama role di header modal
 
 
                 // 3. Atur action form
