@@ -2,11 +2,11 @@
 @section('title', 'Semester')
 
 @section('content')
-    <div class="col-lg-10 col-md-9 content">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <span>📘 Data Semester</span>
-                <form action="/semester" method="GET" class="mb-3 d-flex gap-2">
+ <div class="col-lg-10 col-md-9 content">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>📘 Data Semester</span>
+                        <form action="/semester" method="GET" class="mb-3 d-flex gap-2">
                     <input type="text" name="search" class="form-control" placeholder="Cari nama semester"
                         value="{{ request('search') }}">
 
@@ -18,11 +18,10 @@
 
                     <button type="submit" class="btn btn-primary">Filter</button>
                 </form>
-                <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
-                    data-bs-target="#addSemesterModal">
-                    <i class="bi bi-plus-circle me-1"></i> Tambah Semester
-                </button>
-            </div>
+                        <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal" data-bs-target="#addSemesterModal">
+                            <i class="bi bi-plus-circle me-1"></i> Tambah Semester
+                        </button>
+                    </div>
 
             <div class="card-body">
                 <div class="table-responsive">
@@ -82,12 +81,12 @@
             </div>
         </div>
 
-        <div class="mt-4 alert alert-info bg-opacity-25 border-0 text-primary">
-            <i class="bi bi-info-circle me-2"></i>
-            Data semester digunakan untuk menentukan periode akademik aktif.
+                <div class="mt-4 alert alert-info bg-opacity-25 border-0 text-primary">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Data semester digunakan untuk menentukan periode akademik aktif.
+                </div>
+            </div>
         </div>
-    </div>
-    </div>
     </div>
 
     <!-- Modal Tambah Semester -->
@@ -188,7 +187,7 @@
         aria-hidden="true">
         <div class="modal-dialog modal-sm">
             {{-- Form action akan diisi oleh JavaScript --}}
-            <form class="modal-content" id="deleteRoleForm" action="" method="POST">
+            <form class="modal-content" id="deleteRoleForm" action="/semester" method="POST">
                 @csrf
                 @method('DELETE') {{-- Gunakan method DELETE untuk hapus --}}
                 <div class="modal-header bg-danger text-white">
