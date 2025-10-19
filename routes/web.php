@@ -65,6 +65,9 @@ Route::get('/dekan', function () {
 Route::get('/barter_jadwal', function () {
     return view('barter_jadwal');
 });
+Route::get('/shift', function () {
+    return view('shift');
+});
 
 
 Route::get('/api/provinces', function () {

@@ -176,6 +176,7 @@
                 <a href="#" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Data Mahasiswa</a>
                 <a href="#" class="nav-link"><i class="bi bi-gear me-2"></i> Surat Tugas Mengajar</a>
                 <a href="#" class="nav-link"><i class="bi bi-gear me-2"></i> Barter Jadwal</a>
+                <a href="#" class="nav-link"><i class="bi bi-gear me-2"></i> Shift</a>
                 <a href="#" class="nav-link"><i class="bi bi-gear me-2"></i> Pengaturan</a>
 
             </nav>
@@ -210,6 +211,7 @@
                         <a href="#" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Mahasiswa</a>
                         <a href="#" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Dosen</a>
                         <a href="#" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Dekan</a>
+                        <a href="#" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Shift</a>
                     </div>
                     <a href="#" class="nav-link">
                         <i class="bi bi-gear me-2"></i> Barter Jadwal
