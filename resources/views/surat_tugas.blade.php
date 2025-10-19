@@ -1,5 +1,5 @@
 @extends('apps.index')
-@section('title', 'Pengaturan')
+@section('title', 'Surat Tugas')
 
 @section('content')
 <div class="col-lg-10 col-md-9 content">
