@@ -33,6 +33,7 @@ Route::get('/data', function () {
 Route::get('/settings', function () {
     return view('settings');
 });
+
 Route::get('/matakuliah', function () {
     return view('matakuliah');
 });

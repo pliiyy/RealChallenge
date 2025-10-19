@@ -29,7 +29,6 @@ class SemesterController extends Controller
 
         // Biar query string tetap terbawa saat paginate link
         $semester->appends($request->all());
-
         return view('semester', compact('semester'));
     }
 
@@ -106,7 +105,8 @@ class SemesterController extends Controller
     {
         $semester = Semester::findOrFail($id);
         $semesterName = $semester->nama;
-        $semester->update(["STATUS" => "NONAKTIF"]);
+        $semester->status = "NONAKTIF";
+        $semester->update();
         // $semester->delete();
 
         return redirect('/semester')->with('success', 'Semester ' . $semesterName . ' berhasil dihapus!');
