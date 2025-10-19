@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    protected $table = 'user';
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -45,8 +46,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-     public function Role()
+     public function Roles()
     {
-        return $this->hasOne(Role::class);
+        return $this->belongsToMany(Role::class,"user_role");
     }
 }

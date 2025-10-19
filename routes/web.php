@@ -7,6 +7,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('login');
 });
+
+// Route::prefix('admin')->middleware('auth')->group(function () {
+//     Route::resource('roles', RoleController::class);
+// });
+Route::resource('role', RoleController::class);
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 });
@@ -19,10 +25,7 @@ Route::get('/data', function () {
 Route::get('/settings', function () {
     return view('settings');
 });
-Route::get('/roles', function () {
-    return view('roles');
-});
-Route::post('/roles', [RoleController::class,"create"]);
+
 Route::get('/fakultas', function () {
     return view('fakultas');
 });

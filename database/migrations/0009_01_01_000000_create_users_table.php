@@ -23,11 +23,10 @@ return new class extends Migration
             $table->date('tanggal_lahir');
             $table->string('alamat');
             $table->string('kelurahan');
-            $table->string('kecamatan');
-            $table->string('kota');
-            $table->string('provinsi');
+            $table->string('kec_id');
+            $table->string('kab_id');
+            $table->string('prov_id');
             $table->string('foto_profil')->default("/default_profil.jfif");
-            $table->foreignId('role_id')->constrained('role')->nullable();
             $table->enum('status',["AKTIF","NONAKTIF"])->default("AKTIF");
             $table->rememberToken();
             $table->timestamps();
