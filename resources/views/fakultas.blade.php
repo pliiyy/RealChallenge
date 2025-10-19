@@ -2,11 +2,11 @@
 @section('title', 'Fakultas')
 
 @section('content')
-<div class="col-md-9 col-lg-10 content">
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0"><i class="bi bi-building me-2"></i>Data Fakultas</h5>
-            <form action="/fakultas" method="GET" class="mb-3 d-flex gap-2">
+    <div class="col-md-9 col-lg-10 content">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-building me-2"></i>Data Fakultas</h5>
+                <form action="/fakultas" method="GET" class="mb-3 d-flex gap-2">
                     <input type="text" name="search" class="form-control" placeholder="Cari nama fakultas"
                         value="{{ request('search') }}">
 
@@ -18,51 +18,63 @@
 
                     <button type="submit" class="btn btn-primary">Filter</button>
                 </form>
-            <button class="btn btn-light btn-sm text-primary fw-semibold"data-bs-toggle="modal"
+                <button class="btn btn-light btn-sm text-primary fw-semibold"data-bs-toggle="modal"
                     data-bs-target="#addKelasModal">
-                <i class="bi bi-plus-circle me-1"></i> Tambah Fakultas
-            </button>
-        </div>
-        <div class="card-body">
-            <table class="table table-hover align-middle">
-                <thead>
-                    <tr class="text-center">
-                        <th>No</th>
-                        <th>Nama Fakultas</th>
-                        <th>Kode</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="text-center">
-                    <tr>
-                        <td>1</td>
-                        <td>Fakultas Teknik</td>
-                        <td>FT01</td>
-                        <td><span class="badge badge-active">Aktif</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Fakultas Ekonomi</td>
-                        <td>FE02</td>
-                        <td><span class="badge badge-inactive">Nonaktif</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                    <i class="bi bi-plus-circle me-1"></i> Tambah Fakultas
+                </button>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr class="text-center">
+                            <th>No</th>
+                            <th>Nama Fakultas</th>
+                            <th>Kode</th>
+                            <th>Jumlah Prodi</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        @foreach ($fakultas as $index => $kls)
+                            <tr>
+                                <td>{{ $fakultas->firstItem() + $index }}</td>
+                                <td><span>{{ $kls->nama }}</span></td>
+                                <td>{{ $kls->kode }}</td>
+                                <td>{{ $kls->prodi->count() }}</td>
+                                <td>
+                                    @if ($kls->status == 'AKTIF')
+                                        <span class="badge bg-success">{{ ucfirst(strtolower($kls->status)) }}</span>
+                                    @else
+                                        <span class="badge bg-secondary">{{ ucfirst(strtolower($kls->status)) }}</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
+                                    <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
+                                        data-bs-toggle="modal" data-bs-target="#editRoleModal" data-id="{{ $kls->id }}"
+                                        data-nama="{{ $kls->nama }}"data-kode="{{ $kls->kode }}"> <i
+                                            class="bi bi-pencil"></i>
+                                    </button>
+
+                                    {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
+                                    <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
+                                        data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
+                                        data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                                {{-- ... akhir loop ... --}}
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
-<div class="modal fade" id="addKelasModal" tabindex="-1" aria-labelledby="addKelasModalLabel" aria-hidden="true">
+    <div class="modal fade" id="addKelasModal" tabindex="-1" aria-labelledby="addKelasModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form class="modal-content" action="/kelas" method="POST">
+            <form class="modal-content" action="/fakultas" method="POST">
                 @csrf
                 @method('post')
                 <div class="modal-header bg-primary text-white">
@@ -76,7 +88,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Kode</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 40" name="kode">
+                        <input class="form-control" placeholder="Contoh: 40" name="kode">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -90,7 +102,7 @@
     <div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             {{-- Form action akan diisi oleh JavaScript --}}
-            <form class="modal-content" id="editRoleForm" action="" method="POST">
+            <form class="modal-content" id="editRoleForm" action="/fakultas" method="POST">
                 @csrf
                 @method('PUT') {{-- Gunakan method PUT untuk update --}}
                 <div class="modal-header bg-primary text-white">
@@ -123,7 +135,7 @@
         aria-hidden="true">
         <div class="modal-dialog modal-sm">
             {{-- Form action akan diisi oleh JavaScript --}}
-            <form class="modal-content" id="deleteRoleForm" action="" method="POST">
+            <form class="modal-content" id="deleteRoleForm" action="/fakultas" method="POST">
                 @csrf
                 @method('DELETE') {{-- Gunakan method DELETE untuk hapus --}}
                 <div class="modal-header bg-danger text-white">

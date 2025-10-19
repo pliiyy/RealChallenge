@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Fakultas extends Model
 {
+    protected $guarded = ['id'];
     public function Prodi()
     {
-        return $this->belongsToMany(Prodi::class);
+        return $this->hasMany(Prodi::class);
     }
 }

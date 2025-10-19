@@ -103,7 +103,8 @@ class FakultasController extends Controller
     {
         $fakultas = Fakultas::findOrFail($id);
         $fakultasName = $fakultas->nama;
-        $fakultas->update(["STATUS" => "NONAKTIF"]);
+        $fakultas->status = "NONAKTIF";
+        $fakultas->update();
         // $fakultas->delete();
 
         return redirect('/fakultas')->with('success', 'Fakultas ' . $fakultasName . ' berhasil dihapus!');

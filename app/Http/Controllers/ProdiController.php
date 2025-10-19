@@ -84,12 +84,13 @@ class ProdiController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:255|unique:prodi,nama,' . $id, // Ignor ID saat validasi unique
             'kode' => 'required|string',
-            'fakultas_id' => 'required|string',
+            'fakultas_id' => 'nullable|string',
         ]);
 
         
         // Simpan sebagai string JSON double-encoded
         $validated['status'] = "AKTIF";
+        $validated["fakultas_id"] = $validated["fakultas_id"]|| $prodi->fakultas_id;
         // ===============================================================================
 
         $prodi->update($validated);
@@ -102,11 +103,13 @@ class ProdiController extends Controller
      */
     public function destroy($id)
     {
+        dd($id);
         $prodi = Prodi::findOrFail($id);
         $prodiName = $prodi->nama;
-        $prodi->update(["STATUS" => "NONAKTIF"]);
+        $prodi->status = "NONAKTIF";
+        $prodi->update();
         // $prodi->delete();
 
-        return redirect('/prodi')->with('success', 'Pakultas ' . $prodiName . ' berhasil dihapus!');
+        return redirect('/prodi')->with('success', 'Prodi ' . $prodiName . ' berhasil dihapus!');
     }
 }
