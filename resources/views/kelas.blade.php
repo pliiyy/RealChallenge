@@ -6,6 +6,18 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <span>🏫 Data Kelas</span>
+                         <form action="/role" method="GET" class="mb-3 d-flex gap-2">
+                    <input type="text" name="search" class="form-control" placeholder="Cari nama role"
+                        value="{{ request('search') }}">
+
+                    <select name="status" class="form-select">
+                        <option value="">-- Semua Status --</option>
+                        <option value="AKTIF" {{ request('status') == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
+                        <option value="NONAKTIF" {{ request('status') == 'NONAKTIF' ? 'selected' : '' }}>Nonaktif</option>
+                    </select>
+
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </form>
                         <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal" data-bs-target="#addKelasModal">
                             <i class="bi bi-plus-circle me-1"></i> Tambah Kelas
                         </button>
@@ -18,6 +30,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Nama Kelas</th>
+                                        <th>Tahun ajaran</th>
                                         <th>Kapasitas</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
@@ -72,6 +85,10 @@
                         <input type="text" class="form-control" placeholder="Contoh: Kelas A, Kelas B">
                     </div>
                     <div class="mb-3">
+                        <label class="form-label">Tahun ajaran</label>
+                        <input type="number" class="form-control" placeholder="Contoh: 40">
+                    </div>
+                     <div class="mb-3">
                         <label class="form-label">Kapasitas</label>
                         <input type="number" class="form-control" placeholder="Contoh: 40">
                     </div>
