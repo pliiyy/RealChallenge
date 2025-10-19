@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KelasController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,7 @@ Route::get('/', function () {
 //     Route::resource('roles', RoleController::class);
 // });
 Route::resource('role', RoleController::class);
+Route::resource('kelas', KelasController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -47,9 +49,9 @@ Route::get('/jadwal', function () {
 Route::get('/ruangan', function () {
     return view('ruangan');
 });
-Route::get('/kelas', function () {
-    return view('kelas');
-});
+// Route::get('/kelas', function () {
+//     return view('kelas');
+// });
 Route::get('/mahasiswa', function () {
     return view('mahasiswa');
 });
