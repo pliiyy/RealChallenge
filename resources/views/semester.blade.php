@@ -40,19 +40,42 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Ganjil</td>
-                                <td>2025G1</td>
-                                <td>Semester Ganjil Tahun 2025</td>
-                                <td>2025/2026</td>
-                                <td><span class="badge bg-info text-dark">Reguler</span></td>
-                                <td><span class="badge bg-success">Aktif</span></td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
-                                </td>
-                            </tr>
+                            @foreach ($semester as $index => $kls)
+                                <tr>
+                                    <td>{{ $semester->firstItem() + $index }}</td>
+                                    <td><span>{{ $kls->nama }}</span></td>
+                                    <td>{{ $kls->kode }}</td>
+                                    <td>{{ $kls->keterangan }}</td>
+                                    <td>{{ $kls->tahun_akademik }}</td>
+                                    <td>{{ $kls->tipe }}</td>
+                                    <td>
+                                        @if ($kls->status == 'AKTIF')
+                                            <span class="badge bg-success">{{ ucfirst(strtolower($kls->status)) }}</span>
+                                        @else
+                                            <span class="badge bg-secondary">{{ ucfirst(strtolower($kls->status)) }}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
+                                        <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
+                                            data-bs-toggle="modal" data-bs-target="#editRoleModal"
+                                            data-id="{{ $kls->id }}"
+                                            data-nama="{{ $kls->nama }}"data-kode="{{ $kls->kode }}"
+                                            data-kode="{{ $kls->kode }}"data-keterangan="{{ $kls->keterangan }}"
+                                            data-tahun_akademik="{{ $kls->tahun_akademik }}"
+                                            data-tipe="{{ $kls->tipe }}"> <i class="bi bi-pencil"></i>
+                                        </button>
+
+                                        {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
+                                            data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
+                                            data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                    {{-- ... akhir loop ... --}}
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -70,7 +93,9 @@
     <!-- Modal Tambah Semester -->
     <div class="modal fade" id="addSemesterModal" tabindex="-1" aria-labelledby="addSemesterModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form class="modal-content">
+            <form class="modal-content" action="/semester" method="POST">
+                @csrf
+                @method('POST')
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="addSemesterModalLabel">Tambah Semester Baru</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
@@ -78,32 +103,26 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nama Semester</label>
-                        <input type="text" class="form-control" placeholder="Contoh: Ganjil, Genap">
+                        <input type="text" class="form-control" placeholder="Contoh: Ganjil, Genap" name="nama">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Kode</label>
-                        <input type="text" class="form-control" placeholder="Contoh: 2025G1">
+                        <input type="text" class="form-control" placeholder="Contoh: 2025G1" name="kode">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Keterangan</label>
-                        <textarea class="form-control" rows="2" placeholder="Tuliskan deskripsi singkat semester"></textarea>
+                        <textarea class="form-control" rows="2" placeholder="Tuliskan deskripsi singkat semester" name="keterangan">  </textarea>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Tahun Akademik</label>
-                        <input type="text" class="form-control" placeholder="Contoh: 2025/2026">
+                        <input type="text" class="form-control" placeholder="Contoh: 2025/2026" name="tahun_akademik">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Type</label>
-                        <select class="form-select">
-                            <option value="Reguler">Reguler</option>
-                            <option value="Pendek">Pendek</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <select class="form-select">
-                            <option value="Aktif">Aktif</option>
-                            <option value="Tidak Aktif">Tidak Aktif</option>
+                        <select class="form-select" name="tipe">
+                            <option value="GANJIL">GANJIL</option>
+                            <option value="GENAP">GENAP</option>
+                            <option value="KHUSUS">KHUSUS</option>
                         </select>
                     </div>
                 </div>
@@ -114,46 +133,7 @@
             </form>
         </div>
     </div>
-    <div class="modal fade" id="addKelasModal" tabindex="-1" aria-labelledby="addKelasModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form class="modal-content" action="/prodi" method="POST">
-                @csrf
-                @method('post')
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="addKelasModalLabel">Tambah Semester Baru</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Nama prodi</label>
-                        <input type="text" class="form-control" placeholder="Contoh: Kelas A, Kelas B"
-                            name="nama">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Kode</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 40" name="kode">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Keterangan</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 40" name="keterangan">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Tahun Akademik</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 40" name="tahunakademik">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Type</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 40" name="Type">
-                    </div>
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
 
     <div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -182,12 +162,16 @@
                         <input class="form-control" id="edit-keterangan" name="keterangan"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="edit-tahunakademik" class="form-label">Tahun Akademik</label>
-                        <input class="form-control" id="edit-tahunakademik" name="tahunakademik"></textarea>
+                        <label for="edit-tahun_akademik" class="form-label">Tahun Akademik</label>
+                        <input class="form-control" id="edit-tahun_akademik" name="tahun_akademik"></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="edit-type" class="form-label">Type</label>
-                        <input class="form-control" id="edit-type" name="type"></textarea>
+                        <select class="form-select" name="tipe">
+                            <option value="GANJIL">GANJIL</option>
+                            <option value="GENAP">GENAP</option>
+                            <option value="KHUSUS">KHUSUS</option>
+                        </select>
                     </div>
 
                 </div>
@@ -233,71 +217,40 @@
                 var nama = $(this).data('nama');
                 var kode = $(this).data('kode');
                 var keterangan = $(this).data('keterangan');
-                var tahunakademik = $(this).data('tahunakademik');
-                var type = $(this).data('type');
-
-                // var izinAksesJson = $(this).data('izin_akses');
+                var tahun_akademik = $(this).data('tahun_akademik');
+                var tipe = $(this).data('tipe');
 
                 // 2. Isi data Role ke dalam form modal
                 $('#edit-id').val(id);
                 $('#edit-nama').val(nama);
+                $('#edit-keterangan').val(keterangan);
                 $('#edit-kode').val(kode);
-                $('#edit-keterangan').val(keterangan)); $('#edit-tahunakademik').val(tahunakademik));
-            $('#edit-type').val(type);
-            $('#edit-role-name').text(nama); // Tampilkan nama role di header modal
+                $('#edit-keterangan').val(keterangan);
+                $('#edit-tahun_akademik').val(tahun_akademik);
+                $('#edit-tipe').val(tipe);
+                $('#edit-role-name').text(nama); // Tampilkan nama role di header modal
 
-            // 3. Atur action form
-            // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
-            $('#editRoleForm').attr('action', '/semester/' + id);
+                // 3. Atur action form
+                // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
+                $('#editRoleForm').attr('action', '/semester/' + id);
 
-            // 4. Proses dan centang checkbox Izin Akses
+                // 4. Proses dan centang checkbox Izin Akses
 
-            // Pertama, hapus centang dari semua checkbox
-            // $('#editRoleModal input[type="checkbox"]').prop('checked', false);
+                // Pertama, hapus centang dari semua checkbox
 
-            // if (izinAksesJson) {
-            //     try {
-            //         // Decode JSON string terluar menjadi array string JSON
-            //         var stringArray = JSON.parse(izinAksesJson);
+            });
+            $('.btn-delete').on('click', function() {
+                var id = $(this).data('id');
+                var nama = $(this).data('nama');
 
-            //         stringArray.forEach(function(permString) {
-            //             // Decode setiap string JSON di dalamnya menjadi objek/array
-            //             var perm = JSON.parse(permString);
+                // Isi data ke dalam form modal
+                $('#delete-id').val(id);
+                $('#delete-role-name').text(nama);
 
-
-            //             // Pisahkan string akses (misal: "read,create")
-            //             var aksesArray = perm.akses.split(',');
-
-            //             // Tentukan modulKey dari nama (sesuaikan dengan nama di form)
-            //             var moduleKey = perm.nama === 'Dashboard' ? 'dashboard' :
-            //                 perm.nama === 'Mahasiswa' ? 'mahasiswa' : null;
-
-            //             if (moduleKey) {
-            //                 aksesArray.forEach(function(akses) {
-            //                     // Bentuk ID checkbox yang sesuai dan centang
-            //                     var checkboxId = '#edit-' + moduleKey + '_' + akses
-            //                         .trim();
-            //                     $(checkboxId).prop('checked', true);
-            //                 });
-            //             }
-            //         });
-            //     } catch (e) {
-            //         console.error("Gagal memproses izin akses JSON:", e);
-            //     }
-            // }
-        });
-        $('.btn-delete').on('click', function() {
-        var id = $(this).data('id');
-        var nama = $(this).data('nama');
-
-        // Isi data ke dalam form modal
-        $('#delete-id').val(id);
-        $('#delete-role-name').text(nama);
-
-        // Atur action form
-        // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
-        $('#deleteRoleForm').attr('action', '/semester/' + id);
-        });
+                // Atur action form
+                // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
+                $('#deleteRoleForm').attr('action', '/semester/' + id);
+            });
         });
     </script>
 
