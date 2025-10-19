@@ -38,41 +38,6 @@
                                 <th>Aksi</th>
                             </tr>
                         </thead>
-                        {{-- <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td><span class="badge bg-primary">Admin</span></td>
-                                <td>Memiliki akses penuh ke seluruh sistem</td>
-                                <td>Full Access</td>
-                                <td><span class="badge bg-success">Aktif</span></td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td><span class="badge bg-success">Staff</span></td>
-                                <td>Hanya akses manajemen data</td>
-                                <td>CRUD Data</td>
-                                <td><span class="badge bg-success">Aktif</span></td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td><span class="badge bg-warning text-dark">Mahasiswa</span></td>
-                                <td>Akses terbatas untuk melihat data pribadi</td>
-                                <td>Read Only</td>
-                                <td><span class="badge bg-secondary">Nonaktif</span></td>
-                                <td>
-                                    <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i></button>
-                                </td>
-                            </tr>
-                        </tbody> --}}
                         @foreach ($roles as $index => $role)
                             <tr>
                                 <td>{{ $roles->firstItem() + $index }}</td>

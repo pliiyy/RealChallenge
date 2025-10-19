@@ -25,10 +25,10 @@ class KelasController extends Controller
     }
 
     // Pagination, misal 10 data per halaman
-    $roles = $query->orderBy('id', 'desc')->paginate(10);
+    $kelas = $query->orderBy('id', 'desc')->paginate(10);
 
     // Biar query string tetap terbawa saat paginate link
-    $roles->appends($request->all());
+    $kelas->appends($request->all());
 
     return view('kelas', compact('kelas'));
     }

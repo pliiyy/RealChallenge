@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Kelas extends Model
 {
-    //
+    protected $fillable = ['nama','tahun_ajaran','kapasitas','status',];
 }
