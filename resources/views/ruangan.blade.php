@@ -6,6 +6,18 @@
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <span>🏫 Data Ruangan</span>
+                         <form action="/role" method="GET" class="mb-3 d-flex gap-2">
+                    <input type="text" name="search" class="form-control" placeholder="Cari nama role"
+                        value="{{ request('search') }}">
+
+                    <select name="status" class="form-select">
+                        <option value="">-- Semua Status --</option>
+                        <option value="AKTIF" {{ request('status') == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
+                        <option value="NONAKTIF" {{ request('status') == 'NONAKTIF' ? 'selected' : '' }}>Nonaktif</option>
+                    </select>
+
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </form>
                         <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal" data-bs-target="#addRuanganModal">
                             <i class="bi bi-plus-circle me-1"></i> Tambah Ruangan
                         </button>

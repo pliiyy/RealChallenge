@@ -62,6 +62,9 @@ Route::get('/surat_tugas', function () {
 Route::get('/dekan', function () {
     return view('dekan');
 });
+Route::get('/barter_jadwal', function () {
+    return view('barter_jadwal');
+});
 
 
 Route::get('/api/provinces', function () {
