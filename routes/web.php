@@ -14,6 +14,8 @@ Route::get('/', function () {
 // });
 Route::resource('role', RoleController::class);
 Route::resource('kelas', KelasController::class);
+Route::resource('fakultas', KelasController::class);
+Route::resource('prodi', KelasController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -27,16 +29,6 @@ Route::get('/data', function () {
 Route::get('/settings', function () {
     return view('settings');
 });
-
-Route::get('/fakultas', function () {
-    return view('fakultas');
-});
-Route::get('/prodi', function () {
-    return view('prodi');
-});
-Route::get('/prodi', function () {
-    return view('prodi');
-});
 Route::get('/semester', function () {
     return view('semester');
 });
@@ -49,9 +41,6 @@ Route::get('/jadwal', function () {
 Route::get('/ruangan', function () {
     return view('ruangan');
 });
-// Route::get('/kelas', function () {
-//     return view('kelas');
-// });
 Route::get('/mahasiswa', function () {
     return view('mahasiswa');
 });

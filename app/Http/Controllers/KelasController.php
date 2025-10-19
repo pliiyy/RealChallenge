@@ -77,16 +77,36 @@ class KelasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Kelas $kelas)
+    public function update(Request $request, $id)
     {
-        //
+        $kelas = Kelas::findOrFail($id);
+        
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255|unique:kelas,nama,' . $id, // Ignor ID saat validasi unique
+            'tahun_ajaran' => 'nullable|string',
+        'kapasitas' => 'nullable|string',
+        ]);
+
+        
+        // Simpan sebagai string JSON double-encoded
+        $validated['status'] = $kelas->status;
+        // ===============================================================================
+
+        $kelas->update($validated);
+
+        return redirect('/kelas')->with('success', 'Kelas ' . $kelas->nama . ' berhasil diperbarui!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Kelas $kelas)
+    public function destroy($id)
     {
-        //
+        $kelas = Kelas::findOrFail($id);
+        $kelasName = $kelas->nama;
+        $kelas->update(["STATUS" => "NONAKTIF"]);
+        // $kelas->delete();
+
+        return redirect('/kelas')->with('success', 'Kelas ' . $kelasName . ' berhasil dihapus!');
     }
 }
