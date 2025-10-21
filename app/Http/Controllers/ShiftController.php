@@ -110,8 +110,9 @@ class ShiftController extends Controller
     {
         $shift = Shift::findOrFail($id);
         $shiftName = $shift->nama;
-        $shift->status = "NONAKTIF";
-        $shift->update();
+        // $shift->status = "NONAKTIF";
+        // $shift->update();
+        $shift->delete();
 
         return redirect('/shift')->with('success', 'Shift ' . $shiftName . ' berhasil dihapus!');
     }

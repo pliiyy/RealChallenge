@@ -5,7 +5,7 @@
     <div class="col-lg-10 col-md-9 content">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <span>👨‍🏫 Data Dosen</span>
+                <span>👨‍🏫 Data Kaprodi</span>
                 <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
                     data-bs-target="#dekanFormModal">
                     <i class="bi bi-plus-circle me-1"></i> Tambah Kaprodi
@@ -70,7 +70,9 @@
                 </div>
             </div>
         </div>
-
+        <div class="mt-3">
+            {{ $kaprodi->links() }}
+        </div>
         <div class="mt-4 alert alert-info bg-opacity-25 border-0 text-primary">
             <i class="bi bi-info-circle me-2"></i>
             Kelola data Dekan untuk setiap fakultas dan program studi.

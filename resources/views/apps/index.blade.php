@@ -191,9 +191,12 @@
                         <a href="/jadwal" class="nav-link"><i class="bi bi-clock-history me-2"></i> Jadwal</a>
                         <a href="/ruangan" class="nav-link"><i class="bi bi-door-closed me-2"></i> Ruangan</a>
                         <a href="/kelas" class="nav-link"><i class="bi bi-people me-2"></i> Kelas</a>
+                        <a href="/kosma" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Kosma</a>
                         <a href="/mahasiswa" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Mahasiswa</a>
-                        <a href="/dosen" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Dosen</a>
                         <a href="/dekan" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Dekan</a>
+                        <a href="/kaprodi" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Kaprodi</a>
+                        <a href="/sekprodi" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Sekprodi</a>
+                        <a href="/dosen" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Dosen</a>
                         <a href="/shift" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Shift</a>
                         <a href="/angkatan" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Angkatan</a>
                     </div>
@@ -204,7 +207,7 @@
                         <i class="bi bi-gear me-2"></i> Surat Tugas Mengajar
                     </a>
                     <!-- Pengaturan -->
-                    <a href="/pengaturan" class="nav-link">
+                    <a href="/settings" class="nav-link">
                         <i class="bi bi-gear me-2"></i> Pengaturan
                     </a>
                 </nav>

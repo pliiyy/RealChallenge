@@ -33,6 +33,7 @@
                                 <th>Nama Kelas</th>
                                 <th>Tahun ajaran</th>
                                 <th>Kapasitas</th>
+                                <th>Kosma</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
@@ -44,6 +45,10 @@
                                     <td><span>{{ $kls->nama }}</span></td>
                                     <td>{{ $kls->angkatan->tahun }}</td>
                                     <td>{{ $kls->kapasitas }}</td>
+                                    <td>{{ $kls->kosma?->User?->Biodata?->nama }} @if ($kls->kosma_id !== null)
+                                            <span>({{ $kls->kosma?->User?->Mahasiswa?->nim }})</span>
+                                        @endif
+                                    </td>
                                     <td>
                                         @if ($kls->status == 'AKTIF')
                                             <span class="badge bg-success">{{ ucfirst(strtolower($kls->status)) }}</span>

@@ -103,8 +103,8 @@ class AngkatanController extends Controller
     {
         $angkatan = Angkatan::findOrFail($id);
         $angkatanName = $angkatan->tahun;
-        $angkatan->status = "NONAKTIF";
-        $angkatan->update();
+        // $angkatan->status = "NONAKTIF";
+        $angkatan->delete();
 
         return redirect('/angkatan')->with('success', 'Angkatan ' . $angkatanName . ' berhasil dihapus!');
     }

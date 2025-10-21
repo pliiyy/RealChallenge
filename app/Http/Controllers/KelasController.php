@@ -111,9 +111,7 @@ class KelasController extends Controller
     {
         $kelas = Kelas::findOrFail($id);
         $kelasName = $kelas->nama;
-        $kelas->status = "NONAKTIF";
-        $kelas->update();
-        // $kelas->delete();
+        $kelas->delete();
 
         return redirect('/kelas')->with('success', 'Kelas ' . $kelasName . ' berhasil dihapus!');
     }

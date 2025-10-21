@@ -116,9 +116,9 @@ class MatakuliahController extends Controller
     {
         $matakuliah = Matakuliah::findOrFail($id);
         $matakuliahName = $matakuliah->nama;
-        $matakuliah->status = "NONAKTIF";
-        $matakuliah->update();
-        // $matakuliah->delete();
+        // $matakuliah->status = "NONAKTIF";
+        // $matakuliah->update();
+        $matakuliah->delete();
 
         return redirect('/matakuliah')->with('success', 'Matakuliah ' . $matakuliahName . ' berhasil dihapus!');
     }

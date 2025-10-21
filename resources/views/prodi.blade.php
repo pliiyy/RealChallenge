@@ -32,6 +32,8 @@
                             <th>Nama Prodi</th>
                             <th>Kode</th>
                             <th>Fakultas</th>
+                            <th>Kaprodi</th>
+                            <th>Sekprodi</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -43,6 +45,8 @@
                                 <td><span>{{ $kls->nama }}</span></td>
                                 <td>{{ $kls->kode }}</td>
                                 <td>{{ $kls->fakultas->nama }}</td>
+                                <td>{{ $kls->kaprodi?->user?->Biodata?->nama }}</td>
+                                <td>{{ $kls->kaprodi?->user?->Biodata?->nama }}</td>
                                 <td>
                                     @if ($kls->status == 'AKTIF')
                                         <span class="badge bg-success">{{ ucfirst(strtolower($kls->status)) }}</span>
@@ -53,9 +57,12 @@
                                 <td>
                                     {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
                                     <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
-                                        data-bs-toggle="modal" data-bs-target="#editRoleModal" data-id="{{ $kls->id }}"
+                                        data-bs-toggle="modal" data-bs-target="#editRoleModal"
+                                        data-id="{{ $kls->id }}"
                                         data-nama="{{ $kls->nama }}"data-kode="{{ $kls->kode }}"
-                                        data-fakultas_id="{{ $kls->fakultas_id }}"> <i class="bi bi-pencil"></i>
+                                        data-fakultas_id="{{ $kls->fakultas_id }}"
+                                        data-kaprodi_id="{{ $kls->kaprodi_id }}"
+                                        data-sekprodi_id="{{ $kls->sekprodi_id }}"> <i class="bi bi-pencil"></i>
                                     </button>
 
                                     {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
@@ -103,6 +110,24 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">Kaprodi</label>
+                        <select class="form-select" name="kaprodi_id">
+                            <option value="">-- Kaprodi --</option>
+                            @foreach ($kaprodi as $index => $kls)
+                                <option value="{{ $kls->id }}">{{ $kls->user->Biodata->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sekprodi</label>
+                        <select class="form-select" name="sekprodi_id">
+                            <option value="">-- sekprodi --</option>
+                            @foreach ($sekprodi as $index => $kls)
+                                <option value="{{ $kls->id }}">{{ $kls->user->Biodata->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -140,6 +165,24 @@
                             <option value="">-- Fakultas --</option>
                             @foreach ($fakultas as $index => $kls)
                                 <option value="{{ $kls->id }}">{{ $kls->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-kaprodi" class="form-label">Kaprodi</label>
+                        <select class="form-select" name="kaprodi_id" id="edit-kaprodi_id">
+                            <option value="">-- Kaprodi --</option>
+                            @foreach ($kaprodi as $index => $kls)
+                                <option value="{{ $kls->id }}">{{ $kls->user->Biodata->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-sekprodi" class="form-label">Sekprodi</label>
+                        <select class="form-select" name="sekprodi_id" id="edit-sekprodi_id">
+                            <option value="">-- Sekprodi --</option>
+                            @foreach ($sekprodi as $index => $kls)
+                                <option value="{{ $kls->id }}">{{ $kls->user->Biodata->nama }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -186,6 +229,8 @@
                 var nama = $(this).data('nama');
                 var kode = $(this).data('kode');
                 var fakultas_id = $(this).data('fakultas_id');
+                var kaprodi_id = $(this).data('kaprodi_id');
+                var sekprodi_id = $(this).data('sekprodi_id');
                 // var izinAksesJson = $(this).data('izin_akses');
 
                 // 2. Isi data Role ke dalam form modal
@@ -193,6 +238,8 @@
                 $('#edit-nama').val(nama);
                 $('#edit-kode').val(kode);
                 $('#edit-fakultas_id').val(fakultas_id);
+                $('#edit-kaprodi_id').val(kaprodi_id);
+                $('#edit-sekprodi_id').val(sekprodi_id);
                 $('#edit-role-name').text(nama); // Tampilkan nama role di header modal
 
                 // 3. Atur action form

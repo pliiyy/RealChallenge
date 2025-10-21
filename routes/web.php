@@ -1,17 +1,21 @@
 <?php
 
 use App\Http\Controllers\AngkatanController;
+use App\Http\Controllers\BarterJadwalController;
 use App\Http\Controllers\DekanController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\FakultasController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\KaprodiController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\KosmaController;
+use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\MatakuliahController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\RuanganController;
+use App\Http\Controllers\SekprodiController;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\SuratTugasMengajarController;
 use App\Http\Controllers\User;
@@ -40,6 +44,10 @@ Route::resource('dosen', DosenController::class);
 Route::resource('surat_tugas', SuratTugasMengajarController::class);
 Route::resource('jadwal', JadwalController::class);
 Route::resource('kaprodi', KaprodiController::class);
+Route::resource('sekprodi', SekprodiController::class);
+Route::resource('mahasiswa', MahasiswaController::class);
+Route::resource('kosma', KosmaController::class);
+Route::resource('barter_jadwal', BarterJadwalController::class);
 
 Route::get('/laporan/pdf/show', [PdfController::class, 'generateAndShow'])->name('laporan.pdf.show');
 
@@ -56,14 +64,10 @@ Route::get('/settings', function () {
     return view('settings');
 });
 
-Route::get('/mahasiswa', function () {
-    return view('mahasiswa');
-});
 
-
-Route::get('/barter_jadwal', function () {
-    return view('barter_jadwal');
-});
+// Route::get('/barter_jadwal', function () {
+//     return view('barter_jadwal');
+// });
 
 
 

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fakultas;
+use App\Models\Kaprodi;
 use App\Models\Prodi;
+use App\Models\Sekprodi;
 use Illuminate\Http\Request;
 
 class ProdiController extends Controller
@@ -14,7 +16,7 @@ class ProdiController extends Controller
     public function index(Request $request)
     {
         $query = Prodi::query();
-        $query->with('fakultas');
+        $query->with(['fakultas','kaprodi','sekprodi']);
 
         // Searching berdasarkan nama
         if ($request->filled('search')) {
@@ -34,7 +36,9 @@ class ProdiController extends Controller
         // Biar query string tetap terbawa saat paginate link
         $prodi->appends($request->all());
         $fakultas = Fakultas::where('status',"AKTIF")->get();
-        return view('prodi', compact('prodi','fakultas'));
+        $kaprodi = Kaprodi::all();
+        $sekprodi = Sekprodi::all();
+        return view('prodi', compact('prodi','fakultas','kaprodi','sekprodi'));
     }
 
     /**
@@ -54,6 +58,8 @@ class ProdiController extends Controller
         'nama' => 'required|string|max:255|unique:prodi,nama',
         'kode' => 'required|string',
         'fakultas_id' => 'required|string',
+        'kaprodi_id' => 'nullable|string',
+        'sekprodi_id' => 'nullable|string',
     ]);
     $validated["status"] = "AKTIF";
     Prodi::create($validated);
@@ -87,6 +93,8 @@ class ProdiController extends Controller
             'nama' => 'required|string|max:255|unique:prodi,nama,' . $id, // Ignor ID saat validasi unique
             'kode' => 'required|string',
             'fakultas_id' => 'nullable|string',
+            'kaprodi_id' => 'nullable|string',
+            'sekprodi_id' => 'nullable|string',
         ]);
 
         
@@ -107,9 +115,9 @@ class ProdiController extends Controller
     {
         $prodi = Prodi::findOrFail($id);
         $prodiName = $prodi->nama;
-        $prodi->status = "NONAKTIF";
-        $prodi->update();
-        // $prodi->delete();
+        // $prodi->status = "NONAKTIF";
+        // $prodi->update();
+        $prodi->delete();
 
         return redirect('/prodi')->with('success', 'Prodi ' . $prodiName . ' berhasil dihapus!');
     }

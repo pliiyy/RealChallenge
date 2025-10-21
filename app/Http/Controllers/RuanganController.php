@@ -108,8 +108,9 @@ class RuanganController extends Controller
     {
         $ruangan = Ruangan::findOrFail($id);
         $ruanganName = $ruangan->nama;
-        $ruangan->status = "NONAKTIF";
-        $ruangan->update();
+        // $ruangan->status = "NONAKTIF";
+        // $ruangan->update();
+        $ruangan->delete();
 
         return redirect('/ruangan')->with('success', 'Ruangan ' . $ruanganName . ' berhasil dihapus!');
     }

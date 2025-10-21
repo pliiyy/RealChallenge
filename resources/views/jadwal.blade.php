@@ -79,7 +79,9 @@
                 </div>
             </div>
         </div>
-
+        <div class="mt-3">
+            {{ $jadwal->links() }}
+        </div>
         <div class="mt-4 alert alert-info bg-opacity-25 border-0 text-primary">
             <i class="bi bi-info-circle me-2"></i>
             Kelola jadwal perkuliahan dengan memastikan tidak ada bentrok antar waktu dan ruangan.

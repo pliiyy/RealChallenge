@@ -107,9 +107,9 @@ class SemesterController extends Controller
     {
         $semester = Semester::findOrFail($id);
         $semesterName = $semester->nama;
-        $semester->status = "NONAKTIF";
-        $semester->update();
-        // $semester->delete();
+        // $semester->status = "NONAKTIF";
+        // $semester->update();
+        $semester->delete();
 
         return redirect('/semester')->with('success', 'Semester ' . $semesterName . ' berhasil dihapus!');
     }

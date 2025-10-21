@@ -1,14 +1,14 @@
 @extends('apps.index')
-@section('title', 'Dekan')
+@section('title', 'Kaprodi')
 @section('content')
     <!-- Content -->
     <div class="col-lg-10 col-md-9 content">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <span>👨‍🏫 Data Dekan</span>
+                <span>👨‍🏫 Data Sekprodi</span>
                 <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
                     data-bs-target="#dekanFormModal">
-                    <i class="bi bi-plus-circle me-1"></i> Tambah Dekan
+                    <i class="bi bi-plus-circle me-1"></i> Tambah Sekprodi
                 </button>
             </div>
             <div class="card-body">
@@ -17,28 +17,30 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Nama Dekan</th>
                                 <th>NIDN</th>
-                                <th>Fakultas</th>
+                                <th>Nama Kaprodi</th>
+                                <th>Program Studi</th>
+                                <th>Email</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($dekan as $index => $kls)
+                            @foreach ($sekprodi as $index => $kls)
                                 <tr>
-                                    <td>{{ $dekan->firstItem() + $index }}</td>
+                                    <td>{{ $sekprodi->firstItem() + $index }}</td>
+                                    <td><span>{{ $kls->nidn ?? '' }}</span></td>
                                     <td><span>{{ $kls->user->Biodata->nama }}</span></td>
-                                    <td><span>{{ $kls->nidn }}</span></td>
                                     <td>
-                                        @foreach ($kls->fakultas as $fakultas)
-                                            <span>{{ $fakultas->nama }}</span>{{ ' ' }}
+                                        @foreach ($kls->prodi as $item)
+                                            <span>{{ $item->nama }}</span>
                                         @endforeach
                                     </td>
+                                    <td><span>{{ $kls->user->email }}</span></td>
                                     <td>
                                         {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
                                         <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
                                             data-bs-toggle="modal" data-bs-target="#editRoleModal"
-                                            data-id="{{ $kls->id }}" data-nidn="{{ $kls->nidn }}"
+                                            data-id="{{ $kls->id }}"data-preferensi="{{ $kls->preferensi }}"
                                             data-nama="{{ $kls->user->Biodata->nama }}"
                                             data-username="{{ $kls->user->username }}" data-email="{{ $kls->user->email }}"
                                             data-no_telepon="{{ $kls->user->no_telepon }}"
@@ -69,11 +71,11 @@
             </div>
         </div>
         <div class="mt-3">
-            {{ $dekan->links() }}
+            {{ $sekprodi->links() }}
         </div>
         <div class="mt-4 alert alert-info bg-opacity-25 border-0 text-primary">
             <i class="bi bi-info-circle me-2"></i>
-            Kelola data Dekan untuk setiap fakultas dan program studi.
+            Kelola data Sekprodi untuk setiapprogram studi.
         </div>
     </div>
 
@@ -82,11 +84,11 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="dekanFormModalLabel">Tambah data dekan</h5>
+                    <h5 class="modal-title" id="dekanFormModalLabel">Tambah data Sekprodi</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
-                <form method="POST" action="/dekan" method="POST">
+                <form method="POST" action="/sekprodi" method="POST">
                     @csrf
                     @method('POST')
                     <div class="modal-body">
@@ -97,14 +99,14 @@
                         <div class="mb-3">
                             <label for="user_selection_type" class="form-label">Tindakan User:</label>
                             <select id="user_selection_type" class="form-select">
-                                <option value="existing">Pilih User/Dosen yang Sudah Ada</option>
-                                <option value="new">Buat User/Dosen Baru</option>
+                                <option value="existing">Pilih User yang Sudah Ada</option>
+                                <option value="new">Buat User Baru</option>
                             </select>
                         </div>
                         {{-- 3. Blok Input untuk User Existing --}}
                         <div id="existing-user-block">
                             <div class="mb-3">
-                                <label for="user_id" class="form-label">Pilih User/Dosen:</label>
+                                <label for="user_id" class="form-label">Pilih User:</label>
                                 <select name="user_id" id="user_id"
                                     class="form-select @error('user_id') is-invalid @enderror">
                                     <option value="">-- Pilih User --</option>
@@ -119,28 +121,12 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="mb-3">
-                                <label for="nidn" class="form-label">NIDN:</label>
-                                <input type="text" name="nidn" id="nidn_existing"
-                                    class="form-control @error('nidn') is-invalid @enderror" value="{{ old('nidn') }}">
-                                @error('nidn')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
                         </div>
 
                         {{-- 4. Blok Input untuk User Baru --}}
                         {{-- Catatan: Gunakan kelas 'd-none' untuk menyembunyikan secara default --}}
                         <div id="new-user-block" class="d-none">
-                            <h5 class="mt-4 mb-3 text-primary">Data Dekan Baru</h5>
-                            <div class="mb-3">
-                                <label for="nidn" class="form-label">NIDN:</label>
-                                <input type="text" name="nidn" id="nidn_new"
-                                    class="form-control @error('nidn') is-invalid @enderror" value="{{ old('nidn') }}">
-                                @error('nidn')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                            <h5 class="mt-4 mb-3 text-primary">Data Sekprodi Baru</h5>
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username:</label>
                                 <input type="text" name="username" id="username"
@@ -283,7 +269,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                         <button type="submit" class="btn btn-success">
-                            <i class="fas fa-save me-1"></i> Simpan Penugasan
+                            <i class="fas fa-save me-1"></i> Simpan
                         </button>
                     </div>
                 </form>
@@ -298,18 +284,14 @@
                 @csrf
                 @method('PUT') {{-- Gunakan method PUT untuk update --}}
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="editRoleModalLabel">Edit Dekan: <span id="edit-role-name"></span></h5>
+                    <h5 class="modal-title" id="editRoleModalLabel">Edit Sekprodi: <span id="edit-role-name"></span></h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <input type="hidden" name="id" id="edit-id"> {{-- ID role yang akan diupdate --}}
                     <div class="mb-3">
-                        <label for="edit-nidn" class="form-label">NIDN Dekan</label>
-                        <input type="text" class="form-control" id="edit-nidn" name="nidn" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit-nama" class="form-label">Nama Dekan</label>
+                        <label for="edit-nama" class="form-label">Nama Sekprodi</label>
                         <input type="text" class="form-control" id="edit-nama" name="user_name" required />
                     </div>
                     <div class="mb-3">
@@ -420,12 +402,12 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Apakah Anda yakin ingin menghapus Dekan ini? **<span id="delete-role-name"></span>**?</p>
+                    <p>Apakah Anda yakin ingin menghapus Sekprodi ini? **<span id="delete-role-name"></span>**?</p>
                     <input type="hidden" name="id" id="delete-id">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-danger">Ya, Hapus Dekan Ini</button>
+                    <button type="submit" class="btn btn-danger">Ya, Hapus Sekprodi Ini</button>
                 </div>
             </form>
         </div>
@@ -437,8 +419,6 @@
             const existingBlock = document.getElementById('existing-user-block');
             const newUserBlock = document.getElementById('new-user-block');
             const existingUserId = document.getElementById('user_id');
-            const nidnExisting = document.getElementById('nidn_existing');
-            const nidnNew = document.getElementById('nidn_new');
 
             // Field User Baru
             const newUserFields = {
@@ -471,8 +451,6 @@
 
                     // Mengaktifkan field User Baru agar terkirim
                     Object.values(newUserFields).forEach(field => field.removeAttribute('disabled'));
-                    if (nidnExisting) nidnExisting.setAttribute('disabled', 'disabled');
-                    if (nidnNew) nidnNew.removeAttribute('disabled');
 
                 } else {
                     // Skenario 2: Pilih User Existing
@@ -487,8 +465,6 @@
                         field.setAttribute('disabled', 'disabled');
                         field.value = '';
                     });
-                    if (nidnNew) nidnNew.setAttribute('disabled', 'disabled');
-                    if (nidnExisting) nidnExisting.removeAttribute('disabled');
                 }
             }
 
@@ -552,7 +528,6 @@
             $('.btn-edit').on('click', function() {
                 // 1. Ambil data dari data-attributes
                 var id = $(this).data('id');
-                var nidn = $(this).data('nidn');
                 var nama = $(this).data('nama');
                 var username = $(this).data('username');
                 var email = $(this).data('email');
@@ -570,10 +545,8 @@
                 // var izinAksesJson = $(this).data('izin_akses');
                 RubahProvinsi(prov_id);
                 RubahKota(kab_id);
-
                 // 2. Isi data Role ke dalam form modal
                 $('#edit-id').val(id);
-                $('#edit-nidn').val(nidn);
                 $('#edit-nama').val(nama);
                 $('#edit-username').val(username);
                 $('#edit-email').val(email);
@@ -592,7 +565,7 @@
 
                 // 3. Atur action form
                 // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
-                $('#editRoleForm').attr('action', '/dekan/' + id);
+                $('#editRoleForm').attr('action', '/kaprodi/' + id);
 
             });
             $('.btn-delete').on('click', function() {
@@ -605,7 +578,7 @@
 
                 // Atur action form
                 // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
-                $('#deleteRoleForm').attr('action', '/dekan/' + id);
+                $('#deleteRoleForm').attr('action', '/kaprodi/' + id);
             });
         });
     </script>

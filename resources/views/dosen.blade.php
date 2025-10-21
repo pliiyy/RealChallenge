@@ -65,7 +65,9 @@
                 </div>
             </div>
         </div>
-
+        <div class="mt-3">
+            {{ $dosen->links() }}
+        </div>
         <div class="mt-4 alert alert-info bg-opacity-25 border-0 text-primary">
             <i class="bi bi-info-circle me-2"></i>
             Kelola data Dekan untuk setiap fakultas dan program studi.

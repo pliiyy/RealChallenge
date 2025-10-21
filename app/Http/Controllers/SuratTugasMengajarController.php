@@ -106,7 +106,7 @@ class SuratTugasMengajarController extends Controller
     public function destroy($id)
     {
         $surat = SuratTugasMengajar::findOrFail($id);
-        $surat->destroy();
+        $surat->delete();
 
         return redirect('/surat_tugas')->with('success', 'Surat tugas berhasil dihapus!');
     }

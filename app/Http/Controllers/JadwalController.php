@@ -114,8 +114,9 @@ class JadwalController extends Controller
     public function destroy( $id)
     {
         $jadwal = Jadwal::findOrFail($id);
-        $jadwal->status = "NONAKTIF";
-        $jadwal->update();
+        // $jadwal->status = "NONAKTIF";
+        // $jadwal->update();
+        $jadwal->delete();
 
         return redirect('/jadwal')->with('success', 'Jadwal berhasil dihapus!');
     }

@@ -56,4 +56,20 @@ class User extends Authenticatable
     {
         return $this->hasOne(Dosen::class);
     }
+    public function Kaprodi()
+    {
+        return $this->hasOne(Kaprodi::class);
+    }
+    public function Sekprodi()
+    {
+        return $this->hasOne(Sekprodi::class);
+    }
+    public function Kosma()
+    {
+        return $this->hasOne(Kosma::class);
+    }
+    public function Mahasiswa()
+    {
+        return $this->hasOne(Mahasiswa::class);
+    }
 }

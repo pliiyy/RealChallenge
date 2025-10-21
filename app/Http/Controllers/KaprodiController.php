@@ -29,10 +29,10 @@ class KaprodiController extends Controller
 
 
         // Pagination, misal 10 data per halaman
-        $dosen = $query->orderBy('id', 'desc')->paginate(10);
+        $kaprodi = $query->orderBy('id', 'desc')->paginate(10);
 
         // Biar query string tetap terbawa saat paginate link
-        $dosen->appends($request->all());
+        $kaprodi->appends($request->all());
 
         $users = User::with(['biodata'])->doesntHave("kaprodi")->get();
 
@@ -206,7 +206,7 @@ class KaprodiController extends Controller
      */
     public function update(Request $request,  $id)
     {
-         $dekan = Kaprodi::findOrFail($id);
+        $dekan = Kaprodi::findOrFail($id);
         
         $validated = $request->validate([
         'user_name' => ['string', 'max:255'],
