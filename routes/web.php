@@ -1,27 +1,47 @@
 <?php
 
+use App\Http\Controllers\AngkatanController;
+use App\Http\Controllers\DekanController;
+use App\Http\Controllers\DosenController;
 use App\Http\Controllers\FakultasController;
+use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\KaprodiController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\ProdiController;
-use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\MatakuliahController;
+use App\Http\Controllers\PdfController;
+use App\Http\Controllers\RuanganController;
+use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\SuratTugasMengajarController;
+use App\Http\Controllers\User;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('login');
 });
+Route::post('/login', [User::class, 'login'])->name("login");
+Route::post('/logout', [User::class, 'logout'])->name('logout');
 
 // Route::prefix('admin')->middleware('auth')->group(function () {
 //     Route::resource('roles', RoleController::class);
 // });
-Route::resource('role', RoleController::class);
 Route::resource('kelas', KelasController::class);
 Route::resource('fakultas', FakultasController::class);
 Route::resource('prodi', ProdiController::class);
 Route::resource('semester', SemesterController::class);
 Route::resource('matakuliah', MatakuliahController::class);
+Route::resource('dekan', DekanController::class);
+Route::resource('angkatan', AngkatanController::class);
+Route::resource('shift', ShiftController::class);
+Route::resource('ruangan', RuanganController::class);
+Route::resource('dosen', DosenController::class);
+Route::resource('surat_tugas', SuratTugasMengajarController::class);
+Route::resource('jadwal', JadwalController::class);
+Route::resource('kaprodi', KaprodiController::class);
+
+Route::get('/laporan/pdf/show', [PdfController::class, 'generateAndShow'])->name('laporan.pdf.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -36,30 +56,15 @@ Route::get('/settings', function () {
     return view('settings');
 });
 
-Route::get('/jadwal', function () {
-    return view('jadwal');
-});
-Route::get('/ruangan', function () {
-    return view('ruangan');
-});
 Route::get('/mahasiswa', function () {
     return view('mahasiswa');
 });
-Route::get('/dosen', function () {
-    return view('dosen');
-});
-Route::get('/surat_tugas', function () {
-    return view('surat_tugas');
-});
-Route::get('/dekan', function () {
-    return view('dekan');
-});
+
+
 Route::get('/barter_jadwal', function () {
     return view('barter_jadwal');
 });
-Route::get('/shift', function () {
-    return view('shift');
-});
+
 
 
 Route::get('/api/provinces', function () {

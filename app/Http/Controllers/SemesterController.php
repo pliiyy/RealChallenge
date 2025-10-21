@@ -22,7 +22,9 @@ class SemesterController extends Controller
         // Filter berdasarkan status (AKTIF / NONAKTIF)
         if ($request->filled('status')) {
             $query->where('status', $request->status);
-        }
+        }else{
+        $query->where("status","AKTIF");
+    }
 
         // Pagination, misal 10 data per halaman
         $semester = $query->orderBy('id', 'desc')->paginate(10);

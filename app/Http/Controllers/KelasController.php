@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Angkatan;
 use App\Models\Kelas;
 use Illuminate\Http\Request;
 
@@ -13,24 +14,30 @@ class KelasController extends Controller
     public function index(Request $request)
     {
         $query = Kelas::query();
+        $query->with(['angkatan','mahasiswa.user']);
 
     // Searching berdasarkan nama
     if ($request->filled('search')) {
         $query->where('nama', 'like', '%'.$request->search.'%');
     }
+    if ($request->filled('angkatan_id')) {
+        $query->where('angkatan_id',  $request->angkatan_id);
+    }
 
     // Filter berdasarkan status (AKTIF / NONAKTIF)
     if ($request->filled('status')) {
         $query->where('status', $request->status);
+    }else{
+        $query->where("status","AKTIF");
     }
-$query->where("status","AKTIF");
     // Pagination, misal 10 data per halaman
     $kelas = $query->orderBy('id', 'desc')->paginate(10);
 
     // Biar query string tetap terbawa saat paginate link
     $kelas->appends($request->all());
+    $angkatan = Angkatan::where('status',"AKTIF")->get();
 
-    return view('kelas', compact('kelas'));
+    return view('kelas', compact('kelas','angkatan'));
     }
 
     /**
@@ -48,14 +55,14 @@ $query->where("status","AKTIF");
     {
         $validated = $request->validate([
         'nama' => 'required|string|max:255|unique:kelas,nama',
-        'tahun_ajaran' => 'nullable|string',
+        'angkatan_id' => 'required|string',
         'kapasitas' => 'nullable|string',
         // Kita tidak memvalidasi izin_akses langsung karena akan diproses
         // Kita berasumsi inputnya aman
-    ]);
-    $validated["status"] = "AKTIF";
-    Kelas::create($validated);
-    return redirect('/kelas')->with('success', 'Kelas berhasil ditambahkan!');
+        ]);
+        $validated["status"] = "AKTIF";
+        Kelas::create($validated);
+        return redirect('/kelas')->with('success', 'Kelas berhasil ditambahkan!');
     }
 
     /**
@@ -83,7 +90,7 @@ $query->where("status","AKTIF");
         
         $validated = $request->validate([
             'nama' => 'required|string|max:255|unique:kelas,nama,' . $id, // Ignor ID saat validasi unique
-            'tahun_ajaran' => 'nullable|string',
+            'angkatan_id' => 'required|string',
         'kapasitas' => 'nullable|string',
         ]);
 

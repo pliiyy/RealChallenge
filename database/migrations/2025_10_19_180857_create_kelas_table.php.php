@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('role', function (Blueprint $table) {
+        Schema::create('kelas', function (Blueprint $table) {
             $table->id();
-            $table->string('nama'); // nama role
-            $table->string('keterangan'); // nama role
-            $table->text('izin_akses'); // nama role
+            $table->string("nama");
+            $table->string("kapasitas");
+            $table->foreignId("angkatan_id")->constrained("angkatan")->onDelete('cascade');
+            $table->foreignId('kosma_id')->nullable()->constrained("kosma")->onDelete('set null');
             $table->enum("status",["AKTIF","NONAKTIF"]);
             $table->timestamps();
         });
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('role');
+        Schema::dropIfExists('kelas');
     }
 };

@@ -18,10 +18,8 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
+    protected $guarded = [
+        'id',
     ];
 
     /**
@@ -46,8 +44,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-     public function Roles()
+    public function Biodata()
     {
-        return $this->belongsToMany(Role::class,"user_role");
+        return $this->hasOne(Biodata::class);
+    }
+    public function Dekan()
+    {
+        return $this->hasOne(Dekan::class);
+    }
+    public function Dosen()
+    {
+        return $this->hasOne(Dosen::class);
     }
 }

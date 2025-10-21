@@ -26,16 +26,17 @@ class MatakuliahController extends Controller
         // Filter berdasarkan status (AKTIF / NONAKTIF)
         if ($request->filled('status')) {
             $query->where('status', $request->status);
+        }else{
+            $query->where("status","AKTIF");
         }
-        $query->where("status","AKTIF");
         // Pagination, misal 10 data per halaman
         $matakuliah = $query->orderBy('id', 'desc')->paginate(10);
 
         // Biar query string tetap terbawa saat paginate link
         $matakuliah->appends($request->all());
 
-        $prodi = Prodi::all();
-        $semester = Semester::all();
+        $prodi = Prodi::where('status',"AKTIF")->get();
+        $semester = Semester::where('status',"AKTIF")->get();
 
         return view('matakuliah', compact('matakuliah','prodi','semester'));
     }

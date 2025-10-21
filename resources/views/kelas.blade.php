@@ -42,7 +42,7 @@
                                 <tr>
                                     <td>{{ $kelas->firstItem() + $index }}</td>
                                     <td><span>{{ $kls->nama }}</span></td>
-                                    <td>{{ $kls->tahun_ajaran }}</td>
+                                    <td>{{ $kls->angkatan->tahun }}</td>
                                     <td>{{ $kls->kapasitas }}</td>
                                     <td>
                                         @if ($kls->status == 'AKTIF')
@@ -56,7 +56,7 @@
                                         <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
                                             data-bs-toggle="modal" data-bs-target="#editRoleModal"
                                             data-id="{{ $kls->id }}"
-                                            data-nama="{{ $kls->nama }}"data-tahun_ajaran="{{ $kls->tahun_ajaran }}"
+                                            data-nama="{{ $kls->nama }}"data-angkatan_id="{{ $kls->angkatan_id }}"
                                             data-kapasitas="{{ $kls->kapasitas }}"> <i class="bi bi-pencil"></i>
                                         </button>
 
@@ -102,8 +102,13 @@
                         <input type="text" class="form-control" placeholder="Contoh: Kelas A, Kelas B" name="nama">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Tahun ajaran</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 2025" name="tahun_ajaran">
+                        <label class="form-label">Tahun Angkatan</label>
+                        <select class="form-select" name="angkatan_id">
+                            <option value="">-- Tahun Angkatan --</option>
+                            @foreach ($angkatan as $index => $kls)
+                                <option value="{{ $kls->id }}">{{ $kls->tahun }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Kapasitas</label>
@@ -137,8 +142,13 @@
                         <input type="text" class="form-control" id="edit-nama" name="nama" required />
                     </div>
                     <div class="mb-3">
-                        <label for="edit-tahun_ajaran" class="form-label">Tahun Ajaran</label>
-                        <input class="form-control" id="edit-tahun_ajaran" name="tahun_ajaran"></textarea>
+                        <label for="edit-tahun_ajaran" class="form-label">Tahun Angkatan</label>
+                        <select class="form-select" name="angkatan_id" id="edit-angkatan_id">
+                            <option value="">-- Tahun Angkatan --</option>
+                            @foreach ($angkatan as $index => $kls)
+                                <option value="{{ $kls->id }}">{{ $kls->tahun }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="edit-kapasitans" class="form-label">Kapasitas</label>
@@ -185,14 +195,14 @@
                 // 1. Ambil data dari data-attributes
                 var id = $(this).data('id');
                 var nama = $(this).data('nama');
-                var tahun_ajaran = $(this).data('tahun_ajaran');
+                var angkatan_id = $(this).data('angkatan_id');
                 var kapasitas = $(this).data('kapasitas');
                 // var izinAksesJson = $(this).data('izin_akses');
 
                 // 2. Isi data Role ke dalam form modal
                 $('#edit-id').val(id);
                 $('#edit-nama').val(nama);
-                $('#edit-tahun_ajaran').val(tahun_ajaran);
+                $('#edit-angkatan_id').val(angkatan_id);
                 $('#edit-kapasitas').val(kapasitas);
                 $('#edit-role-name').text(nama); // Tampilkan nama role di header modal
 

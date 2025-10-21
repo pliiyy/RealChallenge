@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string("kode");
             $table->enum("status",["AKTIF","NONAKTIF"]);
             $table->foreignId('fakultas_id')->constrained("fakultas")->onDelete('cascade');
+            $table->foreignId('kaprodi_id')->nullable()->constrained("kaprodi")->onDelete('set null');
+            $table->foreignId('sekprodi_id')->nullable()->constrained("sekprodi")->onDelete('set null');
             $table->timestamps();
         });
     }

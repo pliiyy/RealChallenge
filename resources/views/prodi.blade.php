@@ -73,6 +73,9 @@
             </div>
         </div>
     </div>
+    <div class="mt-3">
+        {{ $prodi->links() }}
+    </div>
     <div class="modal fade" id="addKelasModal" tabindex="-1" aria-labelledby="addKelasModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <form class="modal-content" action="" method="POST">
@@ -93,7 +96,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Fakultas</label>
-                        <select class="form-select" name="fakultas_id" id="edit-fakultas_id">
+                        <select class="form-select" name="fakultas_id">
                             <option value="">-- Fakultas --</option>
                             @foreach ($fakultas as $index => $kls)
                                 <option value="{{ $kls->id }}">{{ $kls->nama }}</option>

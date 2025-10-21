@@ -30,6 +30,7 @@
                             <th>No</th>
                             <th>Nama Fakultas</th>
                             <th>Kode</th>
+                            <th>Dekan</th>
                             <th>Jumlah Prodi</th>
                             <th>Status</th>
                             <th>Aksi</th>
@@ -41,6 +42,7 @@
                                 <td>{{ $fakultas->firstItem() + $index }}</td>
                                 <td><span>{{ $kls->nama }}</span></td>
                                 <td>{{ $kls->kode }}</td>
+                                <td>{{ $kls->dekan?->User?->biodata?->nama }}</td>
                                 <td>{{ $kls->prodi->count() }}</td>
                                 <td>
                                     @if ($kls->status == 'AKTIF')
@@ -52,8 +54,9 @@
                                 <td>
                                     {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
                                     <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
-                                        data-bs-toggle="modal" data-bs-target="#editRoleModal" data-id="{{ $kls->id }}"
-                                        data-nama="{{ $kls->nama }}"data-kode="{{ $kls->kode }}"> <i
+                                        data-bs-toggle="modal" data-bs-target="#editRoleModal"
+                                        data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}"
+                                        data-kode="{{ $kls->kode }}" data-dekan_id="{{ $kls->dekan_id }}"> <i
                                             class="bi bi-pencil"></i>
                                     </button>
 
@@ -72,6 +75,9 @@
             </div>
         </div>
     </div>
+    <div class="mt-3">
+        {{ $fakultas->links() }}
+    </div>
     <div class="modal fade" id="addKelasModal" tabindex="-1" aria-labelledby="addKelasModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <form class="modal-content" action="/fakultas" method="POST">
@@ -84,11 +90,20 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nama Fakultas</label>
-                        <input type="text" class="form-control" placeholder="Contoh: Kelas A, Kelas B" name="nama">
+                        <input type="text" class="form-control" placeholder="Contoh: Komputer" name="nama">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Kode</label>
-                        <input class="form-control" placeholder="Contoh: 40" name="kode">
+                        <input class="form-control" placeholder="" name="kode">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dekan</label>
+                        <select class="form-select" name="dekan_id">
+                            <option value="">-- Pilih Dekan --</option>
+                            @foreach ($dekan as $index => $kls)
+                                <option value="{{ $kls->id }}">{{ $kls->user->biodata->nama }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -102,11 +117,11 @@
     <div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             {{-- Form action akan diisi oleh JavaScript --}}
-            <form class="modal-content" id="editRoleForm" action="/fakultas" method="POST">
+            <form class="modal-content" id="editRoleForm" action="" method="POST">
                 @csrf
                 @method('PUT') {{-- Gunakan method PUT untuk update --}}
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="editRoleModalLabel">Edit Role: <span id="edit-role-name"></span></h5>
+                    <h5 class="modal-title" id="editRoleModalLabel">Edit Fakultas: <span id="edit-role-name"></span></h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -121,6 +136,12 @@
                         <label for="edit-kode" class="form-label">Kode</label>
                         <input class="form-control" id="edit-kode" name="kode"></textarea>
                     </div>
+                    <select class="form-select" name="dekan_id" id="edit-dekan_id">
+                        <option value="">-- Pilih Dekan --</option>
+                        @foreach ($dekan as $index => $kls)
+                            <option value="{{ $kls->id }}">{{ $kls->user->biodata->nama }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -163,12 +184,14 @@
                 var id = $(this).data('id');
                 var nama = $(this).data('nama');
                 var kode = $(this).data('kode');
+                var dekan_id = $(this).data('dekan_id');
                 // var izinAksesJson = $(this).data('izin_akses');
 
                 // 2. Isi data Role ke dalam form modal
                 $('#edit-id').val(id);
                 $('#edit-nama').val(nama);
                 $('#edit-kode').val(kode);
+                $('#edit-dekan_id').val(dekan_id);
                 $('#edit-role-name').text(nama); // Tampilkan nama role di header modal
 
                 // 3. Atur action form

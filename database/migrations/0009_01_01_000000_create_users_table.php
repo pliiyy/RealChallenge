@@ -14,19 +14,9 @@ return new class extends Migration
         Schema::create('user', function (Blueprint $table) {
             $table->id();
             $table->string('username')->unique();
-            $table->string('email')->unique();
             $table->string('password');
-            $table->string('nama_lengkap');
-            $table->enum('jenis_kelamin',["L","P"]);
-            $table->enum('agama',["ISLAM","PROTESTAN","KATOLIK","HINDU","BUDHA","KONGHUCU"]);
-            $table->string('tempat_lahir');
-            $table->date('tanggal_lahir');
-            $table->string('alamat');
-            $table->string('kelurahan');
-            $table->string('kec_id');
-            $table->string('kab_id');
-            $table->string('prov_id');
-            $table->string('foto_profil')->default("/default_profil.jfif");
+            $table->string('email')->unique();
+            $table->string("no_telepon");
             $table->enum('status',["AKTIF","NONAKTIF"])->default("AKTIF");
             $table->rememberToken();
             $table->timestamps();

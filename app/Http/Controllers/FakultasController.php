@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dekan;
 use App\Models\Fakultas;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class FakultasController extends Controller
     public function index(Request $request)
     {
         $query = Fakultas::query();
-        $query->with('prodi');
+        $query->with(['prodi','dekan.user.biodata']);
 
         // Searching berdasarkan nama
         if ($request->filled('search')) {
@@ -23,15 +24,17 @@ class FakultasController extends Controller
         // Filter berdasarkan status (AKTIF / NONAKTIF)
         if ($request->filled('status')) {
             $query->where('status', $request->status);
+        }else{
+            $query->where("status","AKTIF");
         }
-$query->where("status","AKTIF");
         // Pagination, misal 10 data per halaman
         $fakultas = $query->orderBy('id', 'desc')->paginate(10);
 
         // Biar query string tetap terbawa saat paginate link
         $fakultas->appends($request->all());
+        $dekan = Dekan::all();
 
-        return view('fakultas', compact('fakultas'));
+        return view('fakultas', compact('fakultas','dekan'));
     }
 
     /**
@@ -50,6 +53,7 @@ $query->where("status","AKTIF");
         $validated = $request->validate([
         'nama' => 'required|string|max:255|unique:fakultas,nama',
         'kode' => 'nullable|string',
+        'dekan_id' => 'nullable|string',
         // Kita tidak memvalidasi izin_akses langsung karena akan diproses
         // Kita berasumsi inputnya aman
         ]);
@@ -84,6 +88,7 @@ $query->where("status","AKTIF");
         $validated = $request->validate([
             'nama' => 'required|string|max:255|unique:fakultas,nama,' . $id, // Ignor ID saat validasi unique
             'kode' => 'nullable|string',
+            'dekan_id' => 'nullable|string',
         ]);
 
         

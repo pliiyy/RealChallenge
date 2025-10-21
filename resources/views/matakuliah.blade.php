@@ -81,7 +81,9 @@
                 </div>
             </div>
         </div>
-
+        <div class="mt-3">
+            {{ $matakuliah->links() }}
+        </div>
         <div class="mt-4 alert alert-info bg-opacity-25 border-0 text-primary">
             <i class="bi bi-info-circle me-2"></i>
             Kelola data mata kuliah di sini. Pastikan SKS dan status aktif sesuai dengan kurikulum.
@@ -166,7 +168,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Semester</label>
-                        <select class="form-select"name="semester_id">
+                        <select class="form-select"name="semester_id" id="edit-semester_id">
                             @foreach ($semester as $index => $kls)
                                 <option value="{{ $kls->id }}">{{ $kls->nama }}</option>
                             @endforeach
@@ -174,7 +176,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Program Studi</label>
-                        <select class="form-select"name="prodi_id">
+                        <select class="form-select"name="prodi_id" id="edit-prodi_id">
                             @foreach ($prodi as $index => $kls)
                                 <option value="{{ $kls->id }}">{{ $kls->nama }}</option>
                             @endforeach
@@ -232,8 +234,8 @@
                 $('#edit-nama').val(nama);
                 $('#edit-kode').val(kode);
                 $('#edit-sks').text(sks); // Tampilkan nama role di header modal
-                $('#edit-semester_id').text(semester_id); // Tampilkan nama role di header modal
-                $('#edit-prodi_id').text(prodi_id); // Tampilkan nama role di header modal
+                $('#edit-semester_id').val(semester_id); // Tampilkan nama role di header modal
+                $('#edit-prodi_id').val(prodi_id); // Tampilkan nama role di header modal
 
 
                 // 3. Atur action form

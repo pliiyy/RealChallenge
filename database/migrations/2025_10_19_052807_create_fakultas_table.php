@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("nama");
             $table->string("kode");
+            $table->foreignId('dekan_id')->nullable()->constrained("dekan")->onDelete('set null');
             $table->enum("status",["AKTIF","NONAKTIF"]);
             $table->timestamps();
         });

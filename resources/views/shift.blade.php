@@ -2,11 +2,11 @@
 @section('title', 'Shift')
 
 @section('content')
-<div class="col-lg-10 col-md-9 content">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <span>🕒 Data Shift Mengajar</span>
-                    <form action="/shift" method="GET" class="mb-3 d-flex gap-2">
+    <div class="col-lg-10 col-md-9 content">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>🕒 Data Shift Mengajar</span>
+                <form action="/shift" method="GET" class="mb-3 d-flex gap-2">
                     <input type="text" name="search" class="form-control" placeholder="Cari nama shift"
                         value="{{ request('search') }}">
 
@@ -18,121 +18,101 @@
 
                     <button type="submit" class="btn btn-primary">Filter</button>
                 </form>
-                    <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal" data-bs-target="#addShiftModal">
-                        <i class="bi bi-plus-circle me-1"></i> Tambah Shift
-                    </button>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table align-middle">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Nama Shift</th>
-                                    <th>Jam Mulai</th>
-                                    <th>Jam Selesai</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Shift Pagi</td>
-                                    <td>07:00</td>
-                                    <td>12:00</td>
-                                    <td><span class="badge bg-success">Aktif</span></td>
-                                    <td>
-                                        <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i> Edit</button>
-                                        <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Delete</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Shift Siang</td>
-                                    <td>13:00</td>
-                                    <td>17:00</td>
-                                    <td><span class="badge bg-secondary">Nonaktif</span></td>
-                                    <td>
-                                        <button class="btn btn-outline-primary btn-sm"><i class="bi bi-pencil"></i> Edit</button>
-                                        <button class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Delete</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
+                    data-bs-target="#addShiftModal">
+                    <i class="bi bi-plus-circle me-1"></i> Tambah Shift
+                </button>
             </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nama Shift</th>
+                                <th>Kode Shift</th>
+                                <th>Jam Mulai</th>
+                                <th>Jam Selesai</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($shift as $index => $kls)
+                                <tr>
+                                    <td>{{ $shift->firstItem() + $index }}</td>
+                                    <td><span>{{ $kls->nama }}</span></td>
+                                    <td>{{ $kls->kode }}</td>
+                                    <td>{{ $kls->jam_mulai }}</td>
+                                    <td>{{ $kls->jam_selesai }}</td>
+                                    <td>
+                                        @if ($kls->status == 'AKTIF')
+                                            <span class="badge bg-success">{{ ucfirst(strtolower($kls->status)) }}</span>
+                                        @else
+                                            <span class="badge bg-secondary">{{ ucfirst(strtolower($kls->status)) }}</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
+                                        <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
+                                            data-bs-toggle="modal" data-bs-target="#editRoleModal"
+                                            data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}"
+                                            data-kode="{{ $kls->kode }}"data-jam_mulai="{{ $kls->jam_mulai }}"
+                                            data-jam_selesai="{{ $kls->jam_selesai }}"> <i class="bi bi-pencil"></i>
+                                        </button>
 
-            <div class="mt-4 alert alert-info bg-opacity-25 border-0 text-primary">
-                <i class="bi bi-info-circle me-2"></i>
-                Kelola waktu shift mengajar untuk dosen sesuai kebutuhan jadwal kampus.
+                                        {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
+                                            data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
+                                            data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                    {{-- ... akhir loop ... --}}
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+        <div class="mt-3">
+            {{ $shift->links() }}
+        </div>
+        <div class="mt-4 alert alert-info bg-opacity-25 border-0 text-primary">
+            <i class="bi bi-info-circle me-2"></i>
+            Kelola waktu shift mengajar untuk dosen sesuai kebutuhan jadwal kampus.
+        </div>
     </div>
-</div>
+    </div>
+    </div>
 
-<!-- Modal Tambah Shift -->
-<div class="modal fade" id="addShiftModal" tabindex="-1" aria-labelledby="addShiftModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <form class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="addShiftModalLabel">Tambah Shift Baru</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Nama Shift</label>
-                    <input type="text" class="form-control" placeholder="Shift Pagi">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Jam Mulai</label>
-                    <input type="time" class="form-control">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Jam Selesai</label>
-                    <input type="time" class="form-control">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Status</label>
-                    <select class="form-select">
-                        <option>Aktif</option>
-                        <option>Nonaktif</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-primary">Simpan</button>
-            </div>
-        </form>
-    </div>
-</div>
-<div class="modal fade" id="addKelasModal" tabindex="-1" aria-labelledby="addKelasModalLabel" aria-hidden="true">
+    <!-- Modal Tambah Shift -->
+    <div class="modal fade" id="addShiftModal" tabindex="-1" aria-labelledby="addShiftModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form class="modal-content" action="/prodi" method="POST">
+            <form class="modal-content" action="/shift" method="POST">
                 @csrf
-                @method('post')
+                @method('POST')
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="addKelasModalLabel">Tambah prodi Baru</h5>
+                    <h5 class="modal-title" id="addShiftModalLabel">Tambah Shift Baru</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nama Shift</label>
-                        <input type="text" class="form-control" placeholder="Contoh: Kelas A, Kelas B" name="nama">
+                        <input type="text" class="form-control" placeholder="Shift Pagi" name="nama" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Kode Shift</label>
+                        <input type="text" class="form-control" placeholder="Shift Pagi" name="kode" />
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Jam Mulai</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 40" name="jam_mulai">
+                        <input type="time" class="form-control" name="jam_mulai" />
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Jam Selesai</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 40" name="jam_selesai">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Status</label>
-                        <input type="number" class="form-control" placeholder="Contoh: 40" name="status">
+                        <input type="time" class="form-control" name="jam_selesai" />
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -143,6 +123,7 @@
         </div>
     </div>
 
+
     <div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             {{-- Form action akan diisi oleh JavaScript --}}
@@ -150,7 +131,7 @@
                 @csrf
                 @method('PUT') {{-- Gunakan method PUT untuk update --}}
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="editRoleModalLabel">Edit Prodi: <span id="edit-role-name"></span></h5>
+                    <h5 class="modal-title" id="editRoleModalLabel">Edit Shift: <span id="edit-role-name"></span></h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -162,16 +143,16 @@
                         <input type="text" class="form-control" id="edit-nama" name="nama" required />
                     </div>
                     <div class="mb-3">
+                        <label for="edit-nama" class="form-label">Kode Shift</label>
+                        <input type="text" class="form-control" id="edit-kode" name="kode" required />
+                    </div>
+                    <div class="mb-3">
                         <label for="edit-jam_mulai" class="form-label">Jam Mulai</label>
-                        <input class="form-control" id="edit-jam_mulai" name="jam_mulai"></textarea>
+                        <input class="form-control" id="edit-jam_mulai" name="jam_mulai" type="time" />
                     </div>
                     <div class="mb-3">
                         <label for="edit-jam_selesai" class="form-label">Jam Selesai</label>
-                        <input class="form-control" id="edit-jam_selesai" name="jam_selesai"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit-status" class="form-label">Status</label>
-                        <input class="form-control" id="edit-status" name="status"></textarea>
+                        <input class="form-control" id="edit-jam_selesai" name="jam_selesai" type="time" />
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -213,14 +194,16 @@
             $('.btn-edit').on('click', function() {
                 // 1. Ambil data dari data-attributes
                 var id = $(this).data('id');
+                var kode = $(this).data('kode');
                 var nama = $(this).data('nama');
-                var jam_mulau = $(this).data('jam_mulai');
+                var jam_mulai = $(this).data('jam_mulai');
                 var jam_selesai = $(this).data('jam_selesai');
                 // var izinAksesJson = $(this).data('izin_akses');
 
                 // 2. Isi data Role ke dalam form modal
                 $('#edit-id').val(id);
                 $('#edit-nama').val(nama);
+                $('#edit-kode').val(kode);
                 $('#edit-jam_mulai').val(jam_mulai);
                 $('#edit-jam_selesai').val(jam_selesai);
                 $('#edit-role-name').text(nama); // Tampilkan nama role di header modal
@@ -229,41 +212,7 @@
                 // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
                 $('#editRoleForm').attr('action', '/shift/' + id);
 
-                // 4. Proses dan centang checkbox Izin Akses
 
-                // Pertama, hapus centang dari semua checkbox
-                // $('#editRoleModal input[type="checkbox"]').prop('checked', false);
-
-                // if (izinAksesJson) {
-                //     try {
-                //         // Decode JSON string terluar menjadi array string JSON
-                //         var stringArray = JSON.parse(izinAksesJson);
-
-                //         stringArray.forEach(function(permString) {
-                //             // Decode setiap string JSON di dalamnya menjadi objek/array
-                //             var perm = JSON.parse(permString);
-
-
-                //             // Pisahkan string akses (misal: "read,create")
-                //             var aksesArray = perm.akses.split(',');
-
-                //             // Tentukan modulKey dari nama (sesuaikan dengan nama di form)
-                //             var moduleKey = perm.nama === 'Dashboard' ? 'dashboard' :
-                //                 perm.nama === 'Mahasiswa' ? 'mahasiswa' : null;
-
-                //             if (moduleKey) {
-                //                 aksesArray.forEach(function(akses) {
-                //                     // Bentuk ID checkbox yang sesuai dan centang
-                //                     var checkboxId = '#edit-' + moduleKey + '_' + akses
-                //                         .trim();
-                //                     $(checkboxId).prop('checked', true);
-                //                 });
-                //             }
-                //         });
-                //     } catch (e) {
-                //         console.error("Gagal memproses izin akses JSON:", e);
-                //     }
-                // }
             });
             $('.btn-delete').on('click', function() {
                 var id = $(this).data('id');
@@ -280,4 +229,3 @@
         });
     </script>
 @endsection
-
