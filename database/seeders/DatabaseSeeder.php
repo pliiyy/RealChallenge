@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\Mahasiswa;
+use App\Models\Biodata;
+use App\Models\Dekan;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,9 +20,19 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
         
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $user = User::create([
+            'username' => 'master',
+            'email' => 'master@gmail.com',
+            'no_telepon' => '001001001',
+            'password' => Hash::make('master01'),
+        ]);
+        Biodata::create([
+            "user_id" => $user->id,
+            'nama' => 'Master',
+        ]);
+        Dekan::create([
+            "user_id" => $user->id,
+            'nidn' => 'N01192',
         ]);
 
     }
