@@ -204,6 +204,7 @@
                             Dekan</a>
                     </div>
                     <a href="/jadwal" class="nav-link"><i class="bi bi-clock-history me-2"></i> Jadwal</a>
+                    <a href="/pindah_jadwal" class="nav-link"><i class="bi bi-clock-history me-2"></i> Pindah Jadwal</a>
                     <a href="/barter_jadwal" class="nav-link">
                         <i class="bi bi-gear me-2"></i> Barter Jadwal
                     </a>

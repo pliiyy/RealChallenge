@@ -13,6 +13,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Matakuliah</th>
                                 <th>Jadwal Sebelumnya</th>
                                 <th>Jadwal yang Diminta</th>
                                 <th>Alasan</th>
@@ -25,9 +26,10 @@
                                 <tr>
                                     <td>{{ $pindah_jadwal->firstItem() + $index }}</td>
                                     </td>
-                                    <td>{{ $kls->hari }}
-                                        ({{ $kls->shift->jam_mulai }} -
-                                        {{ $kls->shift->jam_selesai }})
+                                    <td>{{ $kls->jadwal->suratTugasMengajar->Matakuliah->nama }}
+                                    <td>{{ $kls->jadwal->hari }}
+                                        ({{ $kls->jadwal->shift->jam_mulai }} -
+                                        {{ $kls->jadwal->shift->jam_selesai }})
                                     </td>
                                     <td>{{ $kls->hari }}
                                         ({{ $kls->shift->jam_mulai }} -
@@ -45,14 +47,14 @@
                                     <td>
                                         {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
 
-                                        @if ($kls->status == 'PENDING')
+                                        @if ($kls->status == 'PENDING' && auth()->user()->kosma)
                                             {{-- Tombol Approve: Memicu modal konfirmasi APPROVE --}}
                                             <button type="button" class="btn btn-outline-success btn-sm btn-action"
                                                 data-bs-toggle="modal" data-bs-target="#actionModal"
                                                 data-id="{{ $kls->id }}" data-jadwal_id="{{ $kls->jadwal_id }}"
                                                 data-ruangan_id="{{ $kls->ruangan_id }}"
                                                 data-shift_id="{{ $kls->shift_id }}" data-hari="{{ $kls->hari }}"
-                                                data-action="approve" title="Setujui Tugas">
+                                                data-action="approve" title="Setujui">
                                                 <i class="bi bi-check-circle"></i>
                                             </button>
 
@@ -62,7 +64,7 @@
                                                 data-id="{{ $kls->id }}" data-jadwal_id="{{ $kls->jadwal_id }}"
                                                 data-ruangan_id="{{ $kls->ruangan_id }}"
                                                 data-shift_id="{{ $kls->shift_id }}" data-hari="{{ $kls->hari }}"
-                                                data-action="reject" title="Tolak Tugas">
+                                                data-action="reject" title="Tolak">
                                                 <i class="bi bi-x-circle"></i>
                                             </button>
                                         @else
@@ -88,7 +90,7 @@
     <div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             {{-- Form akan diisi action URL-nya oleh JavaScript --}}
-            <form class="modal-content" method="POST" id="actionForm">
+            <form class="modal-content" method="POST" id="actionForm" action="/pindah_jadwal">
                 @csrf
                 {{-- Kita akan menggunakan method PUT/PATCH untuk update status --}}
                 @method('PUT')
@@ -101,6 +103,10 @@
 
                     {{-- Input tersembunyi untuk menyimpan status baru --}}
                     <input type="hidden" name="status" id="actionStatusInput">
+                    <input type="hidden" name="jadwal_id" id="jadwal_id">
+                    <input type="hidden" name="hari" id="hari">
+                    <input type="hidden" name="shift_id" id="shift_id">
+                    <input type="hidden" name="ruangan_id" id="ruangan_id">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -119,11 +125,19 @@
             const actionModalHeader = document.getElementById('actionModalHeader');
             const actionVerb = document.getElementById('actionVerb');
             const actionStatusInput = document.getElementById('actionStatusInput');
+            const inhari = document.getElementById('hari');
+            const injadwal_id = document.getElementById('jadwal_id');
+            const inruangan_id = document.getElementById('ruangan_id');
+            const inshift_id = document.getElementById('shift_id');
             const actionConfirmButton = document.getElementById('actionConfirmButton');
 
             actionButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const suratId = this.getAttribute('data-id');
+                    const hari = this.getAttribute('data-hari');
+                    const jadwal_id = this.getAttribute('data-jadwal_id');
+                    const shift_id = this.getAttribute('data-shift_id');
+                    const ruangan_id = this.getAttribute('data-ruangan_id');
                     const action = this.getAttribute('data-action');
 
                     let verb = '';
@@ -154,6 +168,10 @@
 
                     // 3. Set nilai input tersembunyi
                     actionStatusInput.value = statusValue;
+                    inhari.value = hari;
+                    injadwal_id.value = jadwal_id;
+                    inruangan_id.value = ruangan_id;
+                    inshift_id.value = shift_id;
 
                     // Perbaikan: gunakan ID yang baru diambil
 

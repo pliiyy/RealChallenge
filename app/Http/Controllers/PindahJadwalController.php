@@ -100,7 +100,6 @@ class PindahJadwalController extends Controller
          $pindahJadwal = PindahJadwal::findOrFail($id);
         
         $validated = $request->validate([
-            'alasan' => 'required|string|max:255',
             'jadwal_id' => 'required|string',
             'shift_id' => 'required|string',
             'ruangan_id' => 'required|string',
@@ -118,7 +117,7 @@ class PindahJadwalController extends Controller
 
                 $pindahJadwal->update([
                     'status'=> "APPROVED",
-                    'kosma_id' => Auth::user()->id
+                    'kosma_id' => Auth::user()->Kosma->id
                 ]);
                 DB::commit();
             }catch(\Exception $e){
@@ -130,7 +129,7 @@ class PindahJadwalController extends Controller
                 return back()->with('error', 'Gagal melakukan pindah jadwal bentrok dengan jadwal lain. Mohon ajukan barter saja!');
             }
             if($validated["status"] !== "PENDING"){
-                $validated["kosma_id"] = Auth::user()->id;
+                $validated["kosma_id"] = Auth::user()->Kosma->id;
                 $pindahJadwal->update($validated);
             }
             $pindahJadwal->update($validated);

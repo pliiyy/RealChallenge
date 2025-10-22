@@ -55,7 +55,7 @@ Route::resource('sekprodi', SekprodiController::class)->middleware('auth');
 Route::resource('mahasiswa', MahasiswaController::class)->middleware('auth');
 Route::resource('kosma', KosmaController::class)->middleware('auth');
 Route::resource('barter_jadwal', BarterJadwalController::class)->middleware(['auth']);
-Route::resource('pindah_jadwal', PindahJadwalController::class)->middleware(['auth' ]);
+Route::resource('pindah_jadwal', PindahJadwalController::class)->middleware(['auth']);
 
 Route::get('/laporan/pdf/show', [PdfController::class, 'generateAndShow'])->name('laporan.pdf.show');
 
