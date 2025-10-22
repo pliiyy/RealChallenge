@@ -184,27 +184,34 @@
                     <div class="collapse ps-3" id="dataMaster">
                         <a href="/fakultas" class="nav-link"><i class="bi bi-building me-2"></i> Fakultas</a>
                         <a href="/prodi" class="nav-link"><i class="bi bi-mortarboard me-2"></i> Prodi</a>
-                        {{-- <a href="/role" class="nav-link"><i class="bi bi-person-gear me-2"></i> Role</a> --}}
                         <a href="/semester" class="nav-link"><i class="bi bi-calendar3 me-2"></i> Semester</a>
+                        {{-- <a href="/role" class="nav-link"><i class="bi bi-person-gear me-2"></i> Role</a> --}}
                         <a href="/matakuliah" class="nav-link"><i class="bi bi-journal-bookmark me-2"></i> Mata
                             Kuliah</a>
-                        <a href="/jadwal" class="nav-link"><i class="bi bi-clock-history me-2"></i> Jadwal</a>
-                        <a href="/ruangan" class="nav-link"><i class="bi bi-door-closed me-2"></i> Ruangan</a>
-                        <a href="/kelas" class="nav-link"><i class="bi bi-people me-2"></i> Kelas</a>
-                        <a href="/kosma" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Kosma</a>
-                        <a href="/mahasiswa" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Mahasiswa</a>
-                        <a href="/dekan" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Dekan</a>
-                        <a href="/kaprodi" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Kaprodi</a>
-                        <a href="/sekprodi" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Sekprodi</a>
-                        <a href="/dosen" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Dosen</a>
                         <a href="/shift" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Shift</a>
-                        <a href="/angkatan" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Angkatan</a>
+                        <a href="/kaprodi" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Kaprodi</a>
+                        <a href="/dosen" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Dosen</a>
+                        <a href="/sekprodi" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i>
+                            Sekprodi</a>
+                        <a href="/angkatan" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i>
+                            Angkatan</a>
+                        <a href="/kelas" class="nav-link"><i class="bi bi-people me-2"></i> Kelas</a>
+                        <a href="/ruangan" class="nav-link"><i class="bi bi-door-closed me-2"></i> Ruangan</a>
+                        <a href="/kosma" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Kosma</a>
+                        <a href="/mahasiswa" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i>
+                            Mahasiswa</a>
+                        <a href="/dekan" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i>
+                            Dekan</a>
                     </div>
+                    <a href="/jadwal" class="nav-link"><i class="bi bi-clock-history me-2"></i> Jadwal</a>
                     <a href="/barter_jadwal" class="nav-link">
                         <i class="bi bi-gear me-2"></i> Barter Jadwal
                     </a>
                     <a href="/surat_tugas" class="nav-link">
                         <i class="bi bi-gear me-2"></i> Surat Tugas Mengajar
+                    </a>
+                    <a href="/data" class="nav-link">
+                        <i class="bi bi-person me-2"></i> Data Pengguna
                     </a>
                     <!-- Pengaturan -->
                     <a href="/settings" class="nav-link">

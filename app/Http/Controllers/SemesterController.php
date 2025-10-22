@@ -85,7 +85,7 @@ class SemesterController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:255|unique:semester,nama,' . $id, // Ignor ID saat validasi unique
             'kode' => 'required|string',
-            'keterangan' => 'nullable|string',
+            'keterangan' => 'required|string',
             'tahun_akademik' => 'required|string',
             'tipe' => 'required|string',
         ]);

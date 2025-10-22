@@ -64,6 +64,13 @@
                                         @endif
                                     </td>
                                     <td>
+                                        <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
+                                            data-bs-toggle="modal" data-bs-target="#editJadwalModal"
+                                            data-id="{{ $kls->id }}"
+                                            data-surat_tugas_mengajar_id="{{ $kls->surat_tugas_mengajar_id }}"
+                                            data-ruangan_id="{{ $kls->ruangan_id }}" data-hari="{{ $kls->hari }}"
+                                            data-shift_id="{{ $kls->shift_id }}"> <i class="bi bi-pencil"></i>
+                                        </button>
                                         {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
                                         <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
                                             data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
@@ -144,8 +151,68 @@
             </form>
         </div>
     </div>
+    <div class="modal fade" id="editJadwalModal" tabindex="-1" aria-labelledby="editJadwalModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <form class="modal-content" method="POST" action="/pindah_jadwal">
+                @csrf
+                @method('POST')
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="addJadwalModalLabel">Pindahkan Jadwal</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body row g-3">
+                    <div class="col-md-6">
+                        <input type="hidden" name="id" id="edit-id">
+                        <label class="form-label">Mata Kuliah</label>
+                        <select class="form-select" name="surat_tugas_mengajar_id" id="edit-surat_tuga_mengajar_id"
+                            disabled>
+                            @foreach ($surat as $item)
+                                <option value="{{ $item->id }}">{{ $item->matakuliah->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Ruangan</label>
+                        <select class="form-select" name="ruangan_id" id="edit-ruangan_id">
+                            @foreach ($ruangan as $item)
+                                <option value="{{ $item->id }}">{{ $item->nama }} ({{ $item->kode }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Hari</label>
+                        <select class="form-select" name="hari" id="edit-hari">
+                            <option value="SENIN">Senin</option>
+                            <option value="SELASA">Selasa</option>
+                            <option value="RABU">Rabu</option>
+                            <option value="KAMIS">Kamis</option>
+                            <option value="JUMAT">Jumat</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Jam</label>
+                        <select class="form-select" name="shift_id" id="edit-shift_id">
+                            @foreach ($shift as $item)
+                                <option value="{{ $item->id }}">{{ $item->nama }} ({{ $item->jam_mulai }} -
+                                    {{ $item->jam_selesai }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Alasan</label>
+                        <textarea class="form-control" rows="3" placeholder="Alasan Pindah Jadwal" name="alasan"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    <div class="modal fade" id="deleteRoleModal" tabindex="-1" aria-labelledby="deleteRoleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteRoleModal" tabindex="-1" aria-labelledby="deleteRoleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-sm">
             {{-- Form action akan diisi oleh JavaScript --}}
             <form class="modal-content" id="deleteRoleForm" action="" method="POST">
@@ -171,35 +238,26 @@
     <script>
         $(document).ready(function() {
             // Tangkap saat tombol edit diklik
-            // $('.btn-edit').on('click', function() {
-            //     // 1. Ambil data dari data-attributes
-            //     var id = $(this).data('id');
-            //     var nama = $(this).data('nama');
-            //     var dosen = $(this).data('dosen');
-            //     var ruangan = $(this).data('ruangan');
-            //     var kelas = $(this).data('kelas');
-            //     var hari = $(this).data('hari');
-            //     var jam = $(this).data('jam');
-            //     var semester = $(this).data('semester');
-            //     var tahunajaran = $(this).data('tahunajaran');
-            //     // var izinAksesJson = $(this).data('izin_akses');
+            $('.btn-edit').on('click', function() {
+                // 1. Ambil data dari data-attributes
+                var id = $(this).data('id');
+                var surat_tugas_mengajar_id = $(this).data('surat_tugas_mengajar_id');
+                var ruangan_id = $(this).data('ruangan_id');
+                var shift_id = $(this).data('shift_id');
+                var hari = $(this).data('hari');
 
-            //     // 2. Isi data Role ke dalam form modal
-            //     $('#edit-id').val(id);
-            //     $('#edit-nama').val(nama);
-            //     $('#edit-dosen').val(dosen);
-            //     $('#edit-ruangan').text(ruangan); // Tampilkan nama role di header modal
-            //     $('#edit-kelas').text(kelas); // Tampilkan nama role di header modal
-            //     $('#edit-hari').text(hari); // Tampilkan nama role di header modal
-            //     $('#edit-jam').text(jam); // Tampilkan nama role di header modal
-            //     $('#edit-semester').text(semester); // Tampilkan nama role di header modal
-            //     $('#edit-tahunajaran').text(tahunajaran); // Tampilkan nama role di header modal
+                // 2. Isi data Role ke dalam form modal
+                $('#edit-id').val(id);
+                $('#edit-surat_tugas_mengajar_id').val(surat_tugas_mengajar_id);
+                $('#edit-ruangan_id').val(ruangan_id);
+                $('#edit-shift_id').val(shift_id);
+                $('#edit-hari').val(hari);
 
-            //     // 3. Atur action form
-            //     // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
-            //     $('#editRoleForm').attr('action', '/jadwal/' + id);
+                // 3. Atur action form
+                // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
+                $('#editRoleForm').attr('action', '/pindah_jadwal/' + id);
 
-            // });
+            });
             $('.btn-delete').on('click', function() {
                 var id = $(this).data('id');
                 var nama = $(this).data('nama');

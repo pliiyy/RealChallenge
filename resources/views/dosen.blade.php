@@ -6,10 +6,12 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span>👨‍🏫 Data Dosen</span>
-                <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
-                    data-bs-target="#dekanFormModal">
-                    <i class="bi bi-plus-circle me-1"></i> Tambah Dosen
-                </button>
+                @if (auth()->user()->dekan || auth()->user()->kaprodi || auth()->user()->sekprodi)
+                    <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
+                        data-bs-target="#dekanFormModal">
+                        <i class="bi bi-plus-circle me-1"></i> Tambah Dosen
+                    </button>
+                @endif
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -31,31 +33,35 @@
                                     <td><span>{{ $kls->user->Biodata->nama }}</span></td>
                                     <td><span>{{ $kls->user->email }}</span></td>
                                     <td>
-                                        {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
-                                        <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
-                                            data-bs-toggle="modal" data-bs-target="#editRoleModal"
-                                            data-id="{{ $kls->id }}"
-                                            data-nidn="{{ $kls->nidn }}"data-preferensi="{{ $kls->preferensi }}"
-                                            data-nama="{{ $kls->user->Biodata->nama }}"
-                                            data-username="{{ $kls->user->username }}" data-email="{{ $kls->user->email }}"
-                                            data-no_telepon="{{ $kls->user->no_telepon }}"
-                                            data-tempat_lahir="{{ $kls->user->Biodata->tempat_lahir }}"
-                                            data-tanggal_lahir="{{ $kls->user->Biodata->tanggal_lahir }}"
-                                            data-jenis_kelamin="{{ $kls->user->Biodata->jenis_kelamin }}"
-                                            data-agama="{{ $kls->user->Biodata->agama }}"
-                                            data-prov_id="{{ $kls->user->Biodata->prov_id }}"
-                                            data-kab_id="{{ $kls->user->Biodata->kab_id }}"
-                                            data-kec_id="{{ $kls->user->Biodata->kec_id }}"
-                                            data-kelurahan="{{ $kls->user->Biodata->kelurahan }}"
-                                            data-alamat="{{ $kls->user->Biodata->alamat }}"> <i class="bi bi-pencil"></i>
-                                        </button>
+                                        @if (auth()->user()->dekan || auth()->user()->kaprodi || auth()->user()->sekprodi)
+                                            {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
+                                            <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
+                                                data-bs-toggle="modal" data-bs-target="#editRoleModal"
+                                                data-id="{{ $kls->id }}"
+                                                data-nidn="{{ $kls->nidn }}"data-preferensi="{{ $kls->preferensi }}"
+                                                data-nama="{{ $kls->user->Biodata->nama }}"
+                                                data-username="{{ $kls->user->username }}"
+                                                data-email="{{ $kls->user->email }}"
+                                                data-no_telepon="{{ $kls->user->no_telepon }}"
+                                                data-tempat_lahir="{{ $kls->user->Biodata->tempat_lahir }}"
+                                                data-tanggal_lahir="{{ $kls->user->Biodata->tanggal_lahir }}"
+                                                data-jenis_kelamin="{{ $kls->user->Biodata->jenis_kelamin }}"
+                                                data-agama="{{ $kls->user->Biodata->agama }}"
+                                                data-prov_id="{{ $kls->user->Biodata->prov_id }}"
+                                                data-kab_id="{{ $kls->user->Biodata->kab_id }}"
+                                                data-kec_id="{{ $kls->user->Biodata->kec_id }}"
+                                                data-kelurahan="{{ $kls->user->Biodata->kelurahan }}"
+                                                data-alamat="{{ $kls->user->Biodata->alamat }}"> <i
+                                                    class="bi bi-pencil"></i>
+                                            </button>
 
-                                        {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
-                                            data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
-                                            data-id="{{ $kls->id }}" data-nama="{{ $kls->user->Biodata->nama }}">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
+                                            {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
+                                            <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
+                                                data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
+                                                data-id="{{ $kls->id }}" data-nama="{{ $kls->user->Biodata->nama }}">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        @endif
                                     </td>
                                     {{-- ... akhir loop ... --}}
                                 </tr>

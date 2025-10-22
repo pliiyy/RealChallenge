@@ -6,11 +6,11 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="bi bi-building me-2"></i>Data Fakultas</h5>
-                <form action="/fakultas" method="GET" class="mb-3 d-flex gap-2">
-                    <input type="text" name="search" class="form-control" placeholder="Cari nama fakultas"
+                <form action="/fakultas" method="GET" class="mb-3 d-flex gap-2 align-items-center">
+                    <input type="text" name="search" class="form-control form-control-sm" placeholder="Cari nama fakultas"
                         value="{{ request('search') }}">
 
-                    <select name="status" class="form-select">
+                    <select name="status" class="form-select form-select-sm">
                         <option value="">-- Semua Status --</option>
                         <option value="AKTIF" {{ request('status') == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
                         <option value="NONAKTIF" {{ request('status') == 'NONAKTIF' ? 'selected' : '' }}>Nonaktif</option>
@@ -18,10 +18,12 @@
 
                     <button type="submit" class="btn btn-primary">Filter</button>
                 </form>
-                <button class="btn btn-light btn-sm text-primary fw-semibold"data-bs-toggle="modal"
-                    data-bs-target="#addKelasModal">
-                    <i class="bi bi-plus-circle me-1"></i> Tambah Fakultas
-                </button>
+                @if (auth()->user()->dekan || auth()->user()->kaprodi || auth()->user()->sekprodi)
+                    <button class="btn btn-light btn-sm text-primary fw-semibold"data-bs-toggle="modal"
+                        data-bs-target="#addKelasModal">
+                        <i class="bi bi-plus-circle me-1"></i> Tambah Fakultas
+                    </button>
+                @endif
             </div>
             <div class="card-body">
                 <table class="table table-hover align-middle">
@@ -52,20 +54,22 @@
                                     @endif
                                 </td>
                                 <td>
-                                    {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
-                                    <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
-                                        data-bs-toggle="modal" data-bs-target="#editRoleModal"
-                                        data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}"
-                                        data-kode="{{ $kls->kode }}" data-dekan_id="{{ $kls->dekan_id }}"> <i
-                                            class="bi bi-pencil"></i>
-                                    </button>
+                                    @if (auth()->user()->dekan || auth()->user()->kaprodi || auth()->user()->sekprodi)
+                                        {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
+                                        <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
+                                            data-bs-toggle="modal" data-bs-target="#editRoleModal"
+                                            data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}"
+                                            data-kode="{{ $kls->kode }}" data-dekan_id="{{ $kls->dekan_id }}"> <i
+                                                class="bi bi-pencil"></i>
+                                        </button>
 
-                                    {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
-                                        data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
-                                        data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
+                                        {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
+                                            data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
+                                            data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    @endif
                                 </td>
                                 {{-- ... akhir loop ... --}}
                             </tr>

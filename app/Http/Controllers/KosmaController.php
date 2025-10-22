@@ -54,7 +54,7 @@ class KosmaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-        'user_id' => 'required|string|unique:kelas,id',
+        'user_id' => 'required|string',
         'kelas_id' => 'required|string',
         ]);
         $kosma = Kosma::create([

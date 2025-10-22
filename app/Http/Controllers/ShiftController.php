@@ -51,8 +51,8 @@ class ShiftController extends Controller
         $validated = $request->validate([
         'nama' => 'required|string|max:255|unique:kelas,nama',
         'kode' => 'required|string|unique:shift,kode',
-        'jam_mulai' => 'nullable|string',
-        'jam_selesai' => 'nullable|string',
+        'jam_mulai' => 'required|string',
+        'jam_selesai' => 'required|string',
         // Kita tidak memvalidasi izin_akses langsung karena akan diproses
         // Kita berasumsi inputnya aman
         ]);
@@ -87,8 +87,8 @@ class ShiftController extends Controller
         $validated = $request->validate([
         'nama' => 'required|string|max:255|unique:kelas,nama,'. $id,
         'kode' => 'required|string|unique:shift,kode,'. $id,
-        'jam_mulai' => 'nullable|string',
-        'jam_selesai' => 'nullable|string',
+        'jam_mulai' => 'required|string',
+        'jam_selesai' => 'required|string',
         // Kita tidak memvalidasi izin_akses langsung karena akan diproses
         // Kita berasumsi inputnya aman
         ]);

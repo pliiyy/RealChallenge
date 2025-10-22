@@ -6,10 +6,12 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span>📄 Surat Tugas Mengajar</span>
-                <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
-                    data-bs-target="#addSuratModal">
-                    <i class="bi bi-plus-circle me-1"></i> Tambah Surat Tugas
-                </button>
+                @if (auth()->user()->dekan || auth()->user()->kaprodi)
+                    <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
+                        data-bs-target="#addSuratModal">
+                        <i class="bi bi-plus-circle me-1"></i> Tambah Surat Tugas
+                    </button>
+                @endif
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -49,22 +51,23 @@
                                     </td>
                                     <td>
                                         {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
-                                        @if ($kls->status === 'PENDING')
+                                        @if ($kls->status === 'PENDING' && (auth()->user()->dekan || auth()->user()->kaprodi))
                                             <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
                                                 data-bs-toggle="modal" data-bs-target="#editRoleModal"
-                                                data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}"
-                                                data-kode="{{ $kls->kode }}"data-jam_mulai="{{ $kls->jam_mulai }}"
-                                                data-jam_selesai="{{ $kls->jam_selesai }}"> <i class="bi bi-pencil"></i>
+                                                data-id="{{ $kls->id }}"data-dosen_id="{{ $kls->dosen_id }}"
+                                                data-matakuliah_id="{{ $kls->matakuliah_id }}"
+                                                data-status="{{ $kls->status }}" data-kelas_id="{{ $kls->kelas_id }}"> <i
+                                                    class="bi bi-pencil"></i>
+                                            </button>
+
+                                            {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
+                                            <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
+                                                data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
+                                                data-id="{{ $kls->id }}">
+                                                <i class="bi bi-trash"></i>
                                             </button>
                                         @endif
-
-                                        {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
-                                            data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
-                                            data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                        @if ($kls->status == 'PENDING')
+                                        @if ($kls->status == 'PENDING' && auth()->user()->dekan)
                                             {{-- Tombol Approve: Memicu modal konfirmasi APPROVE --}}
                                             <button type="button" class="btn btn-outline-success btn-sm btn-action"
                                                 data-bs-toggle="modal" data-bs-target="#actionModal"
@@ -193,6 +196,79 @@
             </form>
         </div>
     </div>
+
+    <div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            {{-- Form action akan diisi oleh JavaScript --}}
+            <form class="modal-content" id="editRoleForm" action="" method="POST">
+                @csrf
+                @method('PUT') {{-- Gunakan method PUT untuk update --}}
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="editRoleModalLabel">Edit Role: <span id="edit-role-name"></span></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body row g-3">
+                    <input type="hidden" name="id" id="edit-id"> {{-- ID role yang akan diupdate --}}
+                    <input type="hidden" name="status" id="edit-status"> {{-- ID role yang akan diupdate --}}
+                    <div class="col-md-6">
+                        <label class="form-label">Dosen</label>
+                        <select class="form-select" name="dosen_id" id="edit-dosen_id">
+                            @foreach ($dosen as $item)
+                                <option value="{{ $item->id }}">{{ $item->user->Biodata->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Mata Kuliah</label>
+                        <select class="form-select" name="matakuliah_id" id="edit-matakuliah_id">
+                            @foreach ($matakuliah as $item)
+                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Kelas</label>
+                        <select class="form-select" name="kelas_id" id="edit-kelas_id">
+                            @foreach ($kelas as $item)
+                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="deleteRoleModal" tabindex="-1" aria-labelledby="deleteRoleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            {{-- Form action akan diisi oleh JavaScript --}}
+            <form class="modal-content" id="deleteRoleForm" action="" method="POST">
+                @csrf
+                @method('DELETE') {{-- Gunakan method DELETE untuk hapus --}}
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteRoleModalLabel">Konfirmasi Hapus</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Apakah Anda yakin ingin menghapus Surat Tugas Mengajar ini? **<span id="delete-role-name"></span>**?
+                    </p>
+                    <input type="hidden" name="id" id="delete-id">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">Ya, Hapus Data Ini</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const btnTampilkanPdf = document.getElementById('btn-tampilkan-pdf');
@@ -278,6 +354,41 @@
                     // 4. Set Action URL Form (Ganti dengan route yang sudah diperbaiki)
                     actionForm.action = `/surat_tugas/${suratId}`;
                 });
+            });
+        });
+        $(document).ready(function() {
+            // Tangkap saat tombol edit diklik
+            $('.btn-edit').on('click', function() {
+                // 1. Ambil data dari data-attributes
+                var id = $(this).data('id');
+                var dosen_id = $(this).data('dosen_id');
+                var kelas_id = $(this).data('kelas_id');
+                var matakuliah_id = $(this).data('matakuliah_id');
+                var status = $(this).data('status');
+
+                $('#edit-id').val(id);
+                $('#edit-dosen_id').val(dosen_id);
+                $('#edit-kelas_id').val(kelas_id);
+                $('#edit-matakuliah_id').val(matakuliah_id);
+                $('#edit-status').val(status);
+
+
+                // 3. Atur action form
+                // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
+                $('#editRoleForm').attr('action', '/surat_tugas/' + id);
+
+            });
+            $('.btn-delete').on('click', function() {
+                var id = $(this).data('id');
+                var nama = $(this).data('nama');
+
+                // Isi data ke dalam form modal
+                $('#delete-id').val(id);
+                $('#delete-role-name').text(nama);
+
+                // Atur action form
+                // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
+                $('#deleteRoleForm').attr('action', '/surat_tugas/' + id);
             });
         });
     </script>

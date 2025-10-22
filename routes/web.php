@@ -14,6 +14,7 @@ use App\Http\Controllers\ProdiController;
 use App\Http\Controllers\SemesterController;
 use App\Http\Controllers\MatakuliahController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\PindahJadwalController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\SekprodiController;
 use App\Http\Controllers\ShiftController;
@@ -26,43 +27,44 @@ Route::get('/', function () {
     return view('login');
 });
 Route::post('/login', [User::class, 'login'])->name("login");
-Route::post('/logout', [User::class, 'logout'])->name('logout');
+Route::post('/logout', [User::class, 'logout'])->name('logout')->middleware('auth');
+Route::get('/data', [User::class, 'index'])->name('logout')->middleware('auth');
+Route::get('/profil', function () {
+    return view('profil');
+})->middleware("auth");
+Route::put('/profil', [User::class, 'edit'])->middleware('auth');
+Route::put('/settings', [User::class, 'editPassword'])->middleware('auth');
 
 // Route::prefix('admin')->middleware('auth')->group(function () {
 //     Route::resource('roles', RoleController::class);
 // });
-Route::resource('kelas', KelasController::class);
-Route::resource('fakultas', FakultasController::class);
-Route::resource('prodi', ProdiController::class);
-Route::resource('semester', SemesterController::class);
-Route::resource('matakuliah', MatakuliahController::class);
-Route::resource('dekan', DekanController::class);
-Route::resource('angkatan', AngkatanController::class);
-Route::resource('shift', ShiftController::class);
-Route::resource('ruangan', RuanganController::class);
-Route::resource('dosen', DosenController::class);
+Route::resource('kelas', KelasController::class)->middleware('auth');
+Route::resource('fakultas', FakultasController::class)->middleware('auth');
+Route::resource('prodi', ProdiController::class)->middleware('auth');
+Route::resource('semester', SemesterController::class)->middleware('auth');
+Route::resource('matakuliah', MatakuliahController::class)->middleware('auth');
+Route::resource('dekan', DekanController::class)->middleware('auth');
+Route::resource('angkatan', AngkatanController::class)->middleware('auth');
+Route::resource('shift', ShiftController::class)->middleware('auth');
+Route::resource('ruangan', RuanganController::class)->middleware('auth');
+Route::resource('dosen', DosenController::class)->middleware(['auth']);
 Route::resource('surat_tugas', SuratTugasMengajarController::class);
-Route::resource('jadwal', JadwalController::class);
-Route::resource('kaprodi', KaprodiController::class);
-Route::resource('sekprodi', SekprodiController::class);
-Route::resource('mahasiswa', MahasiswaController::class);
-Route::resource('kosma', KosmaController::class);
-Route::resource('barter_jadwal', BarterJadwalController::class);
+Route::resource('jadwal', JadwalController::class)->middleware('auth');
+Route::resource('kaprodi', KaprodiController::class)->middleware('auth');
+Route::resource('sekprodi', SekprodiController::class)->middleware('auth');
+Route::resource('mahasiswa', MahasiswaController::class)->middleware('auth');
+Route::resource('kosma', KosmaController::class)->middleware('auth');
+Route::resource('barter_jadwal', BarterJadwalController::class)->middleware(['auth']);
+Route::resource('pindah_jadwal', PindahJadwalController::class)->middleware(['auth' ]);
 
 Route::get('/laporan/pdf/show', [PdfController::class, 'generateAndShow'])->name('laporan.pdf.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-});
-Route::get('/profil', function () {
-    return view('profil');
-});
-Route::get('/data', function () {
-    return view('data');
-});
+})->middleware('auth');
 Route::get('/settings', function () {
     return view('settings');
-});
+})->middleware('auth');
 
 
 // Route::get('/barter_jadwal', function () {

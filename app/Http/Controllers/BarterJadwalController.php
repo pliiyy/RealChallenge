@@ -152,8 +152,11 @@ try {
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(BarterJadwal $barterJadwal)
+    public function destroy($id)
     {
-        //
+        $barter = BarterJadwal::findOrFail($id);
+        $barter->delete();
+
+        return redirect('/barter_jadwal')->with('success', 'Barter Jadwal berhasil dihapus!');
     }
 }
