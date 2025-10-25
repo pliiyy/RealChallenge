@@ -15,6 +15,13 @@
                         <option value="AKTIF" {{ request('status') == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
                         <option value="NONAKTIF" {{ request('status') == 'NONAKTIF' ? 'selected' : '' }}>Nonaktif</option>
                     </select>
+                    <select name="semester_id" class="form-select">
+                        <option value="">-- Semeter --</option>
+                        @foreach ($semester as $item)
+                            <option value="{{ $item->id }}" {{ request('semester_id') ? 'selected' : '' }}>
+                                {{ $item->nama }}</option>
+                        @endforeach
+                    </select>
 
                     <button type="submit" class="btn btn-primary">Filter</button>
                 </form>

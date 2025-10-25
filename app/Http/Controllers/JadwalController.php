@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Jadwal;
 use App\Models\Ruangan;
+use App\Models\Semester;
 use App\Models\Shift;
 use App\Models\SuratTugasMengajar;
 use Illuminate\Http\Request;
@@ -16,44 +17,44 @@ class JadwalController extends Controller
     public function index(Request $request)
     {
         $query = Jadwal::query();
-        $query->with('suratTugasMengajar.kelas','ruangan',"shift");
+    $query->with('suratTugasMengajar.kelas','suratTugasMengajar.matakuliah.semester','ruangan',"shift");
 
-        // Searching berdasarkan nama
-        if ($request->filled('search')) {
-            if ($request->filled('search')) {
-            // 1. Cari melalui relasi 'suratTugasMengajar'
-            $query->whereHas('suratTugasMengajar', function ($q) use ($request) {
-                // 2. Di dalam Surat Tugas, cari melalui relasi 'dosen'
-                $q->whereHas('dosen.user.biodata', function ($qDosen) use ($request) {
-                    // Asumsi: kolom 'nama' ada di tabel biodata
-                    $qDosen->where('nama', 'like', '%' . $request->search . '%'); 
-                })
-                // 3. ATAU cari berdasarkan Mata Kuliah
-                ->orWhereHas('matakuliah', function ($qMatkul) use ($request) {
-                    // Asumsi: kolom 'nama' ada di tabel matakuliah
-                    $qMatkul->where('nama', 'like', '%' . $request->search . '%');
-                });
+    // Searching berdasarkan nama
+    if ($request->filled('search')) {
+        $query->whereHas('suratTugasMengajar', function ($q) use ($request) {
+            $q->whereHas('dosen.user.biodata', function ($qDosen) use ($request) {
+                $qDosen->where('nama', 'like', '%' . $request->search . '%'); 
+            })
+            ->orWhereHas('matakuliah', function ($qMatkul) use ($request) {
+                $qMatkul->where('nama', 'like', '%' . $request->search . '%');
             });
-        }
-        }
+        });
+    }
 
-        // Filter berdasarkan status (AKTIF / NONAKTIF)
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }else{
-            $query->where("status","AKTIF");
-        }
+    // Filter berdasarkan status (AKTIF / NONAKTIF)
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    } else {
+        $query->where("status","AKTIF");
+    }
 
-        // Pagination, misal 10 data per halaman
-        $jadwal = $query->orderBy('hari', 'desc')->paginate(10);
+    // ✅ Perbaikan disini
+    if ($request->filled('semester_id')) {
+        $query->whereHas('suratTugasMengajar.matakuliah', function ($q) use ($request) {
+            $q->where('semester_id', $request->semester_id);
+        });
+    }
 
-        // Biar query string tetap terbawa saat paginate link
-        $jadwal->appends($request->all());
-        $surat = SuratTugasMengajar::where("status","=","APPROVED")->get();
-        $ruangan = Ruangan::where("status","=","AKTIF")->get();
-        $shift = Shift::where("status","=","AKTIF")->get();
+    // Pagination
+    $jadwal = $query->orderBy('hari', 'desc')->paginate(10);
+    $jadwal->appends($request->all());
 
-        return view('jadwal', compact('jadwal','surat','ruangan','shift'));
+    $surat = SuratTugasMengajar::where("status","APPROVED")->get();
+    $ruangan = Ruangan::where("status","AKTIF")->get();
+    $shift = Shift::where("status","AKTIF")->get();
+    $semester = Semester::where("status","AKTIF")->get();
+
+    return view('jadwal', compact('jadwal','surat','ruangan','shift','semester'));
     }
 
     /**
