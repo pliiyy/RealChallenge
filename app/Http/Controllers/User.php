@@ -104,5 +104,8 @@ class User extends Controller
 
         return redirect('/settings')->with('success', 'Pengguna ' . $user->Biodata->nama . ' berhasil diperbarui!');
     }
-    
+    public function dashboard(){
+        $user = ModelsUser::where("status","AKTIF")->get();
+        return view('dashboard',compact('user'));
+    }
 }

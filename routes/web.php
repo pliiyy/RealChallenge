@@ -59,9 +59,7 @@ Route::resource('pindah_jadwal', PindahJadwalController::class)->middleware(['au
 
 Route::get('/laporan/pdf/show', [PdfController::class, 'generateAndShow'])->name('laporan.pdf.show');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth');
+Route::get('/dashboard', [User::class,'dashboard'])->middleware('auth');
 Route::get('/settings', function () {
     return view('settings');
 })->middleware('auth');

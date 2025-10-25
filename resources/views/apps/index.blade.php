@@ -166,7 +166,7 @@
             <div class="col-lg-2 col-md-3 p-3 sidebar  border-end">
                 <nav class="nav flex-column">
                     <!-- Dashboard -->
-                    <a href="/dasboard" class="nav-link">
+                    <a href="/dashboard" class="nav-link">
                         <i class="bi bi-speedometer2 me-2"></i> Dashboard
                     </a>
 

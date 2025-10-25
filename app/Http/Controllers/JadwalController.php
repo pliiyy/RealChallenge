@@ -44,6 +44,8 @@ class JadwalController extends Controller
             $q->where('semester_id', $request->semester_id);
         });
     }
+ $jadwalAll = $query->orderBy('hari', 'asc')->get();
+    $jadwalPerHari = $jadwalAll->groupBy('hari');
 
     // Pagination
     $jadwal = $query->orderBy('hari', 'desc')->paginate(10);
