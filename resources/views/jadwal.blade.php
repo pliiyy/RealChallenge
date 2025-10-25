@@ -1,282 +1,135 @@
-@extends('apps.index')
-@section('title', 'Jadwal')
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Kuliah</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs" defer></script>
+</head>
+<body class="bg-gray-100 p-6">
 
-@section('content')
-    <div class="col-lg-10 col-md-9 content">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <span>🕒 Data Jadwal Perkuliahan</span>
-                <form action="/jadwal" method="GET" class="mb-3 d-flex gap-2">
-                    <input type="text" name="search" class="form-control" placeholder="Cari nama jadwal"
-                        value="{{ request('search') }}">
+    <div class="max-w-7xl mx-auto bg-white rounded-lg shadow p-6" x-data="{ tab: 'R1' }">
+        <!-- Header -->
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold">JADWAL MATA KULIAH PROGRAM S1 SI & BD, D3 KA</h1>
+            <h2 class="text-lg font-semibold text-gray-700">SEMESTER GANJIL 2025/2026</h2>
+        </div>
 
-                    <select name="status" class="form-select">
-                        <option value="">-- Semua Status --</option>
-                        <option value="AKTIF" {{ request('status') == 'AKTIF' ? 'selected' : '' }}>Aktif</option>
-                        <option value="NONAKTIF" {{ request('status') == 'NONAKTIF' ? 'selected' : '' }}>Nonaktif</option>
-                    </select>
-                    <select name="semester_id" class="form-select">
-                        <option value="">-- Semeter --</option>
-                        @foreach ($semester as $item)
-                            <option value="{{ $item->id }}" {{ request('semester_id') ? 'selected' : '' }}>
-                                {{ $item->nama }}</option>
-                        @endforeach
-                    </select>
-
-                    <button type="submit" class="btn btn-primary">Filter</button>
-                </form>
-                <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
-                    data-bs-target="#addJadwalModal">
-                    <i class="bi bi-plus-circle me-1"></i> Tambah Jadwal
+        <!-- Tabs -->
+        <div class="flex justify-center gap-4 mb-6 flex-wrap">
+            @foreach(['R1','R3','R5','R7','NR1','NR3','NR5','NR7','RUANG'] as $t)
+                <button 
+                    @click="tab = '{{ $t }}'" 
+                    class="px-4 py-2 rounded-lg text-sm font-semibold transition duration-200"
+                    :class="tab === '{{ $t }}' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'">
+                    {{ $t }}
                 </button>
-            </div>
+            @endforeach
+        </div>
 
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table align-middle">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Mata Kuliah</th>
-                                <th>Dosen</th>
-                                <th>Ruangan</th>
-                                <th>Kelas</th>
-                                <th>Hari</th>
-                                <th>Jam</th>
-                                <th>Semester</th>
-                                <th>Tahun Ajaran</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($jadwal as $index => $kls)
-                                <tr>
-                                    <td>{{ $jadwal->firstItem() + $index }}</td>
-                                    <td><span>{{ $kls->suratTugasMengajar->matakuliah->nama }}</span></td>
-                                    <td><span>{{ $kls->suratTugasMengajar->Dosen->user->Biodata->nama }}</span></td>
-                                    <td>{{ $kls->Ruangan->nama }}</td>
-                                    <td>{{ $kls->suratTugasMengajar->kelas->nama }}</td>
-                                    <td>{{ $kls->hari }}</td>
-                                    <td>{{ $kls->shift->nama }} ({{ $kls->shift->jam_mulai }} -
-                                        {{ $kls->shift->jam_selesai }})</td>
-                                    <td><span>{{ $kls->suratTugasMengajar->matakuliah->semester->nama }}</span></td>
-                                    <td><span>{{ $kls->suratTugasMengajar->matakuliah->semester->tahun_akademik }}</span>
-                                    </td>
-                                    <td>
-                                        @if ($kls->status == 'AKTIF')
-                                            <span class="badge bg-success">{{ ucfirst(strtolower($kls->status)) }}</span>
-                                        @else
-                                            <span class="badge bg-secondary">{{ ucfirst(strtolower($kls->status)) }}</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
-                                            data-bs-toggle="modal" data-bs-target="#editJadwalModal"
-                                            data-id="{{ $kls->id }}"
-                                            data-surat_tugas_mengajar_id="{{ $kls->surat_tugas_mengajar_id }}"
-                                            data-ruangan_id="{{ $kls->ruangan_id }}" data-hari="{{ $kls->hari }}"
-                                            data-shift_id="{{ $kls->shift_id }}"> <i class="bi bi-pencil"></i>
-                                        </button>
-                                        {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
-                                            data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
-                                            data-id="{{ $kls->id }}"data-nama="{{ $kls->suratTugasMengajar->Matakuliah->nama }}">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                    {{-- ... akhir loop ... --}}
+        <!-- Jadwal Container -->
+        <div class="overflow-x-auto overflow-y-auto max-h-[75vh] border rounded-lg">
+            
+            <!-- Jadwal R1 -->
+            <div x-show="tab === 'R1'" class="min-w-[900px]">
+                @foreach (['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'] as $hari)
+                    <div class="mb-8 border border-gray-300 rounded-lg">
+                        <div class="bg-yellow-300 font-bold text-lg px-4 py-2">{{ strtoupper($hari) }}</div>
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100 text-sm text-left">
+                                    <th class="border px-3 py-2 w-32">WAKTU</th>
+                                    <th class="border px-3 py-2 text-center">S1 SI</th>
+                                    <th class="border px-3 py-2 text-center">D3 KA</th>
+                                    <th class="border px-3 py-2 text-center">S1 BD A</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody>
+                                <!-- Contoh Data Dummy -->
+                                <tr>
+                                    <td class="border px-3 py-2">07.30 - 09.10</td>
+                                    <td class="border px-3 py-2 text-center">
+                                        Pendidikan Agama Islam I<br>
+                                        <span class="text-sm text-gray-600">Dr. Yudhy</span><br>
+                                        <span class="text-xs">A204</span>
+                                    </td>
+                                    <td class="border px-3 py-2 text-center">
+                                        Pengantar Akuntansi<br>
+                                        <span class="text-sm text-gray-600">Dr. Latifah</span><br>
+                                        <span class="text-xs">A211</span>
+                                    </td>
+                                    <td class="border px-3 py-2 text-center">
+                                        Pengantar Manajemen<br>
+                                        <span class="text-sm text-gray-600">Armansyah</span><br>
+                                        <span class="text-xs">A205</span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="border px-3 py-2">09.20 - 11.00</td>
+                                    <td class="border px-3 py-2 text-center">
+                                        Pengantar Manajemen<br>
+                                        <span class="text-sm text-gray-600">Yelly A.M.</span><br>
+                                        <span class="text-xs">Lab Jaringan</span>
+                                    </td>
+                                    <td class="border px-3 py-2 text-center">
+                                        Pengantar Manajemen & Bisnis<br>
+                                        <span class="text-sm text-gray-600">Dadang Dimyati</span><br>
+                                        <span class="text-xs">A211</span>
+                                    </td>
+                                    <td class="border px-3 py-2 text-center">
+                                        Pengantar Akuntansi<br>
+                                        <span class="text-sm text-gray-600">Dr. Latifah</span><br>
+                                        <span class="text-xs">A205</span>
+                                    </td>
+                                </tr>
+
+                                <!-- Baris Shalat -->
+                                <tr class="bg-green-200 font-semibold text-center">
+                                    <td colspan="4" class="py-2">12.00 - 12.30 → Shalat Dzuhur</td>
+                                </tr>
+
+                                <tr>
+                                    <td class="border px-3 py-2">13.00 - 15.30</td>
+                                    <td class="border px-3 py-2 text-center">
+                                        Analisis Sistem Informasi<br>
+                                        <span class="text-sm text-gray-600">Dr. Latifah</span><br>
+                                        <span class="text-xs">A205</span>
+                                    </td>
+                                    <td class="border px-3 py-2 text-center">
+                                        Praktikum Komputer<br>
+                                        <span class="text-sm text-gray-600">Kanda Ishak</span><br>
+                                        <span class="text-xs">B302</span>
+                                    </td>
+                                    <td class="border px-3 py-2 text-center">
+                                        Sistem Basis Data<br>
+                                        <span class="text-sm text-gray-600">Dr. Rudianto</span><br>
+                                        <span class="text-xs">A211</span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="border px-3 py-2">15.40 - 17.00</td>
+                                    <td class="border px-3 py-2 text-center">—</td>
+                                    <td class="border px-3 py-2 text-center">—</td>
+                                    <td class="border px-3 py-2 text-center">—</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                @endforeach
             </div>
-        </div>
-        <div class="mt-3">
-            {{ $jadwal->links() }}
-        </div>
-        <div class="mt-4 alert alert-info bg-opacity-25 border-0 text-primary">
-            <i class="bi bi-info-circle me-2"></i>
-            Kelola jadwal perkuliahan dengan memastikan tidak ada bentrok antar waktu dan ruangan.
-        </div>
-    </div>
-    </div>
-    </div>
 
-    <!-- Modal Tambah Jadwal -->
-    <div class="modal fade" id="addJadwalModal" tabindex="-1" aria-labelledby="addJadwalModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <form class="modal-content" method="POST" action="/jadwal">
-                @csrf
-                @method('POST')
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="addJadwalModalLabel">Tambah Jadwal Baru</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            <!-- Jadwal Tab Lain (Dummy Sama) -->
+            @foreach(['R3','R5','R7','NR1','NR3','NR5','NR7','RUANG'] as $tab)
+                <div x-show="tab === '{{ $tab }}'" class="min-w-[900px] text-center text-gray-500 py-20">
+                    Jadwal {{ $tab }} (masih dummy, bisa disalin dari R1)
                 </div>
-                <div class="modal-body row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Mata Kuliah</label>
-                        <select class="form-select" name="surat_tugas_mengajar_id">
-                            @foreach ($surat as $item)
-                                <option value="{{ $item->id }}">{{ $item->matakuliah->nama }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Ruangan</label>
-                        <select class="form-select" name="ruangan_id">
-                            @foreach ($ruangan as $item)
-                                <option value="{{ $item->id }}">{{ $item->nama }} ({{ $item->kode }})</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Hari</label>
-                        <select class="form-select" name="hari">
-                            <option value="SENIN">Senin</option>
-                            <option value="SELASA">Selasa</option>
-                            <option value="RABU">Rabu</option>
-                            <option value="KAMIS">Kamis</option>
-                            <option value="JUMAT">Jumat</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Jam</label>
-                        <select class="form-select" name="shift_id">
-                            @foreach ($shift as $item)
-                                <option value="{{ $item->id }}">{{ $item->nama }} ({{ $item->jam_mulai }} -
-                                    {{ $item->jam_selesai }})</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div class="modal fade" id="editJadwalModal" tabindex="-1" aria-labelledby="editJadwalModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <form class="modal-content" method="POST" action="/pindah_jadwal">
-                @csrf
-                @method('POST')
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="addJadwalModalLabel">Pindahkan Jadwal</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body row g-3">
-                    <div class="col-md-6">
-                        <input type="hidden" name="id" id="edit-id">
-                        <label class="form-label">Mata Kuliah</label>
-                        <select class="form-select" name="surat_tugas_mengajar_id" id="edit-surat_tuga_mengajar_id"
-                            disabled>
-                            @foreach ($surat as $item)
-                                <option value="{{ $item->id }}">{{ $item->matakuliah->nama }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Ruangan</label>
-                        <select class="form-select" name="ruangan_id" id="edit-ruangan_id">
-                            @foreach ($ruangan as $item)
-                                <option value="{{ $item->id }}">{{ $item->nama }} ({{ $item->kode }})</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Hari</label>
-                        <select class="form-select" name="hari" id="edit-hari">
-                            <option value="SENIN">Senin</option>
-                            <option value="SELASA">Selasa</option>
-                            <option value="RABU">Rabu</option>
-                            <option value="KAMIS">Kamis</option>
-                            <option value="JUMAT">Jumat</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Jam</label>
-                        <select class="form-select" name="shift_id" id="edit-shift_id">
-                            @foreach ($shift as $item)
-                                <option value="{{ $item->id }}">{{ $item->nama }} ({{ $item->jam_mulai }} -
-                                    {{ $item->jam_selesai }})</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Alasan</label>
-                        <textarea class="form-control" rows="3" placeholder="Alasan Pindah Jadwal" name="alasan"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
+            @endforeach
+
         </div>
     </div>
 
-    <div class="modal fade" id="deleteRoleModal" tabindex="-1" aria-labelledby="deleteRoleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            {{-- Form action akan diisi oleh JavaScript --}}
-            <form class="modal-content" id="deleteRoleForm" action="" method="POST">
-                @csrf
-                @method('DELETE') {{-- Gunakan method DELETE untuk hapus --}}
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="deleteRoleModalLabel">Konfirmasi Hapus</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Apakah Anda yakin ingin menghapus Jadwal ini? **<span id="delete-role-name"></span>**?</p>
-                    <input type="hidden" name="id" id="delete-id">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-danger">Ya, Hapus Jadwal Ini</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        $(document).ready(function() {
-            // Tangkap saat tombol edit diklik
-            $('.btn-edit').on('click', function() {
-                // 1. Ambil data dari data-attributes
-                var id = $(this).data('id');
-                var surat_tugas_mengajar_id = $(this).data('surat_tugas_mengajar_id');
-                var ruangan_id = $(this).data('ruangan_id');
-                var shift_id = $(this).data('shift_id');
-                var hari = $(this).data('hari');
-
-                // 2. Isi data Role ke dalam form modal
-                $('#edit-id').val(id);
-                $('#edit-surat_tugas_mengajar_id').val(surat_tugas_mengajar_id);
-                $('#edit-ruangan_id').val(ruangan_id);
-                $('#edit-shift_id').val(shift_id);
-                $('#edit-hari').val(hari);
-
-                // 3. Atur action form
-                // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
-                $('#editRoleForm').attr('action', '/pindah_jadwal/' + id);
-
-            });
-            $('.btn-delete').on('click', function() {
-                var id = $(this).data('id');
-                var nama = $(this).data('nama');
-
-                // Isi data ke dalam form modal
-                $('#delete-id').val(id);
-                $('#delete-role-name').text(nama);
-
-                // Atur action form
-                // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
-                $('#deleteRoleForm').attr('action', '/jadwal/' + id);
-            });
-        });
-    </script>
-@endsection
+</body>
+</html>
