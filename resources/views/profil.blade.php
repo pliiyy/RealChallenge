@@ -5,13 +5,40 @@
     <div class="col-lg-10 col-md-9 p-4">
         <div class="profile-card mx-auto" style="max-width: 800px;">
             <!-- Header -->
-            <div class="profile-header">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ auth()->user()->Biodata->nama ?? 'user' }}"
-                    alt="Foto Profil">
-                <h4>{{ auth()->user()->Biodata->nama ?? 'Nama Pengguna' }}</h4>
+            <div class="profile-header text-center py-4 bg-primary text-white rounded-top">
+                {{-- Lingkaran foto bisa diklik untuk upload --}}
+                <form id="formUploadFoto" method="POST" action="{{ route('profil.updateFoto') }}"
+                    enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <input type="file" name="foto" id="fotoInput" accept="image/*" style="display: none;"
+                        onchange="previewFoto(event)">
+
+                    <div class="d-inline-block mb-3 position-relative" style="cursor: pointer;"
+                        onclick="document.getElementById('fotoInput').click()">
+                        <div id="previewContainer"
+                            class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto"
+                            style="width: 120px; height: 120px; border: 3px solid #fff; overflow: hidden;">
+                            @if (auth()->user()->biodata->foto_profil)
+                                <img id="fotoPreview"
+                                    src="{{ asset('storage/foto_profil/' . auth()->user()->biodata->foto_profil) }}"
+                                    class="w-100 h-100" style="object-fit: cover;">
+                            @else
+                                <i id="iconDefault" class="bi bi-person text-secondary" style="font-size: 60px;"></i>
+                            @endif
+                        </div>
+                        <div class="position-absolute bottom-0 end-0 translate-middle p-2 bg-white rounded-circle border shadow-sm"
+                            style="width: 36px; height: 36px;">
+                            <i class="bi bi-camera-fill text-primary"></i>
+                        </div>
+                    </div>
+                </form>
+
+                <h4 class="mb-1">{{ auth()->user()->Biodata->nama ?? 'Nama Pengguna' }}</h4>
                 <p class="text-white-50 mb-0">{{ auth()->user()->email ?? 'email@contoh.com' }}</p>
-                <div>
-                    <span class="badge rounded-pill text-uppercase" style="border-width: 2px;">
+
+                <div class="mt-2">
+                    <span class="badge rounded-pill text-uppercase bg-light text-primary fw-semibold px-3 py-2">
                         {{ auth()->user()->dekan ? 'DEKAN' : '' }}
                         {{ auth()->user()->dosen ? 'DOSEN' : '' }}
                         {{ auth()->user()->mahasiswa ? 'MAHASISWA' : '' }}
@@ -51,8 +78,7 @@
                         </div>
                         <div class="col-md-12 mt-3">
                             <label class="info-label mb-1">Tentang Saya</label>
-                            <textarea class="form-control" rows="3" placeholder="Tuliskan sesuatu tentang dirimu..."
-                                value="{{ auth()->user()->Biodata->keterangan ?? '' }}" name="keterangan">{{ auth()->user()->Biodata->keterangan ?? '' }}</textarea>
+                            <textarea class="form-control" rows="3" placeholder="Tuliskan sesuatu tentang dirimu..." name="keterangan">{{ auth()->user()->Biodata->keterangan ?? '' }}</textarea>
                         </div>
                     </div>
 
@@ -65,4 +91,21 @@
             </div>
         </div>
     </div>
+
+    {{-- Script preview foto --}}
+    <script>
+        function previewFoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    let previewContainer = document.getElementById('previewContainer');
+                    previewContainer.innerHTML =
+                        `<img id="fotoPreview" src="${e.target.result}" class="w-100 h-100" style="object-fit: cover;">`;
+                    document.getElementById('formUploadFoto').submit(); // auto submit setelah pilih foto
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
 @endsection
