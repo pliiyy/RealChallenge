@@ -6,10 +6,12 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span>👨‍🏫 Data Kosma</span>
-                <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
-                    data-bs-target="#dekanFormModal">
-                    <i class="bi bi-plus-circle me-1"></i> Tambah Kosma
-                </button>
+                @if (!auth()->user()->mahasiswa)
+                    <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
+                        data-bs-target="#dekanFormModal">
+                        <i class="bi bi-plus-circle me-1"></i> Tambah Kosma
+                    </button>
+                @endif
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -36,21 +38,23 @@
                                     <td><span>{{ $kls->kelas->Angkatan->nama }}</span></td>
                                     <td><span>{{ $kls->user->Mahasiswa->prodi->nama }}</span></td>
                                     <td><span>{{ $kls->user->Mahasiswa->prodi->fakultas->nama }}</span></td>
-                                    <td>
-                                        {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
-                                        <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
-                                            data-bs-toggle="modal" data-bs-target="#editRoleModal"
-                                            data-id="{{ $kls->id }}" data-kelas_id="{{ $kls->kelas_id }}"
-                                            data-user_id="{{ $kls->user_id }}"> <i class="bi bi-pencil"></i>
-                                        </button>
+                                    @if (!auth()->user()->mahasiswa)
+                                        <td>
+                                            {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
+                                            <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
+                                                data-bs-toggle="modal" data-bs-target="#editRoleModal"
+                                                data-id="{{ $kls->id }}" data-kelas_id="{{ $kls->kelas_id }}"
+                                                data-user_id="{{ $kls->user_id }}"> <i class="bi bi-pencil"></i>
+                                            </button>
 
-                                        {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
-                                            data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
-                                            data-id="{{ $kls->id }}" data-nama="{{ $kls->user->Biodata->nama }}">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
+                                            {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
+                                            <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
+                                                data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
+                                                data-id="{{ $kls->id }}" data-nama="{{ $kls->user->Biodata->nama }}">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    @endif
                                     {{-- ... akhir loop ... --}}
                                 </tr>
                             @endforeach

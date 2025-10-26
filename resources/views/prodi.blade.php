@@ -19,10 +19,12 @@
 
                     <button type="submit" class="btn btn-primary">Filter</button>
                 </form>
-                <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
-                    data-bs-target="#addKelasModal">
-                    <i class="bi bi-plus-circle me-1"></i> Tambah Prodi
-                </button>
+                @if (!auth()->user()->mahasiswa)
+                    <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
+                        data-bs-target="#addKelasModal">
+                        <i class="bi bi-plus-circle me-1"></i> Tambah Prodi
+                    </button>
+                @endif
             </div>
             <div class="card-body">
                 <table class="table table-hover align-middle">
@@ -54,24 +56,26 @@
                                         <span class="badge bg-secondary">{{ ucfirst(strtolower($kls->status)) }}</span>
                                     @endif
                                 </td>
-                                <td>
-                                    {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
-                                    <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
-                                        data-bs-toggle="modal" data-bs-target="#editRoleModal"
-                                        data-id="{{ $kls->id }}"
-                                        data-nama="{{ $kls->nama }}"data-kode="{{ $kls->kode }}"
-                                        data-fakultas_id="{{ $kls->fakultas_id }}"
-                                        data-kaprodi_id="{{ $kls->kaprodi_id }}"
-                                        data-sekprodi_id="{{ $kls->sekprodi_id }}"> <i class="bi bi-pencil"></i>
-                                    </button>
+                                @if (!auth()->user()->mahasiswa)
+                                    <td>
+                                        {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
+                                        <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
+                                            data-bs-toggle="modal" data-bs-target="#editRoleModal"
+                                            data-id="{{ $kls->id }}"
+                                            data-nama="{{ $kls->nama }}"data-kode="{{ $kls->kode }}"
+                                            data-fakultas_id="{{ $kls->fakultas_id }}"
+                                            data-kaprodi_id="{{ $kls->kaprodi_id }}"
+                                            data-sekprodi_id="{{ $kls->sekprodi_id }}"> <i class="bi bi-pencil"></i>
+                                        </button>
 
-                                    {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
-                                    <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
-                                        data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
-                                        data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </td>
+                                        {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
+                                            data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
+                                            data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                @endif
                                 {{-- ... akhir loop ... --}}
                             </tr>
                         @endforeach
@@ -95,11 +99,12 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nama prodi</label>
-                        <input type="text" class="form-control" placeholder="Contoh: Kelas A, Kelas B" name="nama">
+                        <input type="text" class="form-control" placeholder="Contoh: Sistem Informasi/Bisnis Digital dll"
+                            name="nama">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Kode</label>
-                        <input class="form-control" placeholder="Contoh: 40" name="kode">
+                        <input class="form-control" placeholder="Contoh: SI/BD" name="kode">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Fakultas</label>

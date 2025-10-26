@@ -104,11 +104,11 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nama Ruangan</label>
-                        <input type="text" class="form-control" placeholder="Contoh: Ruang Kuliah" name="nama">
+                        <input type="text" class="form-control" placeholder="Contoh: Lab Jaringan/Bahasa" name="nama">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Kode Ruangan</label>
-                        <input type="text" class="form-control" placeholder="Contoh: LABA101" name="kode">
+                        <input type="text" class="form-control" placeholder="Contoh: A201/A202" name="kode">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Kapasitas</label>

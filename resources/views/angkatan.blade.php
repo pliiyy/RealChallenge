@@ -94,7 +94,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Tahun Angkatan</label>
-                        <input type="text" class="form-control" placeholder="2024-2024" name="tahun">
+                        <input type="text" class="form-control" placeholder="2024" name="tahun">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Keterangan</label>

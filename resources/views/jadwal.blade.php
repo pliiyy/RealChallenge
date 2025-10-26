@@ -25,10 +25,12 @@
 
                     <button type="submit" class="btn btn-primary">Filter</button>
                 </form>
-                <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
-                    data-bs-target="#addJadwalModal">
-                    <i class="bi bi-plus-circle me-1"></i> Tambah Jadwal
-                </button>
+                @if (!auth()->user()->mahasiswa)
+                    <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
+                        data-bs-target="#addJadwalModal">
+                        <i class="bi bi-plus-circle me-1"></i> Tambah Jadwal
+                    </button>
+                @endif
             </div>
 
             <div class="card-body">
@@ -70,21 +72,23 @@
                                             <span class="badge bg-secondary">{{ ucfirst(strtolower($kls->status)) }}</span>
                                         @endif
                                     </td>
-                                    <td>
-                                        <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
-                                            data-bs-toggle="modal" data-bs-target="#editJadwalModal"
-                                            data-id="{{ $kls->id }}"
-                                            data-surat_tugas_mengajar_id="{{ $kls->surat_tugas_mengajar_id }}"
-                                            data-ruangan_id="{{ $kls->ruangan_id }}" data-hari="{{ $kls->hari }}"
-                                            data-shift_id="{{ $kls->shift_id }}"> <i class="bi bi-pencil"></i>
-                                        </button>
-                                        {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
-                                            data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
-                                            data-id="{{ $kls->id }}"data-nama="{{ $kls->suratTugasMengajar->Matakuliah->nama }}">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
+                                    @if (!auth()->user()->mahasiswa)
+                                        <td>
+                                            <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
+                                                data-bs-toggle="modal" data-bs-target="#editJadwalModal"
+                                                data-id="{{ $kls->id }}"
+                                                data-surat_tugas_mengajar_id="{{ $kls->surat_tugas_mengajar_id }}"
+                                                data-ruangan_id="{{ $kls->ruangan_id }}" data-hari="{{ $kls->hari }}"
+                                                data-shift_id="{{ $kls->shift_id }}"> <i class="bi bi-pencil"></i>
+                                            </button>
+                                            {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
+                                            <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
+                                                data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
+                                                data-id="{{ $kls->id }}"data-nama="{{ $kls->suratTugasMengajar->Matakuliah->nama }}">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    @endif
                                     {{-- ... akhir loop ... --}}
                                 </tr>
                             @endforeach

@@ -14,11 +14,12 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #4f46e5, #3b82f6);
+            /* background: linear-gradient(135deg, #4f46e5, #3b82f6); */
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: url('/app-bg.jpeg');
         }
 
         .card {
@@ -29,7 +30,7 @@
         }
 
         .login-image {
-            background: url('https://images.unsplash.com/photo-1508780709619-79562169bc64?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;
+            background: url('https://1.bp.blogspot.com/-85w3nKQ5gOg/XQs8JTEA3FI/AAAAAAAAQ8o/ja1bjNAnsCYYGoN1VKFKqqw12EEXKuuGACLcBGAs/s1600/Ma%2527soem%2BUniversity.jpg') center/cover no-repeat;
         }
 
         .form-control:focus {
@@ -71,7 +72,7 @@
                         <!-- Form kanan -->
                         <div class="col-md-6 bg-white p-5">
                             <div class="text-center mb-4">
-                                <h3 class="brand-title">Aplikasi Saya</h3>
+                                <h3 class="brand-title">BEVARARI Apps</h3>
                                 <p class="text-muted">Silakan masuk untuk melanjutkan</p>
                             </div>
 
@@ -104,8 +105,8 @@
                                             Ingat saya
                                         </label>
                                     </div>
-                                    <a href="#" class="small-link text-decoration-none text-primary">Lupa
-                                        password?</a>
+                                    {{-- <a href="#" class="small-link text-decoration-none text-primary">Lupa
+                                        password?</a> --}}
                                 </div>
 
                                 <div class="d-grid">
@@ -114,12 +115,12 @@
                                     </button>
                                 </div>
                             </form>
-
+                            {{-- 
                             <div class="text-center mt-4 small-link">
                                 Belum punya akun?
                                 <a href="#" class="text-primary text-decoration-none fw-semibold">Daftar
                                     sekarang</a>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

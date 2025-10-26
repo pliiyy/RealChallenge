@@ -53,7 +53,6 @@
                                         @endif
                                     </td>
                                     <td>
-                                        {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
                                         <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
                                             data-bs-toggle="modal" data-bs-target="#editRoleModal"
                                             data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}"
@@ -61,14 +60,12 @@
                                             data-jam_selesai="{{ $kls->jam_selesai }}"> <i class="bi bi-pencil"></i>
                                         </button>
 
-                                        {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
                                         <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
                                             data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
                                             data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}">
                                             <i class="bi bi-trash"></i>
                                         </button>
                                     </td>
-                                    {{-- ... akhir loop ... --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -90,7 +87,7 @@
     <!-- Modal Tambah Shift -->
     <div class="modal fade" id="addShiftModal" tabindex="-1" aria-labelledby="addShiftModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form class="modal-content" action="/shift" method="POST">
+            <form class="modal-content" action="/shift" method="POST" id="addShiftForm">
                 @csrf
                 @method('POST')
                 <div class="modal-header bg-primary text-white">
@@ -100,77 +97,104 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nama Shift</label>
-                        <input type="text" class="form-control" placeholder="Shift Pagi" name="nama" />
+                        <select class="form-select" name="nama" id="add-nama" required>
+                            <option value="">-- Pilih Shift --</option>
+                            <option value="PAGI">Pagi</option>
+                            <option value="SIANG">Siang</option>
+                            <option value="MALAM">Malam</option>
+                        </select>
+                        <small class="text-muted">Pilih waktu shift mengajar</small>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Kode Shift</label>
-                        <input type="text" class="form-control" placeholder="Shift Pagi" name="kode" />
+                        <input type="text" class="form-control" placeholder="SP01" name="kode" id="add-kode"
+                            required />
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Jam Mulai</label>
-                        <input type="time" class="form-control" name="jam_mulai" />
+                        <input type="time" class="form-control" name="jam_mulai" id="add-jam_mulai" required />
+                        <div class="invalid-feedback" id="add-jam_mulai-error"></div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Jam Selesai</label>
-                        <input type="time" class="form-control" name="jam_selesai" />
+                        <input type="time" class="form-control" name="jam_selesai" id="add-jam_selesai" required />
+                        <div class="invalid-feedback" id="add-jam_selesai-error"></div>
+                    </div>
+
+                    <!-- Info Aturan Shift -->
+                    <div class="alert alert-warning alert-sm" id="add-shift-info" style="display:none;">
+                        <small><i class="bi bi-exclamation-triangle me-1"></i><span
+                                id="add-shift-info-text"></span></small>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary" id="add-submit-btn">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 
-
+    <!-- Modal Edit Shift -->
     <div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            {{-- Form action akan diisi oleh JavaScript --}}
             <form class="modal-content" id="editRoleForm" action="" method="POST">
                 @csrf
-                @method('PUT') {{-- Gunakan method PUT untuk update --}}
+                @method('PUT')
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="editRoleModalLabel">Edit Shift: <span id="edit-role-name"></span></h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="id" id="edit-id"> {{-- ID role yang akan diupdate --}}
+                    <input type="hidden" name="id" id="edit-id">
 
                     <div class="mb-3">
                         <label for="edit-nama" class="form-label">Nama Shift</label>
-                        <input type="text" class="form-control" id="edit-nama" name="nama" required />
+                        <select class="form-select" id="edit-nama" name="nama" required>
+                            <option value="">-- Pilih Shift --</option>
+                            <option value="PAGI">Pagi</option>
+                            <option value="SIANG">Siang</option>
+                            <option value="MALAM">Malam</option>
+                        </select>
+                        <small class="text-muted">Pilih waktu shift mengajar</small>
                     </div>
                     <div class="mb-3">
-                        <label for="edit-nama" class="form-label">Kode Shift</label>
+                        <label for="edit-kode" class="form-label">Kode Shift</label>
                         <input type="text" class="form-control" id="edit-kode" name="kode" required />
                     </div>
                     <div class="mb-3">
                         <label for="edit-jam_mulai" class="form-label">Jam Mulai</label>
-                        <input class="form-control" id="edit-jam_mulai" name="jam_mulai" type="time" />
+                        <input class="form-control" id="edit-jam_mulai" name="jam_mulai" type="time" required />
+                        <div class="invalid-feedback" id="edit-jam_mulai-error"></div>
                     </div>
                     <div class="mb-3">
                         <label for="edit-jam_selesai" class="form-label">Jam Selesai</label>
-                        <input class="form-control" id="edit-jam_selesai" name="jam_selesai" type="time" />
+                        <input class="form-control" id="edit-jam_selesai" name="jam_selesai" type="time" required />
+                        <div class="invalid-feedback" id="edit-jam_selesai-error"></div>
+                    </div>
+
+                    <!-- Info Aturan Shift -->
+                    <div class="alert alert-warning alert-sm" id="edit-shift-info" style="display:none;">
+                        <small><i class="bi bi-exclamation-triangle me-1"></i><span
+                                id="edit-shift-info-text"></span></small>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    <button type="submit" class="btn btn-primary" id="edit-submit-btn">Simpan Perubahan</button>
                 </div>
             </form>
         </div>
     </div>
 
-
+    <!-- Modal Delete Shift -->
     <div class="modal fade" id="deleteRoleModal" tabindex="-1" aria-labelledby="deleteRoleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-sm">
-            {{-- Form action akan diisi oleh JavaScript --}}
             <form class="modal-content" id="deleteRoleForm" action="" method="POST">
                 @csrf
-                @method('DELETE') {{-- Gunakan method DELETE untuk hapus --}}
+                @method('DELETE')
                 <div class="modal-header bg-danger text-white">
                     <h5 class="modal-title" id="deleteRoleModalLabel">Konfirmasi Hapus</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
@@ -190,41 +214,190 @@
 
     <script>
         $(document).ready(function() {
-            // Tangkap saat tombol edit diklik
+            // Aturan validasi shift
+            const shiftRules = {
+                'pagi': {
+                    minTime: '07:00',
+                    maxTime: '12:00',
+                    label: 'Shift Pagi (07:00 - 12:00)'
+                },
+                'siang': {
+                    minTime: '12:00',
+                    maxTime: '18:00',
+                    label: 'Shift Siang (12:00 - 18:00)'
+                },
+                'malam': {
+                    minTime: '18:00',
+                    maxTime: '23:59',
+                    label: 'Shift Malam (18:00 - 00:00)'
+                }
+            };
+
+            // Fungsi untuk mendapatkan tipe shift dari nama
+            function getShiftType(namaShift) {
+                const nama = namaShift.toLowerCase();
+                if (nama === 'pagi') return 'pagi';
+                if (nama === 'siang') return 'siang';
+                if (nama === 'malam') return 'malam';
+                return null;
+            }
+
+            // Fungsi validasi waktu shift
+            function validateShiftTime(namaShift, jamMulai, jamSelesai, prefix) {
+                const shiftType = getShiftType(namaShift);
+
+                // Reset error states
+                $(`#${prefix}-jam_mulai`).removeClass('is-invalid');
+                $(`#${prefix}-jam_selesai`).removeClass('is-invalid');
+                $(`#${prefix}-shift-info`).hide();
+                $(`#${prefix}-submit-btn`).prop('disabled', false);
+
+                if (!shiftType) {
+                    // Jika tidak ada aturan khusus, hanya validasi jam selesai > jam mulai
+                    if (jamSelesai && jamMulai && jamSelesai <= jamMulai) {
+                        $(`#${prefix}-jam_selesai`).addClass('is-invalid');
+                        $(`#${prefix}-jam_selesai-error`).text('Jam selesai harus lebih besar dari jam mulai');
+                        $(`#${prefix}-submit-btn`).prop('disabled', true);
+                        return false;
+                    }
+                    return true;
+                }
+
+                const rules = shiftRules[shiftType];
+                let isValid = true;
+                let errorMsg = '';
+
+                // Tampilkan info aturan shift
+                $(`#${prefix}-shift-info-text`).text(`Aturan: ${rules.label}`);
+                $(`#${prefix}-shift-info`).show();
+
+                // Validasi jam mulai
+                if (jamMulai) {
+                    if (jamMulai < rules.minTime || jamMulai > rules.maxTime) {
+                        $(`#${prefix}-jam_mulai`).addClass('is-invalid');
+                        $(`#${prefix}-jam_mulai-error`).text(
+                            `Jam mulai ${shiftType} harus antara ${rules.minTime} - ${rules.maxTime}`
+                        );
+                        isValid = false;
+                    }
+                }
+
+                // Validasi jam selesai
+                if (jamSelesai) {
+                    if (jamSelesai < rules.minTime || jamSelesai > rules.maxTime) {
+                        $(`#${prefix}-jam_selesai`).addClass('is-invalid');
+                        $(`#${prefix}-jam_selesai-error`).text(
+                            `Jam selesai ${shiftType} harus antara ${rules.minTime} - ${rules.maxTime}`
+                        );
+                        isValid = false;
+                    }
+                }
+
+                // Validasi jam selesai > jam mulai
+                if (jamMulai && jamSelesai && jamSelesai <= jamMulai) {
+                    $(`#${prefix}-jam_selesai`).addClass('is-invalid');
+                    $(`#${prefix}-jam_selesai-error`).text('Jam selesai harus lebih besar dari jam mulai');
+                    isValid = false;
+                }
+
+                $(`#${prefix}-submit-btn`).prop('disabled', !isValid);
+                return isValid;
+            }
+
+            // Validasi untuk form ADD
+            $('#add-nama, #add-jam_mulai, #add-jam_selesai').on('input change', function() {
+                const nama = $('#add-nama').val();
+                const jamMulai = $('#add-jam_mulai').val();
+                const jamSelesai = $('#add-jam_selesai').val();
+                validateShiftTime(nama, jamMulai, jamSelesai, 'add');
+            });
+
+            // Validasi untuk form EDIT
+            $('#edit-nama, #edit-jam_mulai, #edit-jam_selesai').on('input change', function() {
+                const nama = $('#edit-nama').val();
+                const jamMulai = $('#edit-jam_mulai').val();
+                const jamSelesai = $('#edit-jam_selesai').val();
+                validateShiftTime(nama, jamMulai, jamSelesai, 'edit');
+            });
+
+            // Submit form ADD dengan validasi
+            $('#addShiftForm').on('submit', function(e) {
+                const nama = $('#add-nama').val();
+                const jamMulai = $('#add-jam_mulai').val();
+                const jamSelesai = $('#add-jam_selesai').val();
+
+                if (!validateShiftTime(nama, jamMulai, jamSelesai, 'add')) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Validasi Gagal',
+                        text: 'Mohon periksa kembali waktu shift Anda!',
+                        confirmButtonColor: '#4f46e5'
+                    });
+                    return false;
+                }
+            });
+
+            // Submit form EDIT dengan validasi
+            $('#editRoleForm').on('submit', function(e) {
+                const nama = $('#edit-nama').val();
+                const jamMulai = $('#edit-jam_mulai').val();
+                const jamSelesai = $('#edit-jam_selesai').val();
+
+                if (!validateShiftTime(nama, jamMulai, jamSelesai, 'edit')) {
+                    e.preventDefault();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Validasi Gagal',
+                        text: 'Mohon periksa kembali waktu shift Anda!',
+                        confirmButtonColor: '#4f46e5'
+                    });
+                    return false;
+                }
+            });
+
+            // Handle tombol edit
             $('.btn-edit').on('click', function() {
-                // 1. Ambil data dari data-attributes
                 var id = $(this).data('id');
                 var kode = $(this).data('kode');
                 var nama = $(this).data('nama');
                 var jam_mulai = $(this).data('jam_mulai');
                 var jam_selesai = $(this).data('jam_selesai');
-                // var izinAksesJson = $(this).data('izin_akses');
 
-                // 2. Isi data Role ke dalam form modal
                 $('#edit-id').val(id);
                 $('#edit-nama').val(nama);
                 $('#edit-kode').val(kode);
                 $('#edit-jam_mulai').val(jam_mulai);
                 $('#edit-jam_selesai').val(jam_selesai);
-                $('#edit-role-name').text(nama); // Tampilkan nama role di header modal
-
-                // 3. Atur action form
-                // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
+                $('#edit-role-name').text(nama);
                 $('#editRoleForm').attr('action', '/shift/' + id);
 
-
+                // Trigger validasi saat modal dibuka
+                validateShiftTime(nama, jam_mulai, jam_selesai, 'edit');
             });
+
+            // Handle tombol delete
             $('.btn-delete').on('click', function() {
                 var id = $(this).data('id');
                 var nama = $(this).data('nama');
 
-                // Isi data ke dalam form modal
                 $('#delete-id').val(id);
                 $('#delete-role-name').text(nama);
-
-                // Atur action form
-                // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
                 $('#deleteRoleForm').attr('action', '/shift/' + id);
+            });
+
+            // Reset form saat modal ditutup
+            $('#addShiftModal').on('hidden.bs.modal', function() {
+                $('#addShiftForm')[0].reset();
+                $('#add-jam_mulai, #add-jam_selesai').removeClass('is-invalid');
+                $('#add-shift-info').hide();
+                $('#add-submit-btn').prop('disabled', false);
+            });
+
+            $('#editRoleModal').on('hidden.bs.modal', function() {
+                $('#edit-jam_mulai, #edit-jam_selesai').removeClass('is-invalid');
+                $('#edit-shift-info').hide();
+                $('#edit-submit-btn').prop('disabled', false);
             });
         });
     </script>

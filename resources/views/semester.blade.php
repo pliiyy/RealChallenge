@@ -18,10 +18,12 @@
 
                     <button type="submit" class="btn btn-primary">Filter</button>
                 </form>
-                <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
-                    data-bs-target="#addSemesterModal">
-                    <i class="bi bi-plus-circle me-1"></i> Tambah Semester
-                </button>
+                @if (!auth()->user()->mahasiswa)
+                    <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
+                        data-bs-target="#addSemesterModal">
+                        <i class="bi bi-plus-circle me-1"></i> Tambah Semester
+                    </button>
+                @endif
             </div>
 
             <div class="card-body">
@@ -55,24 +57,26 @@
                                             <span class="badge bg-secondary">{{ ucfirst(strtolower($kls->status)) }}</span>
                                         @endif
                                     </td>
-                                    <td>
-                                        {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
-                                        <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
-                                            data-bs-toggle="modal" data-bs-target="#editRoleModal"
-                                            data-id="{{ $kls->id }}"
-                                            data-nama="{{ $kls->nama }}"data-kode="{{ $kls->kode }}"
-                                            data-kode="{{ $kls->kode }}"data-keterangan="{{ $kls->keterangan }}"
-                                            data-tahun_akademik="{{ $kls->tahun_akademik }}"
-                                            data-tipe="{{ $kls->tipe }}"> <i class="bi bi-pencil"></i>
-                                        </button>
+                                    @if (!auth()->user()->mahasiswa)
+                                        <td>
+                                            {{-- Tombol Edit: Memicu modal dan mengirim data role ke fungsi JS/data attributes --}}
+                                            <button type="button" class="btn btn-outline-primary btn-sm btn-edit"
+                                                data-bs-toggle="modal" data-bs-target="#editRoleModal"
+                                                data-id="{{ $kls->id }}"
+                                                data-nama="{{ $kls->nama }}"data-kode="{{ $kls->kode }}"
+                                                data-kode="{{ $kls->kode }}"data-keterangan="{{ $kls->keterangan }}"
+                                                data-tahun_akademik="{{ $kls->tahun_akademik }}"
+                                                data-tipe="{{ $kls->tipe }}"> <i class="bi bi-pencil"></i>
+                                            </button>
 
-                                        {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
-                                            data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
-                                            data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
+                                            {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
+                                            <button type="button" class="btn btn-outline-danger btn-sm btn-delete"
+                                                data-bs-toggle="modal" data-bs-target="#deleteRoleModal"
+                                                data-id="{{ $kls->id }}" data-nama="{{ $kls->nama }}">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </td>
+                                    @endif
                                     {{-- ... akhir loop ... --}}
                                 </tr>
                             @endforeach
@@ -105,11 +109,21 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nama Semester</label>
-                        <input type="text" class="form-control" placeholder="Contoh: Ganjil, Genap" name="nama">
+                        <select class="form-select" name="nama">
+                            <option value="1">Semester 1</option>
+                            <option value="2">Semester 2</option>
+                            <option value="3">Semester 3</option>
+                            <option value="4">Semester 4</option>
+                            <option value="5">Semester 5</option>
+                            <option value="6">Semester 6</option>
+                            <option value="7">Semester 7</option>
+                            <option value="8">Semester 8</option>
+                        </select>
+                        {{-- <input type="text" class="form-control" placeholder="Contoh: Semester 1/2/3 dll" name="nama"> --}}
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Kode</label>
-                        <input type="text" class="form-control" placeholder="Contoh: 2025G1" name="kode">
+                        <input type="text" class="form-control" placeholder="Contoh: 20251" name="kode">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Keterangan</label>
@@ -153,7 +167,17 @@
 
                     <div class="mb-3">
                         <label for="edit-nama" class="form-label">Nama Semester</label>
-                        <input type="text" class="form-control" id="edit-nama" name="nama" required />
+                        <select class="form-select" name="nama" id="edit-nama">
+                            <option value="1">Semester 1</option>
+                            <option value="2">Semester 2</option>
+                            <option value="3">Semester 3</option>
+                            <option value="4">Semester 4</option>
+                            <option value="5">Semester 5</option>
+                            <option value="6">Semester 6</option>
+                            <option value="7">Semester 7</option>
+                            <option value="8">Semester 8</option>
+                        </select>
+                        {{-- <input type="text" class="form-control" id="edit-nama" name="nama" required /> --}}
                     </div>
                     <div class="mb-3">
                         <label for="edit-kode" class="form-label">Kode</label>

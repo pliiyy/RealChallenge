@@ -28,8 +28,30 @@
         .sidebar {
             background: #4f46e5;
             height: 92vh;
-            overflow-y: "scroll";
+            overflow-y: auto;
+            /* FIXED: Hapus tanda kutip */
             color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        /* Custom Scrollbar untuk Sidebar */
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
         }
 
         .sidebar .nav-link {
@@ -149,9 +171,10 @@
             })
         </script>
     @endif
+
     <nav class="navbar navbar-dark">
         <div class="container-fluid px-4">
-            <span class="navbar-brand">Aplikasi Kampus</span>
+            <span class="navbar-brand">BEVARARI</span>
             <div class="d-flex align-items-center gap-3">
                 <span class="text-white small">Halo, {{ auth()->user()->biodata->nama ?? 'Admin' }} 👋</span>
                 <form method="POST" action="{{ route('logout') }}">
@@ -166,7 +189,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-lg-2 col-md-3 p-3 sidebar  border-end">
+            <div class="col-lg-2 col-md-3 p-3 sidebar border-end">
                 <nav class="nav flex-column">
                     <!-- Dashboard -->
                     <a href="/dashboard" class="nav-link">
@@ -191,23 +214,27 @@
                         {{-- <a href="/role" class="nav-link"><i class="bi bi-person-gear me-2"></i> Role</a> --}}
                         <a href="/matakuliah" class="nav-link"><i class="bi bi-journal-bookmark me-2"></i> Mata
                             Kuliah</a>
-                        <a href="/shift" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Shift</a>
+                        @if (!auth()->user()->mahasiswa)
+                            <a href="/shift" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Shift</a>
+                        @endif
                         <a href="/kaprodi" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Kaprodi</a>
                         <a href="/dosen" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Dosen</a>
                         <a href="/sekprodi" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i>
                             Sekprodi</a>
-                        <a href="/angkatan" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i>
-                            Angkatan</a>
-                        <a href="/kelas" class="nav-link"><i class="bi bi-people me-2"></i> Kelas</a>
+                        @if (!auth()->user()->mahasiswa)
+                            <a href="/angkatan" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i>
+                                Angkatan</a>
+                            <a href="/kelas" class="nav-link"><i class="bi bi-people me-2"></i> Kelas</a>
+                        @endif
                         <a href="/ruangan" class="nav-link"><i class="bi bi-door-closed me-2"></i> Ruangan</a>
                         <a href="/kosma" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i> Kosma</a>
                         <a href="/mahasiswa" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i>
                             Mahasiswa</a>
                         <a href="/dekan" class="nav-link"><i class="bi bi-person-lines-fill me-2"></i>
                             Dekan</a>
-                        <a href="/jadwal" class="nav-link"><i class="bi bi-clock-history me-2"></i>
-                            Buat Jadwal</a>
                     </div>
+                    <a href="/jadwal" class="nav-link"><i class="bi bi-clock-history me-2"></i>
+                        Buat Jadwal</a>
                     <a href="/jadwal_global" class="nav-link"><i class="bi bi-clock-history me-2"></i>
                         Jadwal</a>
                     <a href="/pindah_jadwal" class="nav-link"><i class="bi bi-clock-history me-2"></i> Pindah Jadwal</a>

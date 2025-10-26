@@ -118,7 +118,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Nama Kelas</label>
-                        <input type="text" class="form-control" placeholder="Contoh: Kelas A, Kelas B" name="nama">
+                        <input type="text" class="form-control" placeholder="Contoh: S1 SI/ D3 KA" name="nama">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Tahun Angkatan</label>
