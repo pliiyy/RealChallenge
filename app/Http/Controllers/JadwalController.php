@@ -7,6 +7,7 @@ use App\Models\Ruangan;
 use App\Models\Semester;
 use App\Models\Shift;
 use App\Models\SuratTugasMengajar;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class JadwalController extends Controller
@@ -165,6 +166,48 @@ class JadwalController extends Controller
     });
 
     return view('jadwal_global', compact('availableTabs', 'activeTab', 'grouped'));
+   }
+
+   public function export(Request $request){
+    $jadwals = Jadwal::with([
+        'ruangan',
+        'shift',
+        'suratTugasMengajar.kelas',
+        'suratTugasMengajar.dosen',
+        'suratTugasMengajar.mataKuliah.semester'
+    ])->get();
+
+    // Buat daftar tab dinamis berdasarkan kombinasi tipe kelas + semester
+    $availableTabs = $jadwals->map(function ($j) {
+        $kelas = $j->suratTugasMengajar->kelas;
+        $semester = $j->suratTugasMengajar->mataKuliah->semester;
+        if (!$kelas || !$semester) return null;
+        return strtoupper($kelas->tipe) . $semester->nama;
+    })->filter()->unique()->values();
+
+    // Ambil tab aktif dari query
+    $activeTab = $request->get('tab', $availableTabs->first());
+
+    // Filter data sesuai tab aktif
+    $filteredJadwals = $jadwals->filter(function ($j) use ($activeTab) {
+        $kelas = $j->suratTugasMengajar->kelas;
+        $semester = $j->suratTugasMengajar->mataKuliah->semester;
+        if (!$kelas || !$semester) return false;
+        return strtoupper($kelas->tipe) . $semester->nama === $activeTab;
+    });
+
+    // Kelompokkan data berdasarkan hari dan kelas
+    $grouped = $filteredJadwals->groupBy(function ($item) {
+        return strtoupper($item->hari ?? 'TANPA HARI');
+    })->map(function ($items) {
+        return $items->groupBy(function ($i) {
+            return $i->suratTugasMengajar->kelas->nama ?? 'Tanpa Kelas';
+        });
+    });
+
+    $pdf = Pdf::loadView('jadwal_global', compact('availableTabs', 'activeTab', 'grouped'));
+    
+    return $pdf->download('jadwal.pdf');
    }
     // {
     //     $jadwals = Jadwal::with([

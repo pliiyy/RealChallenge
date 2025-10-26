@@ -14,9 +14,13 @@
                     {{ $tab }}
                 </a>
             @endforeach
-            <a href="{{ route('jadwal_global', ['tab' => 'RUANG']) }}"
+            {{-- <a href="{{ route('jadwal_global', ['tab' => 'RUANG']) }}"
                 class="btn btn-sm {{ $activeTab === 'RUANG' ? 'btn-primary' : 'btn-outline-secondary' }}">
                 RUANG
+            </a> --}}
+            <a href="{{ route('jadwal_export_ruang') }}" target="_blank"
+                class="btn btn-sm {{ $activeTab === 'RUANG' ? 'btn-primary' : 'btn-outline-secondary' }}">
+                DOWNLOAD (PDF)
             </a>
         </div>
 

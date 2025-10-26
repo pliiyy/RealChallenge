@@ -115,12 +115,16 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body row g-3">
+
                     <div class="col-md-6">
                         <label class="form-label">Mata Kuliah</label>
-                        <select class="form-select" name="surat_tugas_mengajar_id">
+                        <select class="form-select" name="surat_tugas_mengajar_id" id="matkulSelect">
                             @foreach ($surat as $item)
-                                <option value="{{ $item->id }}">{{ $item->matakuliah->nama }}
-                                    ({{ $item->kelas->nama }})</option>
+                                <option value="{{ $item->id }}"
+                                    data-dosen="{{ $item->dosen->user->biodata->keterangan }}">
+                                    {{ $item->matakuliah->nama }}
+                                    ({{ $item->kelas->nama }})
+                                    {{ $item->dosen->User->biodata->nama }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -131,6 +135,11 @@
                                 <option value="{{ $item->id }}">{{ $item->nama }} ({{ $item->kode }})</option>
                             @endforeach
                         </select>
+                    </div>
+                    <!-- Preferensi Dosen akan muncul di sini -->
+                    <div class="col-md-12 text-xs mt-2" id="preferensiDosen" style="display:none;">
+                        <div class="text-danger" id="preferensiText" style="font-size: 0.85rem;">
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Hari</label>
@@ -159,7 +168,8 @@
             </form>
         </div>
     </div>
-    <div class="modal fade" id="editJadwalModal" tabindex="-1" aria-labelledby="editJadwalModalLabel" aria-hidden="true">
+    <div class="modal fade" id="editJadwalModal" tabindex="-1" aria-labelledby="editJadwalModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <form class="modal-content" method="POST" action="/pindah_jadwal">
                 @csrf
@@ -277,6 +287,15 @@
                 // Atur action form
                 // Ganti '/role/' dengan URL route Anda yang benar, misal '/roles' atau sejenisnya
                 $('#deleteRoleForm').attr('action', '/jadwal/' + id);
+            });
+            $('#matkulSelect').on('change', function() {
+                var dosen = $(this).find(':selected').data('dosen');
+                if (dosen) {
+                    $('#preferensiText').text('Preferensi Dosen: ' + dosen);
+                    $('#preferensiDosen').show();
+                } else {
+                    $('#preferensiDosen').hide();
+                }
             });
         });
     </script>

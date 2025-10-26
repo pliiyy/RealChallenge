@@ -52,7 +52,7 @@
                         <div class="col-md-12 mt-3">
                             <label class="info-label mb-1">Tentang Saya</label>
                             <textarea class="form-control" rows="3" placeholder="Tuliskan sesuatu tentang dirimu..."
-                                value="{{ auth()->user()->Biodata->keterangan ?? '' }}" name="keterangan"></textarea>
+                                value="{{ auth()->user()->Biodata->keterangan ?? '' }}" name="keterangan">{{ auth()->user()->Biodata->keterangan ?? '' }}</textarea>
                         </div>
                     </div>
 

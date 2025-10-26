@@ -67,7 +67,7 @@ class User extends Controller
         'email' => 'required|string|max:255',
         'no_telepon' => 'nullable|string',
         'alamat' => 'nullable|string',
-        'keterangan' => 'nullable|string',
+        'keterangan' => 'required|string',
         ]);
         
         $user->update([

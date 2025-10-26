@@ -61,6 +61,7 @@ Route::get('/laporan/pdf/show', [PdfController::class, 'generateAndShow'])->name
 
 Route::get('/dashboard', [User::class,'dashboard'])->middleware('auth');
 Route::get('/jadwal_global', [JadwalController::class,'jadwal_global'])->middleware('auth')->name("jadwal_global");
+Route::get('/jadwal_global/export', [JadwalController::class,'export'])->middleware('auth')->name('jadwal_export_ruang');
 Route::get('/settings', function () {
     return view('settings');
 })->middleware('auth');
