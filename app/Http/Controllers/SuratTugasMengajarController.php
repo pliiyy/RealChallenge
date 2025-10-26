@@ -6,6 +6,8 @@ use App\Models\Dosen;
 use App\Models\Kelas;
 use App\Models\Matakuliah;
 use App\Models\SuratTugasMengajar;
+use App\Models\User;
+use App\Notifications\NotifEmail;
 use Illuminate\Http\Request;
 
 class SuratTugasMengajarController extends Controller
@@ -89,11 +91,19 @@ class SuratTugasMengajarController extends Controller
         $surat = SuratTugasMengajar::findOrFail($id);
         
         $validated = $request->validate([
-        'dosen_id' => 'required',
-        'kelas_id' => 'required',
-        'matakuliah_id' => 'required',
-        'status' => 'required',
-    ]);
+            'dosen_id' => 'required',
+            'kelas_id' => 'required',
+            'matakuliah_id' => 'required',
+            'status' => 'required',
+        ]);
+
+        if($validated['status'] !== "PENDING"){
+            $user = User::where("id",$surat->dosen->user_id)->first();
+            $statuss = $validated['status'] === "APPROVE"?"Telah Disetujui":"Telah Ditolak";
+            $rejectMsg = "Mohon maaf surat tugas mengajar kamu dalam kelas ".$surat->kelas->nama ." telah ditolak. Mohon ajukan kembali nanti.";
+            $approvMsg = "Selamat!!. surat tugas mengajar kamu dalam kelas ".$surat->kelas->nama ." telah disetujui. Silahkan buat jadwal dalam matakuliah ".$surat->Matakuliah->nama;
+             $user->notify(new NotifEmail('Surat Tugas Mengajar '.$statuss, $validated['status'] === "APPROVED"?$approvMsg: $rejectMsg));
+        }
     
         $surat->update($validated);
 

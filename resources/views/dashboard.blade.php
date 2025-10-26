@@ -16,7 +16,7 @@
                         </div>
                         <div>
                             <h5 class="card-title mb-1">Pengguna</h5>
-                            <p class="card-text text-muted mb-0">{{ $user->count() }} terdaftar</p>
+                            <p class="card-text text-muted mb-0">{{ $user }} terdaftar</p>
                         </div>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                         </div>
                         <div>
                             <h5 class="card-title mb-1">Notifikasi</h5>
-                            <p class="card-text text-muted mb-0">5 pesan belum dibaca</p>
+                            <p class="card-text text-muted mb-0">{{ $total }} pesan belum dibaca</p>
                         </div>
                     </div>
                 </div>
@@ -55,28 +55,72 @@
 
         {{-- Kartu Data Mahasiswa --}}
         <div class="card p-4 mt-4">
-            <h5 class="fw-semibold text-secondary mb-3">Data Mahasiswa</h5>
+            <h5 class="fw-semibold text-secondary mb-3">Data {{ auth()->user()->Dekan ? 'Dekan' : '' }}
+                {{ auth()->user()->Dosen ? 'Dosen' : '' }} {{ auth()->user()->Kaprodi ? 'Kaprodi' : '' }}
+                {{ auth()->user()->Sekprodi ? 'Sekprodi' : '' }} {{ auth()->user()->Mahasiswa ? 'Mahasiswa' : '' }}
+                {{ auth()->user()->Kosma ? 'Kosma' : '' }}</h5>
             <div class="row">
                 <div class="col-md-6 col-lg-3 mb-3">
                     <p class="fw-semibold mb-1 text-muted">Nama</p>
-                    <p class="mb-0">{{ $mahasiswa->nama ?? 'Rafly Adrian Firmansyah' }}</p>
+                    <p class="mb-0">{{ auth()->user()->Biodata->nama ?? 'Rafly Adrian Firmansyah' }}</p>
                 </div>
-                <div class="col-md-6 col-lg-3 mb-3">
-                    <p class="fw-semibold mb-1 text-muted">NIM</p>
-                    <p class="mb-0">{{ $mahasiswa->nim ?? '242505017' }}</p>
-                </div>
-                <div class="col-md-6 col-lg-3 mb-3">
-                    <p class="fw-semibold mb-1 text-muted">Prodi</p>
-                    <p class="mb-0">{{ $mahasiswa->prodi ?? 'S1 - Sistem Informasi' }}</p>
-                </div>
-                <div class="col-md-6 col-lg-3 mb-3">
-                    <p class="fw-semibold mb-1 text-muted">Jenis Kelas</p>
-                    <p class="mb-0">{{ $mahasiswa->jenis_kelas ?? 'Reguler' }}</p>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <p class="fw-semibold mb-1 text-muted">Semester</p>
-                    <p class="mb-0">{{ $mahasiswa->semester ?? '3' }}</p>
-                </div>
+                @if (auth()->user()->Dekan)
+                    <div class="col-md-6 col-lg-3 mb-3">
+                        <p class="fw-semibold mb-1 text-muted">NIDN</p>
+                        <p class="mb-0">{{ auth()->user()->Dekan->nidn ?? '242505017' }}</p>
+                    </div>
+                @elseif(auth()->user()->Dosen)
+                    <div class="col-md-6 col-lg-3 mb-3">
+                        <p class="fw-semibold mb-1 text-muted">NIDN</p>
+                        <p class="mb-0">{{ auth()->user()->Dosen->nidn ?? '242505017' }}</p>
+                    </div>
+                @elseif(auth()->user()->Mahasiswa)
+                    <div class="col-md-6 col-lg-3 mb-3">
+                        <p class="fw-semibold mb-1 text-muted">NIM</p>
+                        <p class="mb-0">{{ auth()->user()->mahasiswa->nim ?? '242505017' }}</p>
+                    </div>
+                @else
+                    <div class="col-md-6 col-lg-3 mb-3">
+                        <p class="fw-semibold mb-1 text-muted">NIDN</p>
+                        <p class="mb-0">
+                            {{ auth()->user()->kaprodi->nidn ?? (auth()->user()->sekprodi->nidn ?? '242505017') }}</p>
+                    </div>
+                @endif
+                @if (auth()->user()->Dekan)
+                    <div class="col-md-6 col-lg-3 mb-3">
+                        <p class="fw-semibold mb-1 text-muted">Fakultas</p>
+                        @foreach (auth()->user()->dekan->Fakultas as $fak)
+                            <p class="mb-0">{{ $fak->nama }}</p>
+                        @endforeach
+                    </div>
+                @elseif(auth()->user()->Kaprodi || auth()->user()->Sekprodi)
+                    <div class="col-md-6 col-lg-3 mb-3">
+                        <p class="fw-semibold mb-1 text-muted">Prodi</p>
+                        @if (auth()->user()->Kaprodi)
+                            <p class="mb-0">{{ auth()->user()->Kaprodi->prodi->nama ?? 'S1 - Sistem Informasi' }}></p>
+                        @else
+                            <p class="mb-0">{{ auth()->user()->Sekprodi->prodi->nama ?? 'S1 - Sistem Informasi' }}></p>
+                        @endif
+                        </p>
+                    </div>
+                @else
+                    <div class="col-md-6 col-lg-3 mb-3">
+                        <p class="fw-semibold mb-1 text-muted">Prodi</p>
+                        <p class="mb-0">{{ auth()->user()->Mahasiswa->prodi->nama ?? 'S1 - Sistem Informasi' }}
+                        </p>
+                    </div>
+                @endif
+                @if (auth()->user()->mahasiswa)
+                    <div class="col-md-6 col-lg-3 mb-3">
+                        <p class="fw-semibold mb-1 text-muted">Jenis Kelas</p>
+                        <p class="mb-0">{{ auth()->user->mahasiswa->kelas->tipe ?? 'Reguler' }}</p>
+                    </div>
+                @else
+                    <div class="col-md-6 col-lg-3 mb-3">
+                        <p class="fw-semibold mb-1 text-muted">Jenis Kelas</p>
+                        <p class="mb-0">Reguller/Non Reguller</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
