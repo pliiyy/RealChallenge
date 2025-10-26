@@ -9,17 +9,19 @@
         <div class="row g-4 mt-4">
             <!-- Card Pengguna -->
             <div class="col-md-4">
-                <div class="card p-4">
-                    <div class="d-flex align-items-center">
-                        <div class="icon bg-primary bg-opacity-10 text-primary rounded-3 p-3 me-3">
-                            <i class="bi bi-people fs-4"></i>
-                        </div>
-                        <div>
-                            <h5 class="card-title mb-1">Pengguna</h5>
-                            <p class="card-text text-muted mb-0">{{ $user }} terdaftar</p>
+                <a href="/data" style="text-decoration: none">
+                    <div class="card p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="icon bg-primary bg-opacity-10 text-primary rounded-3 p-3 me-3">
+                                <i class="bi bi-people fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="card-title mb-1">Pengguna</h5>
+                                <p class="card-text text-muted mb-0">{{ $user }} terdaftar</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
 
             <!-- Card Notifikasi -->
@@ -39,17 +41,19 @@
 
             <!-- Card Pengaturan -->
             <div class="col-md-4">
-                <div class="card p-4">
-                    <div class="d-flex align-items-center">
-                        <div class="icon bg-success bg-opacity-10 text-success rounded-3 p-3 me-3">
-                            <i class="bi bi-gear fs-4"></i>
-                        </div>
-                        <div>
-                            <h5 class="card-title mb-1">Pengaturan</h5>
-                            <p class="card-text text-muted mb-0">Kelola preferensi akun</p>
+                <a href="/settings" style="text-decoration: none">
+                    <div class="card p-4">
+                        <div class="d-flex align-items-center">
+                            <div class="icon bg-success bg-opacity-10 text-success rounded-3 p-3 me-3">
+                                <i class="bi bi-gear fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="card-title mb-1">Pengaturan</h5>
+                                <p class="card-text text-muted mb-0">Kelola preferensi akun</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
 
@@ -123,5 +127,34 @@
                 @endif
             </div>
         </div>
+        <div style="margin-top: 20px"></div>
+        <div id='calendar' style="height:500px;width: 80%;margin: auto"></div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: '/rekap', // ambil semua jadwal dari controller
+                timeZone: 'local',
+                locale: 'id', // <-- tambahkan ini
+                eventTimeFormat: {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                },
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                editable: false,
+                selectable: false,
+                dayMaxEvents: true // otomatis membuat “+N more” jika terlalu banyak event
+            });
+
+            calendar.render();
+        });
+    </script>
 @endsection

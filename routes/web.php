@@ -87,5 +87,6 @@ Route::get('/api/districts/{regencyId}', function ($regencyId) {
     $response = Http::get("https://wilayah.id/api/districts/{$regencyId}.json");
     return response()->json($response->json());
 });
-// web.php
+
 Route::put('/profil/foto', [User::class, 'updateFoto'])->name('profil.updateFoto');
+Route::get('/rekap', [User::class, 'jadwal']);

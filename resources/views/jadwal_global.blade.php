@@ -3,8 +3,10 @@
 
 @section('content')
     <div class="col-md-9 col-lg-10 content">
-        <h3 class="text-center mb-2 fw-bold">JADWAL MATA KULIAH PROGRAM S1 SI & BD, D3 KA</h3>
-        <h5 class="text-center text-secondary mb-4">SEMESTER GANJIL 2025/2026</h5>
+        <h3 class="text-center mb-2 fw-bold">JADWAL MATA KULIAH</h3>
+        <h5 class="text-center text-secondary mb-4">SEMESTER {{ $sems?->tipe }}
+            {{ $sems?->tahun_akademik }}
+        </h5>
 
         {{-- Tabs --}}
         <div class="d-flex justify-content-center mb-3">
@@ -18,9 +20,8 @@
                 class="btn btn-sm {{ $activeTab === 'RUANG' ? 'btn-primary' : 'btn-outline-secondary' }}">
                 RUANG
             </a> --}}
-            <a href="{{ route('jadwal_export_ruang') }}" target="_blank"
-                class="btn btn-sm {{ $activeTab === 'RUANG' ? 'btn-primary' : 'btn-outline-secondary' }}">
-                DOWNLOAD (PDF)
+            <a href="{{ route('jadwal_export_ruang', ['tab' => $activeTab]) }}" target="_blank" class="btn btn-sm btn-success">
+                <i class="bi bi-file-pdf"></i> DOWNLOAD PDF ({{ $activeTab }})
             </a>
         </div>
 

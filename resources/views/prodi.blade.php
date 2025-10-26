@@ -46,7 +46,7 @@
                                 <td>{{ $kls->kode }}</td>
                                 <td>{{ $kls->fakultas->nama }}</td>
                                 <td>{{ $kls->kaprodi?->user?->Biodata?->nama }}</td>
-                                <td>{{ $kls->kaprodi?->user?->Biodata?->nama }}</td>
+                                <td>{{ $kls->sekprodi?->user?->Biodata?->nama }}</td>
                                 <td>
                                     @if ($kls->status == 'AKTIF')
                                         <span class="badge bg-success">{{ ucfirst(strtolower($kls->status)) }}</span>

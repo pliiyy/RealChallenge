@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BarterJadwal;
+use App\Models\Jadwal;
 use App\Models\PindahJadwal;
 use App\Models\SuratTugasMengajar;
 use App\Models\User as ModelsUser;
@@ -147,6 +148,39 @@ class User extends Controller
         $biodata->save();
 
         return back()->with('success', 'Foto profil berhasil diperbarui!');
+    }
+
+    public function jadwal()
+    {
+       $jadwal = Jadwal::with(['suratTugasMengajar.kelas','shift'])->get();
+
+        $data = $jadwal->map(function ($event) {
+            // buat tanggal dari hari dan jam_mulai/jam_selesai
+            // misal ambil minggu ini sebagai acuan
+            $hariArray = [
+                "SENIN" => 1,
+                "SELASA" => 2,
+                "RABU" => 3,
+                "KAMIS" => 4,
+                "JUMAT" => 5,
+                "SABTU" => 6,
+                "MINGGU" => 7,
+            ];
+
+            $date = \Carbon\Carbon::now()->startOfWeek()->addDays($hariArray[$event->hari] - 1);
+
+            $start = \Carbon\Carbon::parse($date->format('Y-m-d') . ' ' . $event->shift->jam_mulai);
+            $end = \Carbon\Carbon::parse($date->format('Y-m-d') . ' ' . $event->shift->jam_selesai);
+
+            return [
+                'id' => $event->id,
+                'title' => $event->suratTugasMengajar->kelas->tipe." " .$event->suratTugasMengajar->kelas->nama . " " . $event->suratTugasMengajar->matakuliah->nama,
+                'start' => $start->toIso8601String(),
+                'end' => $end->toIso8601String(),
+            ];
+        });
+
+        return response()->json($data);
     }
 
 }

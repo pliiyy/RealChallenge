@@ -136,12 +136,12 @@ class JadwalController extends Controller
         'suratTugasMengajar.dosen',
         'suratTugasMengajar.mataKuliah.semester'
     ])->get();
-
     // Buat daftar tab dinamis berdasarkan kombinasi tipe kelas + semester
     $availableTabs = $jadwals->map(function ($j) {
         $kelas = $j->suratTugasMengajar->kelas;
         $semester = $j->suratTugasMengajar->mataKuliah->semester;
         if (!$kelas || !$semester) return null;
+        $sems = $semester;
         return strtoupper($kelas->tipe) . $semester->nama;
     })->filter()->unique()->values();
 
@@ -164,8 +164,9 @@ class JadwalController extends Controller
             return $i->suratTugasMengajar->kelas->nama ?? 'Tanpa Kelas';
         });
     });
+    $sems = $filteredJadwals->first()?->suratTugasMengajar?->mataKuliah?->semester;
 
-    return view('jadwal_global', compact('availableTabs', 'activeTab', 'grouped'));
+    return view('jadwal_global', compact('availableTabs', 'activeTab', 'grouped','sems'));
    }
 
    public function export(Request $request){
@@ -204,42 +205,12 @@ class JadwalController extends Controller
             return $i->suratTugasMengajar->kelas->nama ?? 'Tanpa Kelas';
         });
     });
-
-    $pdf = Pdf::loadView('jadwal_global', compact('availableTabs', 'activeTab', 'grouped'));
+    
+    $sems = $filteredJadwals->first()?->suratTugasMengajar?->mataKuliah?->semester;
+    $pdf = Pdf::loadView('export_jadwal', compact('availableTabs', 'activeTab', 'grouped','sems'))->setOption('isHtml5ParserEnabled', true);
     
     return $pdf->download('jadwal.pdf');
    }
-    // {
-    //     $jadwals = Jadwal::with([
-    //         'shift',
-    //         'ruangan',
-    //         'suratTugasMengajar.mataKuliah.semester',
-    //         'suratTugasMengajar.dosen',
-    //         'suratTugasMengajar.kelas',
-    //     ])->get();
-
-    //     // Grup: R1, R2, NR1, dst
-    //     // $grouped = $jadwals->groupBy(function ($item) {
-    //     //     $tipe = strtoupper($item->suratTugasMengajar->kelas->tipe ?? 'R');
-    //     //     $semesterNama = $item->suratTugasMengajar->mataKuliah->semester->nama ?? '1';
-    //     //     $semester = preg_replace('/\D/', '', $semesterNama);
-    //     //     return "{$tipe}{$semester}";
-    //     // });
-    //     $grouped = $jadwals->groupBy(function ($item) {
-    //         // Group per semester dan tipe (R/NR)
-    //         $tipe = strtoupper($item->suratTugasMengajar->kelas->tipe ?? 'R');
-    //         $semester = preg_replace('/\D/', '', $item->suratTugasMengajar->mataKuliah->semester->nama ?? '1');
-    //         return "{$tipe}{$semester}";
-    //     });
-
-    //     // Grup tambahan: per RUANG
-    //     $byRoom = $jadwals->groupBy(function ($item) {
-    //         return $item->ruangan->nama ?? 'Tanpa Ruangan';
-    //     });
-
-    //     $hariList = ['SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT'];
-
-    //     return view('jadwal_global', compact('grouped', 'byRoom', 'hariList'));
-    //     }
+    
 
 }
