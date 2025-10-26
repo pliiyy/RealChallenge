@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId("angkatan_id")->constrained("angkatan")->onDelete('cascade');
             $table->foreignId('kosma_id')->nullable()->constrained("kosma")->onDelete('set null');
             $table->enum("status",["AKTIF","NONAKTIF"]);
+            $table->enum("tipe",["R","NR"])->default("R");
             $table->timestamps();
         });
     }

@@ -57,6 +57,7 @@ class KelasController extends Controller
         'nama' => 'required|string|max:255|unique:kelas,nama',
         'angkatan_id' => 'required|string',
         'kapasitas' => 'nullable|string',
+        'tipe' => 'required|string',
         // Kita tidak memvalidasi izin_akses langsung karena akan diproses
         // Kita berasumsi inputnya aman
         ]);
@@ -91,7 +92,8 @@ class KelasController extends Controller
         $validated = $request->validate([
             'nama' => 'required|string|max:255|unique:kelas,nama,' . $id, // Ignor ID saat validasi unique
             'angkatan_id' => 'required|string',
-        'kapasitas' => 'nullable|string',
+            'kapasitas' => 'nullable|string',
+            'tipe' => 'required|string',
         ]);
 
         

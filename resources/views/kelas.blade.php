@@ -35,6 +35,7 @@
                                 <th>Nama Kelas</th>
                                 <th>Tahun ajaran</th>
                                 <th>Kapasitas</th>
+                                <th>Tipe</th>
                                 <th>Kosma</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
@@ -47,10 +48,18 @@
                                     <td><span>{{ $kls->nama }}</span></td>
                                     <td>{{ $kls->angkatan->tahun }}</td>
                                     <td>{{ $kls->kapasitas }}</td>
+                                    <td>
+                                        @if ($kls->tipe === 'R')
+                                            <span>REGULLER</span>
+                                        @else
+                                            <span>NON REGULLER</span>
+                                        @endif
+                                    </td>
                                     <td>{{ $kls->kosma?->User?->Biodata?->nama }} @if ($kls->kosma_id !== null)
                                             <span>({{ $kls->kosma?->User?->Mahasiswa?->nim }})</span>
                                         @endif
                                     </td>
+
                                     <td>
                                         @if ($kls->status == 'AKTIF')
                                             <span class="badge bg-success">{{ ucfirst(strtolower($kls->status)) }}</span>
@@ -65,7 +74,8 @@
                                                 data-bs-toggle="modal" data-bs-target="#editRoleModal"
                                                 data-id="{{ $kls->id }}"
                                                 data-nama="{{ $kls->nama }}"data-angkatan_id="{{ $kls->angkatan_id }}"
-                                                data-kapasitas="{{ $kls->kapasitas }}"> <i class="bi bi-pencil"></i>
+                                                data-kapasitas="{{ $kls->kapasitas }}" data-tipe="{{ $kls->tipe }}"> <i
+                                                    class="bi bi-pencil"></i>
                                             </button>
 
                                             {{-- Tombol Delete: Memicu modal konfirmasi hapus --}}
@@ -123,6 +133,14 @@
                         <label class="form-label">Kapasitas</label>
                         <input type="number" class="form-control" placeholder="Contoh: 40" name="kapasitas">
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tipe Kelas</label>
+                        <select class="form-select" name="tipe">
+                            <option value="">-- Tipe --</option>
+                            <option value="R">REGULLER</option>
+                            <option value="NR">NON REGULLER</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -162,6 +180,10 @@
                     <div class="mb-3">
                         <label for="edit-kapasitans" class="form-label">Kapasitas</label>
                         <input class="form-control" id="edit-kapasitas" name="kapasitas"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-kapasitans" class="form-label">Tipe</label>
+                        <input class="form-control" id="edit-tipe" name="tipe"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -206,6 +228,7 @@
                 var nama = $(this).data('nama');
                 var angkatan_id = $(this).data('angkatan_id');
                 var kapasitas = $(this).data('kapasitas');
+                var tipe = $(this).data('tipe');
                 // var izinAksesJson = $(this).data('izin_akses');
 
                 // 2. Isi data Role ke dalam form modal
@@ -213,6 +236,7 @@
                 $('#edit-nama').val(nama);
                 $('#edit-angkatan_id').val(angkatan_id);
                 $('#edit-kapasitas').val(kapasitas);
+                $('#edit-tipe').val(tipe);
                 $('#edit-role-name').text(nama); // Tampilkan nama role di header modal
 
                 $('#editRoleForm').attr('action', '/kelas/' + id);

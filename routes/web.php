@@ -60,6 +60,7 @@ Route::resource('pindah_jadwal', PindahJadwalController::class)->middleware(['au
 Route::get('/laporan/pdf/show', [PdfController::class, 'generateAndShow'])->name('laporan.pdf.show');
 
 Route::get('/dashboard', [User::class,'dashboard'])->middleware('auth');
+Route::get('/jadwal_global', [JadwalController::class,'jadwal_global'])->middleware('auth')->name("jadwal_global");
 Route::get('/settings', function () {
     return view('settings');
 })->middleware('auth');

@@ -44,7 +44,7 @@ class JadwalController extends Controller
             $q->where('semester_id', $request->semester_id);
         });
     }
- $jadwalAll = $query->orderBy('hari', 'asc')->get();
+    $jadwalAll = $query->orderBy('hari', 'asc')->get();
     $jadwalPerHari = $jadwalAll->groupBy('hari');
 
     // Pagination
@@ -78,7 +78,8 @@ class JadwalController extends Controller
         'shift_id' => 'required',
         'hari' => 'required',
         ]);
-        $find = Jadwal::where("hari",$validated["hari"])->where("shift_id",$validated["shift_id"])->where("status","AKTIF")->get();
+        $find = Jadwal::where("hari",$validated["hari"])->where("shift_id",$validated["shift_id"])->where("ruangan_id",$validated["ruangan_id"])->where("surat_tugas_mengajar_id",$validated["surat_tugas_mengajar_id"])->where("status","AKTIF")->get();
+        
         if($find->isNotEmpty()){
             return redirect('/jadwal')->with('error', 'Jadwal bentrok! mohon pilih waktu yg lain atau ajukan barter!');
         }
@@ -123,4 +124,79 @@ class JadwalController extends Controller
 
         return redirect('/jadwal')->with('success', 'Jadwal berhasil dihapus!');
     }
+
+   public function jadwal_global(Request $request)
+   {
+    // Ambil semua jadwal dengan relasi lengkap
+    $jadwals = Jadwal::with([
+        'ruangan',
+        'shift',
+        'suratTugasMengajar.kelas',
+        'suratTugasMengajar.dosen',
+        'suratTugasMengajar.mataKuliah.semester'
+    ])->get();
+
+    // Buat daftar tab dinamis berdasarkan kombinasi tipe kelas + semester
+    $availableTabs = $jadwals->map(function ($j) {
+        $kelas = $j->suratTugasMengajar->kelas;
+        $semester = $j->suratTugasMengajar->mataKuliah->semester;
+        if (!$kelas || !$semester) return null;
+        return strtoupper($kelas->tipe) . $semester->nama;
+    })->filter()->unique()->values();
+
+    // Ambil tab aktif dari query
+    $activeTab = $request->get('tab', $availableTabs->first());
+
+    // Filter data sesuai tab aktif
+    $filteredJadwals = $jadwals->filter(function ($j) use ($activeTab) {
+        $kelas = $j->suratTugasMengajar->kelas;
+        $semester = $j->suratTugasMengajar->mataKuliah->semester;
+        if (!$kelas || !$semester) return false;
+        return strtoupper($kelas->tipe) . $semester->nama === $activeTab;
+    });
+
+    // Kelompokkan data berdasarkan hari dan kelas
+    $grouped = $filteredJadwals->groupBy(function ($item) {
+        return strtoupper($item->hari ?? 'TANPA HARI');
+    })->map(function ($items) {
+        return $items->groupBy(function ($i) {
+            return $i->suratTugasMengajar->kelas->nama ?? 'Tanpa Kelas';
+        });
+    });
+
+    return view('jadwal_global', compact('availableTabs', 'activeTab', 'grouped'));
+   }
+    // {
+    //     $jadwals = Jadwal::with([
+    //         'shift',
+    //         'ruangan',
+    //         'suratTugasMengajar.mataKuliah.semester',
+    //         'suratTugasMengajar.dosen',
+    //         'suratTugasMengajar.kelas',
+    //     ])->get();
+
+    //     // Grup: R1, R2, NR1, dst
+    //     // $grouped = $jadwals->groupBy(function ($item) {
+    //     //     $tipe = strtoupper($item->suratTugasMengajar->kelas->tipe ?? 'R');
+    //     //     $semesterNama = $item->suratTugasMengajar->mataKuliah->semester->nama ?? '1';
+    //     //     $semester = preg_replace('/\D/', '', $semesterNama);
+    //     //     return "{$tipe}{$semester}";
+    //     // });
+    //     $grouped = $jadwals->groupBy(function ($item) {
+    //         // Group per semester dan tipe (R/NR)
+    //         $tipe = strtoupper($item->suratTugasMengajar->kelas->tipe ?? 'R');
+    //         $semester = preg_replace('/\D/', '', $item->suratTugasMengajar->mataKuliah->semester->nama ?? '1');
+    //         return "{$tipe}{$semester}";
+    //     });
+
+    //     // Grup tambahan: per RUANG
+    //     $byRoom = $jadwals->groupBy(function ($item) {
+    //         return $item->ruangan->nama ?? 'Tanpa Ruangan';
+    //     });
+
+    //     $hariList = ['SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT'];
+
+    //     return view('jadwal_global', compact('grouped', 'byRoom', 'hariList'));
+    //     }
+
 }

@@ -21,4 +21,8 @@ class SuratTugasMengajar extends Model
     {
         return $this->belongsTo(Kelas::class);
     }
+    public function Jadwal()
+    {
+        return $this->hasMany(Jadwal::class);
+    }
 }

@@ -17,4 +17,8 @@ class Matakuliah extends Model
     {
         return $this->belongsTo(Semester::class);
     }
+    public function SuratTugasMengajar()
+    {
+        return $this->hasMany(SuratTugasMengajar::class, 'matakuliah_id');
+    }
 }
