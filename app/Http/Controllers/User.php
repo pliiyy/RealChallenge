@@ -107,5 +107,30 @@ class User extends Controller
     public function dashboard(){
         $user = ModelsUser::where("status","AKTIF")->get();
         return view('dashboard',compact('user'));
+    
     }
+    // ProfilController.php
+public function updateFoto(Request $request)
+{
+    $request->validate([
+        'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+    $user = auth()->user()->Biodata;
+
+    // Hapus foto lama jika ada
+    if ($user->foto && file_exists(storage_path('app/public/foto_profil/' . $user->foto))) {
+        unlink(storage_path('app/public/foto_profil/' . $user->foto));
+    }
+
+    // Simpan foto baru
+    $filename = time() . '.' . $request->foto->extension();
+    $request->foto->storeAs('public/foto_profil', $filename);
+
+    $user->foto_profil = $filename;
+    $user->save();
+
+    return back()->with('success', 'Foto profil berhasil diperbarui!');
+}
+
 }
