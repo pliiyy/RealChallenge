@@ -79,7 +79,7 @@ class JadwalController extends Controller
         'shift_id' => 'required',
         'hari' => 'required',
         ]);
-        $find = Jadwal::where("hari",$validated["hari"])->where("shift_id",$validated["shift_id"])->where("ruangan_id",$validated["ruangan_id"])->where("surat_tugas_mengajar_id",$validated["surat_tugas_mengajar_id"])->where("status","AKTIF")->get();
+        $find = Jadwal::where("hari",$validated["hari"])->where("shift_id",$validated["shift_id"])->where("ruangan_id",$validated["ruangan_id"])->where("status","AKTIF")->get();
         
         if($find->isNotEmpty()){
             return redirect('/jadwal')->with('error', 'Jadwal bentrok! mohon pilih waktu yg lain atau ajukan barter!');
