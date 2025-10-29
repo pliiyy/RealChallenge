@@ -6,12 +6,12 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <span>🔄 Barter Jadwal Mengajar</span>
-                @if (auth()->user()->dosen)
+                {{-- @if (auth()->user()->dosen)
                     <button class="btn btn-light btn-sm text-primary fw-semibold" data-bs-toggle="modal"
                         data-bs-target="#addBarterModal">
                         <i class="bi bi-plus-circle me-1"></i> Ajukan Barter
                     </button>
-                @endif
+                @endif --}}
             </div>
             <div class="card-body">
                 <div class="table-responsive">

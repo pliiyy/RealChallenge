@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string("kode");
             $table->string("sks");
             $table->enum("status",["AKTIF","NONAKTIF"]);
+            // $table->foreignId('status_id')->constrained("status_mk")->onDelete('cascade');
             $table->foreignId('prodi_id')->constrained("prodi")->onDelete('cascade');
             $table->foreignId('semester_id')->constrained("semester")->onDelete('cascade');
             $table->timestamps();

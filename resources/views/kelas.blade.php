@@ -183,7 +183,12 @@
                     </div>
                     <div class="mb-3">
                         <label for="edit-kapasitans" class="form-label">Tipe</label>
-                        <input class="form-control" id="edit-tipe" name="tipe"></textarea>
+                        <select class="form-select" name="tipe" id="edit-tipe">
+                            <option value="">-- Tipe --</option>
+                            <option value="R">REGULLER</option>
+                            <option value="NR">NON REGULLER</option>
+                        </select>
+                        {{-- <input class="form-control" id="edit-tipe" name="tipe"></textarea> --}}
                     </div>
                 </div>
                 <div class="modal-footer">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Fakultas;
 use App\Models\Jadwal;
 use App\Models\Ruangan;
 use App\Models\Semester;
@@ -82,11 +83,11 @@ class JadwalController extends Controller
         $find = Jadwal::where("hari",$validated["hari"])->where("shift_id",$validated["shift_id"])->where("ruangan_id",$validated["ruangan_id"])->where("status","AKTIF")->get();
         
         if($find->isNotEmpty()){
-            return redirect('/jadwal')->with('error', 'Jadwal bentrok! mohon pilih waktu yg lain atau ajukan barter!');
+            return redirect('/jadwal_global')->with('error', 'Jadwal bentrok! mohon pilih waktu yg lain atau ajukan barter!');
         }
         $validated["status"] = "AKTIF";
         Jadwal::create($validated);
-        return redirect('/jadwal')->with('success', 'Jadwal berhasil ditambahkan!');
+        return redirect('/jadwal_global')->with('success', 'Jadwal berhasil ditambahkan!');
     }
 
     /**
@@ -127,87 +128,121 @@ class JadwalController extends Controller
     }
 
    public function jadwal_global(Request $request)
-   {
-    // Ambil semua jadwal dengan relasi lengkap
-    $jadwals = Jadwal::with([
-        'ruangan',
-        'shift',
-        'suratTugasMengajar.kelas',
-        'suratTugasMengajar.dosen',
-        'suratTugasMengajar.mataKuliah.semester'
-    ])->get();
-    // Buat daftar tab dinamis berdasarkan kombinasi tipe kelas + semester
-    $availableTabs = $jadwals->map(function ($j) {
-        $kelas = $j->suratTugasMengajar->kelas;
-        $semester = $j->suratTugasMengajar->mataKuliah->semester;
-        if (!$kelas || !$semester) return null;
-        $sems = $semester;
-        return strtoupper($kelas->tipe) . $semester->nama;
-    })->filter()->unique()->values();
+    {
+        $jadwals = Jadwal::with([
+            'ruangan',
+            'shift',
+            'suratTugasMengajar.kelas',
+            'suratTugasMengajar.dosen',
+            'suratTugasMengajar.mataKuliah.semester'
+        ])->get();
 
-    // Ambil tab aktif dari query
-    $activeTab = $request->get('tab', $availableTabs->first());
+        $availableTabs = $jadwals->map(function ($j) {
+            $kelas = $j->suratTugasMengajar->kelas;
+            $semester = $j->suratTugasMengajar->mataKuliah->semester;
+            if (!$kelas || !$semester) return null;
+            return strtoupper($kelas->tipe) . $semester->nama;
+        })->sort()->filter()->unique()->values();
 
-    // Filter data sesuai tab aktif
-    $filteredJadwals = $jadwals->filter(function ($j) use ($activeTab) {
-        $kelas = $j->suratTugasMengajar->kelas;
-        $semester = $j->suratTugasMengajar->mataKuliah->semester;
-        if (!$kelas || !$semester) return false;
-        return strtoupper($kelas->tipe) . $semester->nama === $activeTab;
-    });
+        $activeTab = $request->get('tab', $availableTabs->first());
 
-    // Kelompokkan data berdasarkan hari dan kelas
-    $grouped = $filteredJadwals->groupBy(function ($item) {
-        return strtoupper($item->hari ?? 'TANPA HARI');
-    })->map(function ($items) {
-        return $items->groupBy(function ($i) {
-            return $i->suratTugasMengajar->kelas->nama ?? 'Tanpa Kelas';
+        $filteredJadwals = $jadwals->filter(function ($j) use ($activeTab) {
+            $kelas = $j->suratTugasMengajar->kelas;
+            $semester = $j->suratTugasMengajar->mataKuliah->semester;
+            if (!$kelas || !$semester) return false;
+            return strtoupper($kelas->tipe) . $semester->nama === $activeTab;
         });
-    });
-    $sems = $filteredJadwals->first()?->suratTugasMengajar?->mataKuliah?->semester;
 
-    return view('jadwal_global', compact('availableTabs', 'activeTab', 'grouped','sems'));
-   }
+        // ✅ Group by hari → lalu by kelas
+        $grouped = $filteredJadwals->groupBy(function ($item) {
+            return strtoupper($item->hari ?? 'TANPA HARI');
+        })->map(function ($items) {
+            return $items->groupBy(function ($i) {
+                return $i->suratTugasMengajar->kelas->nama ?? 'Tanpa Kelas';
+            });
+        });
+
+        // ✅ Urutkan hari manual (Senin → Jumat)
+        $order = ['SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT', 'SABTU', 'MINGGU', 'TANPA HARI'];
+        $grouped = collect($order)
+            ->filter(fn($hari) => $grouped->has($hari))
+            ->mapWithKeys(fn($hari) => [$hari => $grouped[$hari]]);
+
+        $sems = $filteredJadwals->first()?->suratTugasMengajar?->mataKuliah?->semester;
+        $fakultas = Fakultas::where('id', $filteredJadwals->first()?->SuratTugasMengajar->matakuliah->prodi->fakultas->id)->first();
+
+        // ✅ Semua shift (waktu tetap)
+        $shifts = Shift::orderBy('jam_mulai')->get();
+
+        $surat = auth()->user()->dekan
+            ? SuratTugasMengajar::all()
+            : SuratTugasMengajar::where('dosen_id', auth()->user()?->dosen?->id)->get();
+
+        $ruangan = Ruangan::all();
+        $jadwal = Jadwal::all();
+        $jadwalMe = Jadwal::whereHas('suratTugasMengajar.dosen.user', function ($q) {
+            $q->where('id', auth()->user()->id);
+        })->get();
+
+        return view('jadwal_global', compact('availableTabs', 'activeTab', 'grouped', 'sems', 'fakultas', 'shifts', 'surat', 'ruangan','jadwal','jadwalMe'));
+    }
 
    public function export(Request $request){
     $jadwals = Jadwal::with([
-        'ruangan',
-        'shift',
-        'suratTugasMengajar.kelas',
-        'suratTugasMengajar.dosen',
-        'suratTugasMengajar.mataKuliah.semester'
-    ])->get();
+            'ruangan',
+            'shift',
+            'suratTugasMengajar.kelas',
+            'suratTugasMengajar.dosen',
+            'suratTugasMengajar.mataKuliah.semester'
+        ])->get();
 
-    // Buat daftar tab dinamis berdasarkan kombinasi tipe kelas + semester
-    $availableTabs = $jadwals->map(function ($j) {
-        $kelas = $j->suratTugasMengajar->kelas;
-        $semester = $j->suratTugasMengajar->mataKuliah->semester;
-        if (!$kelas || !$semester) return null;
-        return strtoupper($kelas->tipe) . $semester->nama;
-    })->filter()->unique()->values();
+        $availableTabs = $jadwals->map(function ($j) {
+            $kelas = $j->suratTugasMengajar->kelas;
+            $semester = $j->suratTugasMengajar->mataKuliah->semester;
+            if (!$kelas || !$semester) return null;
+            return strtoupper($kelas->tipe) . $semester->nama;
+        })->sort()->filter()->unique()->values();
 
-    // Ambil tab aktif dari query
-    $activeTab = $request->get('tab', $availableTabs->first());
+        $activeTab = $request->get('tab', $availableTabs->first());
 
-    // Filter data sesuai tab aktif
-    $filteredJadwals = $jadwals->filter(function ($j) use ($activeTab) {
-        $kelas = $j->suratTugasMengajar->kelas;
-        $semester = $j->suratTugasMengajar->mataKuliah->semester;
-        if (!$kelas || !$semester) return false;
-        return strtoupper($kelas->tipe) . $semester->nama === $activeTab;
-    });
-
-    // Kelompokkan data berdasarkan hari dan kelas
-    $grouped = $filteredJadwals->groupBy(function ($item) {
-        return strtoupper($item->hari ?? 'TANPA HARI');
-    })->map(function ($items) {
-        return $items->groupBy(function ($i) {
-            return $i->suratTugasMengajar->kelas->nama ?? 'Tanpa Kelas';
+        $filteredJadwals = $jadwals->filter(function ($j) use ($activeTab) {
+            $kelas = $j->suratTugasMengajar->kelas;
+            $semester = $j->suratTugasMengajar->mataKuliah->semester;
+            if (!$kelas || !$semester) return false;
+            return strtoupper($kelas->tipe) . $semester->nama === $activeTab;
         });
-    });
-    
-    $sems = $filteredJadwals->first()?->suratTugasMengajar?->mataKuliah?->semester;
-    $pdf = Pdf::loadView('export_jadwal', compact('availableTabs', 'activeTab', 'grouped','sems'))->setOption('isHtml5ParserEnabled', true);
+
+        // ✅ Group by hari → lalu by kelas
+        $grouped = $filteredJadwals->groupBy(function ($item) {
+            return strtoupper($item->hari ?? 'TANPA HARI');
+        })->map(function ($items) {
+            return $items->groupBy(function ($i) {
+                return $i->suratTugasMengajar->kelas->nama ?? 'Tanpa Kelas';
+            });
+        });
+
+        // ✅ Urutkan hari manual (Senin → Jumat)
+        $order = ['SENIN', 'SELASA', 'RABU', 'KAMIS', 'JUMAT', 'SABTU', 'MINGGU', 'TANPA HARI'];
+        $grouped = collect($order)
+            ->filter(fn($hari) => $grouped->has($hari))
+            ->mapWithKeys(fn($hari) => [$hari => $grouped[$hari]]);
+
+        $sems = $filteredJadwals->first()?->suratTugasMengajar?->mataKuliah?->semester;
+        $fakultas = Fakultas::where('id', $filteredJadwals->first()?->SuratTugasMengajar->matakuliah->prodi->fakultas->id)->first();
+
+        // ✅ Semua shift (waktu tetap)
+        $shifts = Shift::orderBy('jam_mulai')->get();
+
+        $surat = auth()->user()->dekan
+            ? SuratTugasMengajar::all()
+            : SuratTugasMengajar::where('dosen_id', auth()->user()?->dosen?->id)->get();
+
+        $ruangan = Ruangan::all();
+        $jadwal = Jadwal::all();
+        $jadwalMe = Jadwal::whereHas('suratTugasMengajar.dosen.user', function ($q) {
+            $q->where('id', auth()->user()->id);
+        })->get();
+    $pdf = Pdf::loadView('export_jadwal', compact('availableTabs', 'activeTab', 'grouped', 'sems', 'fakultas', 'shifts', 'surat', 'ruangan','jadwal','jadwalMe'))->setOption('isHtml5ParserEnabled', true);
     
     return $pdf->download('jadwal.pdf');
    }

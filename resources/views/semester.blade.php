@@ -111,13 +111,13 @@
                         <label class="form-label">Nama Semester</label>
                         <select class="form-select" name="nama">
                             <option value="1">Semester 1</option>
-                            <option value="2">Semester 2</option>
+                            {{-- <option value="2">Semester 2</option> --}}
                             <option value="3">Semester 3</option>
-                            <option value="4">Semester 4</option>
+                            {{-- <option value="4">Semester 4</option> --}}
                             <option value="5">Semester 5</option>
-                            <option value="6">Semester 6</option>
+                            {{-- <option value="6">Semester 6</option> --}}
                             <option value="7">Semester 7</option>
-                            <option value="8">Semester 8</option>
+                            {{-- <option value="8">Semester 8</option> --}}
                         </select>
                         {{-- <input type="text" class="form-control" placeholder="Contoh: Semester 1/2/3 dll" name="nama"> --}}
                     </div>
@@ -169,13 +169,13 @@
                         <label for="edit-nama" class="form-label">Nama Semester</label>
                         <select class="form-select" name="nama" id="edit-nama">
                             <option value="1">Semester 1</option>
-                            <option value="2">Semester 2</option>
+                            {{-- <option value="2">Semester 2</option> --}}
                             <option value="3">Semester 3</option>
-                            <option value="4">Semester 4</option>
+                            {{-- <option value="4">Semester 4</option> --}}
                             <option value="5">Semester 5</option>
-                            <option value="6">Semester 6</option>
+                            {{-- <option value="6">Semester 6</option> --}}
                             <option value="7">Semester 7</option>
-                            <option value="8">Semester 8</option>
+                            {{-- <option value="8">Semester 8</option> --}}
                         </select>
                         {{-- <input type="text" class="form-control" id="edit-nama" name="nama" required /> --}}
                     </div>
